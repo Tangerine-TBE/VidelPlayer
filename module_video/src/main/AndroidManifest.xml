@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.module_video">
+
+    <application>
+        <activity android:name=".ui.activity.PlayVideoActivity"></activity>
+        <activity android:name=".ui.activity.HomeActivity" />
+    </application>
+
+</manifest>

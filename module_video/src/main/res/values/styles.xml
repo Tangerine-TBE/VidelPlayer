@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <style name="bottom_normal_text">
+        <item name="android:textColor">#3D5A87</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="bottom_select_text">
+        <item name="android:textColor">@color/theme_color</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+</resources>

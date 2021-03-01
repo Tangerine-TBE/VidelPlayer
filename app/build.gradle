@@ -161,4 +161,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation project(path: ':module_base')
+    implementation project(path: ':module_video')
 }

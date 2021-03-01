@@ -83,6 +83,10 @@ dependencies {
     api rootProject.ext.dependencies["permissionx"]
     //阿里路由
     api rootProject.ext.dependencies["arouter_api"]
+    //RxTool
+    api rootProject.ext.dependencies["RxTool"]
+    //MagicIndicator
+    api rootProject.ext.dependencies["MagicIndicator"]
 
 
     //日志打印
