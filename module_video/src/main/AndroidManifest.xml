@@ -3,8 +3,10 @@
     package="com.example.module_video">
 
     <application>
-        <activity android:name=".ui.activity.PlayVideoActivity"></activity>
-        <activity android:name=".ui.activity.HomeActivity" />
+        <activity android:name=".ui.activity.PlayVideoActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ui.activity.HomeActivity" android:launchMode="singleTask" />
     </application>
 
 </manifest>

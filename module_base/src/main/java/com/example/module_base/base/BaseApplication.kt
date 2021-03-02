@@ -41,9 +41,9 @@ open class BaseApplication : Application() {
         mHandler=Handler(Looper.getMainLooper())
         mPackName=packageName
         initData()
+        RxTool.init(this@BaseApplication)
         GlobalScope.launch {
             SPUtil.init(this@BaseApplication)
-            RxTool.init(this@BaseApplication)
         //    LitePal.initialize(this@BaseApplication)
           //  LitePal.getDatabase()
             ARouter.init(this@BaseApplication)

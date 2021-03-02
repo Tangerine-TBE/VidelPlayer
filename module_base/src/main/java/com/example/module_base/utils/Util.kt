@@ -163,7 +163,7 @@ fun LoadingDialog.showDialog(activity: Activity?){
 
 //不全屏
 inline fun <reified T : View>setStatusBar(
-    activity: FragmentActivity?,
+    context: Context?,
     view: T,
     layoutType: LayoutType
 ){
@@ -173,7 +173,7 @@ inline fun <reified T : View>setStatusBar(
         LayoutType.CONSTRAINTLAYOUT -> view.layoutParams as ConstraintLayout.LayoutParams
         else ->view.layoutParams as RelativeLayout.LayoutParams
     }
-    layoutParams.topMargin= MyStatusBarUtil.getStatusBarHeight(activity)
+    layoutParams.topMargin= MyStatusBarUtil.getStatusBarHeight(context)
     view.layoutParams=layoutParams
 }
 

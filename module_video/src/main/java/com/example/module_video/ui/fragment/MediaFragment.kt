@@ -1,7 +1,11 @@
 package com.example.module_video.ui.fragment
 
-import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager
+import android.content.Intent
+import android.os.Build
+import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
 import com.example.module_base.utils.setStatusBar
@@ -11,7 +15,6 @@ import com.example.module_video.databinding.FragmentMediaBinding
 import com.example.module_video.ui.activity.PlayVideoActivity
 import com.example.module_video.ui.adapter.IndicatorAdapter
 import com.example.module_video.ui.adapter.viewpager.HomePagerAdapter
-import com.example.module_video.viewmode.ListViewModel
 import com.example.module_video.viewmode.MediaViewModel
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -24,7 +27,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigat
  * @time 2021/3/1 11:54:16
  * @class describe
  */
-class MediaFragment :BaseVmFragment<FragmentMediaBinding,MediaViewModel>(){
+class MediaFragment :BaseVmFragment<FragmentMediaBinding, MediaViewModel>(){
     private val mHomePagerAdapter by lazy {
         HomePagerAdapter(childFragmentManager)
     }
@@ -40,14 +43,14 @@ class MediaFragment :BaseVmFragment<FragmentMediaBinding,MediaViewModel>(){
 
     override fun initView() {
         binding.apply {
-            setStatusBar(activity,homeIndicator, LayoutType.CONSTRAINTLAYOUT)
+            setStatusBar(context, homeIndicator, LayoutType.CONSTRAINTLAYOUT)
 
             val commonNavigator = CommonNavigator(context)
             commonNavigator.adapter=mIndicatorAdapter
             homeIndicator.navigator=commonNavigator
 
             homePager.adapter=mHomePagerAdapter
-            ViewPagerHelper.bind(homeIndicator,homePager)
+            ViewPagerHelper.bind(homeIndicator, homePager)
 
 
         }
@@ -57,14 +60,27 @@ class MediaFragment :BaseVmFragment<FragmentMediaBinding,MediaViewModel>(){
 
     override fun initEvent() {
     binding.apply {
-        mIndicatorAdapter.setOnIndicatorClickListener(object :IndicatorAdapter.OnIndicatorClickListener{
+        mIndicatorAdapter.setOnIndicatorClickListener(object :
+            IndicatorAdapter.OnIndicatorClickListener {
             override fun onIndicatorClick(position: Int) {
-                homePager.currentItem=position
+                homePager.currentItem = position
             }
         })
 
         imageView.setOnClickListener {
-            toOtherActivity<PlayVideoActivity>(activity){}
+          //  toOtherActivity<PlayVideoActivity>(activity){}
+            val intent = Intent(activity, PlayVideoActivity::class.java)
+            intent.putExtra(PlayVideoActivity.TRANSITION, true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val pair: Pair<View, String> = Pair<View, String>(it, PlayVideoActivity.IMG_TRANSITION)
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(), pair
+                )
+                ActivityCompat.startActivity(requireActivity(), intent, activityOptions.toBundle())
+            } else {
+                activity?.startActivity(intent)
+                activity?.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+            }
         }
 
     }

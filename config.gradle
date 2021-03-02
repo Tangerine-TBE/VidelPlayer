@@ -14,7 +14,7 @@ ext {
             versionCode      : 10000,                    //版本号
             versionName      : "1.0",              //版本名称
             compileSdkVersion: 30,
-            minSdkVersion    : 21,
+            minSdkVersion    : 23,
             targetSdkVersion : 30,
 
     ]
