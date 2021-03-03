@@ -8,6 +8,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
+import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.setStatusBar
 import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
@@ -54,7 +55,6 @@ class MediaFragment :BaseVmFragment<FragmentMediaBinding, MediaViewModel>(){
 
 
         }
-
     }
 
 
@@ -69,18 +69,7 @@ class MediaFragment :BaseVmFragment<FragmentMediaBinding, MediaViewModel>(){
 
         imageView.setOnClickListener {
           //  toOtherActivity<PlayVideoActivity>(activity){}
-            val intent = Intent(activity, PlayVideoActivity::class.java)
-            intent.putExtra(PlayVideoActivity.TRANSITION, true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val pair: Pair<View, String> = Pair<View, String>(it, PlayVideoActivity.IMG_TRANSITION)
-                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    requireActivity(), pair
-                )
-                ActivityCompat.startActivity(requireActivity(), intent, activityOptions.toBundle())
-            } else {
-                activity?.startActivity(intent)
-                activity?.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
-            }
+
         }
 
     }

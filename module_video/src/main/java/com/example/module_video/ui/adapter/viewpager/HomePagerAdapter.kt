@@ -17,7 +17,5 @@ import com.example.module_video.ui.fragment.ContentsFragment
 class HomePagerAdapter( fragmentManager: FragmentManager):FragmentStatePagerAdapter(fragmentManager,
     BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getCount(): Int=DataProvider.homeItemList.size
-    override fun getItem(position: Int): Fragment {
-        return ContentsFragment.getInstance()
-        }
+    override fun getItem(position: Int): Fragment =ContentsFragment.getInstance(position)
 }

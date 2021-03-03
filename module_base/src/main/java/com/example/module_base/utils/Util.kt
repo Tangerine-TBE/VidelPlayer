@@ -6,12 +6,9 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Rect
 import android.net.Uri
 import android.os.CountDownTimer
-import android.text.TextUtils
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -45,9 +42,9 @@ inline fun <reified T>toOtherActivity(activity: Activity?, block: Intent.() -> U
 
 //跳转Activity
 inline fun <reified T>toOtherActivity(
-    activity: Activity?,
-    isFinish: Boolean,
-    block: Intent.() -> Unit
+        activity: Activity?,
+        isFinish: Boolean,
+        block: Intent.() -> Unit
 ){
     val intent = Intent(activity, T::class.java)
     intent.block()
@@ -59,9 +56,9 @@ inline fun <reified T>toOtherActivity(
 
 //跳转Activity带请求码
 inline fun <reified T>toOtherResultActivity(
-    context: Activity?,
-    requestCode: Int,
-    block: Intent.() -> Unit
+        context: Activity?,
+        requestCode: Int,
+        block: Intent.() -> Unit
 ){
     val intent = Intent(context, T::class.java)
     intent.block()
@@ -83,12 +80,12 @@ fun shareContent(context: Context, result: String){
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
     context.startActivity(
-        Intent.createChooser(
-            intent, PackageUtil.getAppMetaData(
-                context,
-                Constants.APP_NAME
+            Intent.createChooser(
+                    intent, PackageUtil.getAppMetaData(
+                    context,
+                    Constants.APP_NAME
             )
-        )
+            )
     )
 }
 //设置页面和状态栏的距离
@@ -130,8 +127,8 @@ fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit){
 
 //计时
 fun startCountDown(totalTime: Long, followTime: Long, finish: () -> Unit, ticking: () -> Unit) = object:CountDownTimer(
-    totalTime,
-    followTime
+        totalTime,
+        followTime
 ){
         override fun onFinish() {
             finish()
@@ -163,9 +160,9 @@ fun LoadingDialog.showDialog(activity: Activity?){
 
 //不全屏
 inline fun <reified T : View>setStatusBar(
-    context: Context?,
-    view: T,
-    layoutType: LayoutType
+        context: Context?,
+        view: T,
+        layoutType: LayoutType
 ){
     val layoutParams = when (layoutType) {
         LayoutType.RELATIVELAYOUT -> view.layoutParams as RelativeLayout.LayoutParams
@@ -208,11 +205,11 @@ inline fun <reified T> gsonHelper(result: String?): T? =
 
 
 fun checkAppPermission(
-    permissions: ArrayList<String>,
-    success: () -> Unit,
-    fail: () -> Unit,
-    activity: FragmentActivity? = null,
-    fragment: Fragment? = null
+        permissions: ArrayList<String>,
+        success: () -> Unit,
+        fail: () -> Unit,
+        activity: FragmentActivity? = null,
+        fragment: Fragment? = null
 ){
     try {
         val permissionCollection = if (activity == null) {
@@ -223,8 +220,8 @@ fun checkAppPermission(
         permissionCollection
             .permissions(permissions)
             .setDialogTintColor(
-                Color.parseColor("#285FF5"),
-                Color.parseColor("#285FF5")
+                    Color.parseColor("#285FF5"),
+                    Color.parseColor("#285FF5")
             )
             .onExplainRequestReason { scope, deniedList, beforeRequest ->
                 val msg = "即将申请的权限是程序必须依赖的权限"
@@ -246,5 +243,22 @@ fun checkAppPermission(
 
 }
 
+fun formatTime(timeTemp: Long): String {
+    val second = timeTemp % 60
+    val minuteTemp = timeTemp / 60
+    return if (minuteTemp > 0) {
+        val minute = minuteTemp % 60
+        val hour = minuteTemp / 60
+        if (hour > 0) {
+            ((if (hour > 10) hour.toString() + "" else "0$hour") + ":" + (if (minute > 10) minute.toString() + "" else "0$minute")
+                    + ":" + if (second > 10) second.toString() + "" else "0$second")
+        } else {
+            ("00:" + (if (minute > 10) minute.toString() + "" else "0$minute") + ":"
+                    + if (second > 10) second.toString() + "" else "0$second")
+        }
+    } else {
+        "00:00:" + if (second > 10) second.toString() + "" else "0$second"
+    }
+}
 
 

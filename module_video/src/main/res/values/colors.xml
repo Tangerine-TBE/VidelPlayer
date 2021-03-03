@@ -2,5 +2,8 @@
 <resources>
     
     <color name="item_theme_color">#1FFFFFFF</color>
+    <color name="item_bg">#263751</color>
+    <color name="white_50">#80FFFFFF</color>
+
     
 </resources>

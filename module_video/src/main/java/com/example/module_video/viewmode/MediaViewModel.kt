@@ -1,6 +1,11 @@
 package com.example.module_video.viewmode
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.module_base.base.BaseViewModel
+import com.example.module_video.domain.MediaInformation
+import com.example.module_video.utils.MediaUtil
+import kotlinx.coroutines.launch
 
 /**
  * @name VidelPlayer
@@ -11,4 +16,7 @@ import com.example.module_base.base.BaseViewModel
  * @class describe
  */
 class MediaViewModel:BaseViewModel() {
+
 }
+
+

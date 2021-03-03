@@ -12,8 +12,10 @@ import androidx.core.view.ViewCompat
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyStatusBarUtil
+import com.example.module_base.utils.gsonHelper
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayVideoBinding
+import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.SwitchVideoModel
 import com.example.module_video.viewmode.PlayVideoViewModel
 import com.shuyu.gsyvideoplayer.GSYVideoManager
@@ -28,6 +30,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     companion object {
         const val IMG_TRANSITION = "IMG_TRANSITION"
         const val TRANSITION = "TRANSITION"
+
+        const val VIDEO_MSG="VIDEO_MSG"
     }
 
 
@@ -43,44 +47,41 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     }
 
     override fun initView() {
-        val list = arrayListOf(
-            SwitchVideoModel(
-                "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4",
-                "普通"
-            ),
-            SwitchVideoModel(
-                "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f30.mp4",
-                "清晰"
-            )
-        )
-        isTransition = intent.getBooleanExtra(TRANSITION, false)
-
         binding.apply {
+            //设置旋转
+            orientationUtils = OrientationUtils(this@PlayVideoActivity, videoPlayer)
+            val videoMsg = intent.getStringExtra(VIDEO_MSG)
+            isTransition = intent.getBooleanExtra(TRANSITION, false)
+            gsonHelper<MediaInformation>(videoMsg)?.apply {
+                val list = arrayListOf(
+                        SwitchVideoModel(
+                                "$uri"
+                        )
+                )
+                videoPlayer?.apply {
+                    setUp(list, true, "$name")
+                    //增加title
+                    titleTextView.visibility = View.VISIBLE
+                    //设置返回键
+                    backButton.visibility = View.VISIBLE
 
-            videoPlayer?.apply {
-                setUp(list, true, "测试视频")
-                //增加title
-                titleTextView.visibility = View.VISIBLE
-                //设置返回键
-                backButton.visibility = View.VISIBLE
-                //设置旋转
-                orientationUtils = OrientationUtils(this@PlayVideoActivity, binding.videoPlayer)
-                //增加封面
-                val imageView = ImageView(this@PlayVideoActivity)
-                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                imageView.setImageResource(R.mipmap.app_logo)
-                thumbImageView = imageView
-                //是否可以滑动调整
-                setIsTouchWiget(true)
-                //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-                fullscreenButton.setOnClickListener { orientationUtils.resolveByClick() }
-                dismissControlTime=5500
+                    //增加封面
+                 /*   val imageView = ImageView(this@PlayVideoActivity)
+                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                    imageView.setImageBitmap(bitmap)
+                    thumbImageView = imageView*/
+                    //是否可以滑动调整
+                    setIsTouchWiget(true)
+                    //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+                    fullscreenButton.setOnClickListener { orientationUtils.resolveByClick() }
+                    dismissControlTime = 5500
+                }
             }
-        }
 
+
+        }
         //过渡动画
         initTransition()
-
     }
 
     override fun initEvent() {

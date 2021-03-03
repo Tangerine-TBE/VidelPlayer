@@ -8,5 +8,5 @@ package com.example.module_video.domain
  * @time 2021/3/2 10:41:59
  * @class describe
  */
-data class SwitchVideoModel(var url:String,var name:String) {
+data class SwitchVideoModel(var url:String="",var name:String="") {
 }
