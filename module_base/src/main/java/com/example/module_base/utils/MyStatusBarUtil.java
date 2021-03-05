@@ -14,6 +14,13 @@ import androidx.core.graphics.ColorUtils;
 
 public class MyStatusBarUtil {
 
+
+    public static void setNoStateBarWindow(Activity activity){
+        View decorView = activity.getWindow().getDecorView();
+        int option = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(option);
+    }
+
     public static void setTransparent(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
@@ -146,6 +153,24 @@ public class MyStatusBarUtil {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
+
+
+    public static void fullStateWindow(boolean hasFocus,Activity activity) {
+        if (hasFocus && Build.VERSION.SDK_INT >= 21) {
+            if (Build.VERSION.SDK_INT >= 28) {
+                WindowManager.LayoutParams lp =activity. getWindow().getAttributes();
+                lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                activity.getWindow().setAttributes(lp);
+            }
+            View decorView = activity.getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
 
     public static void setTransparencyActivity(Activity activity,float alpha) {
         Window window = activity.getWindow();

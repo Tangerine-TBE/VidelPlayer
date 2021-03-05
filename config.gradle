@@ -117,6 +117,11 @@ ext {
             //MagicIndicator
             "MagicIndicator" :'com.github.hackware1993:MagicIndicator:1.7.0',
 
+            //EasyFloat
+            "EasyFloat" :'com.github.princekin-f:EasyFloat:1.3.4',
+            //BasePopup
+            "BasePopup" : 'com.github.razerdp:BasePopup:2.2.9',
+
             // 友盟统计SDK
             "umeng_common"              : 'com.umeng.umsdk:common:9.1.0',// (必选)
             "umeng_asms"                : 'com.umeng.umsdk:asms:1.1.3',// asms包依赖(必选)

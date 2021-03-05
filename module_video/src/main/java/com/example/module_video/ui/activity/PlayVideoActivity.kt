@@ -1,13 +1,12 @@
 package com.example.module_video.ui.activity
 
 import android.annotation.TargetApi
-import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.transition.Transition
-import android.view.View
-import android.widget.ImageView
+import android.view.animation.BounceInterpolator
 import androidx.core.view.ViewCompat
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
@@ -17,16 +16,23 @@ import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayVideoBinding
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.SwitchVideoModel
+import com.example.module_video.ui.widget.FloatPlayerView
+import com.example.module_video.utils.floatUtil.FloatWindow
+import com.example.module_video.utils.floatUtil.MoveType
+import com.example.module_video.utils.floatUtil.Screen
 import com.example.module_video.viewmode.PlayVideoViewModel
 import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
+import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 
 class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideoViewModel>() {
     private lateinit var orientationUtils: OrientationUtils
     private var isTransition = false
-
+    private var isPlay = false
+    private var isPause = false
     companion object {
         const val IMG_TRANSITION = "IMG_TRANSITION"
         const val TRANSITION = "TRANSITION"
@@ -37,9 +43,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        MyStatusBarUtil.setFullScreen(this,hasFocus)
+        MyStatusBarUtil.fullStateWindow(hasFocus, this)
     }
-
 
     override fun getLayoutView(): Int = R.layout.activity_play_video
     override fun getViewModelClass(): Class<PlayVideoViewModel> {
@@ -48,49 +53,115 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
     override fun initView() {
         binding.apply {
-            //设置旋转
-            orientationUtils = OrientationUtils(this@PlayVideoActivity, videoPlayer)
-            val videoMsg = intent.getStringExtra(VIDEO_MSG)
-            isTransition = intent.getBooleanExtra(TRANSITION, false)
-            gsonHelper<MediaInformation>(videoMsg)?.apply {
-                val list = arrayListOf(
-                        SwitchVideoModel(
-                                "$uri"
-                        )
-                )
-                videoPlayer?.apply {
-                    setUp(list, true, "$name")
-                    //增加title
-                    titleTextView.visibility = View.VISIBLE
-                    //设置返回键
-                    backButton.visibility = View.VISIBLE
-
-                    //增加封面
-                 /*   val imageView = ImageView(this@PlayVideoActivity)
-                    imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-                    imageView.setImageBitmap(bitmap)
-                    thumbImageView = imageView*/
-                    //是否可以滑动调整
-                    setIsTouchWiget(true)
-                    //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-                    fullscreenButton.setOnClickListener { orientationUtils.resolveByClick() }
-                    dismissControlTime = 5500
-                }
-            }
+            val showType = GSYVideoType.getShowType()
 
 
+            LogUtils.i("----GSYVideoType-------$showType------------")
+            initVideoPlayer()
         }
         //过渡动画
         initTransition()
     }
 
+    private fun ActivityPlayVideoBinding.initVideoPlayer() {
+        //设置旋转
+        orientationUtils = OrientationUtils(this@PlayVideoActivity, videoPlayer)
+        val videoMsg = intent.getStringExtra(VIDEO_MSG)
+        isTransition = intent.getBooleanExtra(TRANSITION, false)
+        gsonHelper<MediaInformation>(videoMsg)?.apply {
+            setFloatWindow("$uri")
+            val list = arrayListOf(
+                SwitchVideoModel(
+                    "$uri"
+                )
+            )
+            GSYVideoOptionBuilder()
+                    .setIsTouchWiget(true)
+                    .setRotateViewAuto(true)
+                    .setRotateWithSystem(true)
+                    .setLockLand(false)
+                    .setAutoFullWithSize(false)
+                    .setShowFullAnimation(false)
+                    .setNeedLockFull(true)
+                    .setVideoAllCallBack(object : GSYSampleCallBack() {
+                        override fun onStartPrepared(url: String?, vararg objects: Any?) {
+                            super.onStartPrepared(url, *objects)
+                            //开始播放了才能旋转和全屏
+                            orientationUtils.isRotateWithSystem = false
+
+                            isPlay = true
+                        }
+
+                        override fun onEnterFullscreen(url: String?, vararg objects: Any?) {
+                            super.onEnterFullscreen(url, *objects)
+
+                        }
+
+                        override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
+                            super.onQuitFullscreen(url, *objects)
+                            orientationUtils.backToProtVideo()
+                        }
+                    })
+                    .setLockClickListener { view, lock ->
+                        //配合下方的onConfigurationChanged
+                        orientationUtils.isEnable = !lock
+                    }
+                    .build(videoPlayer)
+
+            videoPlayer.setUp(list, true, "$name")
+            videoPlayer.seekTo(100000)
+        }
+    }
+
+
+
+    /**
+     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
+     */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        //如果旋转了就全屏
+        if (isPlay && !isPause) {
+            binding.videoPlayer.onConfigurationChanged(
+                this,
+                newConfig,
+                orientationUtils,
+                true,
+                true
+            )
+            LogUtils.i("---onConfigurationChanged-------------------${orientationUtils.screenType}--------------")
+        }
+    }
+
+
+    private fun setFloatWindow(path:String){
+       binding.videoPlayer.mShowSmallWindow.setOnClickListener {
+            if (FloatWindow.get() == null) {
+                val floatPlayerView = FloatPlayerView(applicationContext)
+                floatPlayerView.setUir(path)
+                FloatWindow.with(applicationContext)
+                    .setView(floatPlayerView)
+                    .setWidth(Screen.width, 0.4f)
+                    .setHeight(Screen.width, 0.4f)
+                    .setX(Screen.width, 0.8f)
+                    .setY(Screen.height, 0.3f)
+                    .setMoveType(MoveType.slide)
+                    .setFilter(false)
+                    .setMoveStyle(500, BounceInterpolator())
+                    .build()
+                FloatWindow.get().show()
+            }
+        }
+    }
+
     override fun initEvent() {
         binding.apply {
             videoPlayer.apply {
+
+
                 backButton.setOnClickListener {
                     onBackPressed()
                 }
-
 
                 setGSYStateUiListener {
                     when (it) {
@@ -99,32 +170,41 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                     }
                 }
             }
-
-
-
         }
     }
 
 
     override fun onPause() {
-        super.onPause()
         binding.videoPlayer.onVideoPause()
+        super.onPause()
+        isPause = true
+
     }
 
     override fun onResume() {
-        super.onResume()
         binding.videoPlayer.onVideoResume()
+        super.onResume()
+        isPause = false
+
 
     }
 
     override fun release() {
+        if (isPlay) {
+            getCurPlay().release()
+        }
         orientationUtils.releaseListener()
     }
 
+    private fun getCurPlay(): GSYVideoPlayer {
+        return if (binding.videoPlayer.fullWindowPlayer != null) {
+            binding.videoPlayer.fullWindowPlayer
+        } else  binding.videoPlayer
+    }
+
     override fun onBackPressed() {
-        //先返回正常状态
-        if (orientationUtils.screenType == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            binding.videoPlayer.fullscreenButton.performClick()
+        orientationUtils.backToProtVideo()
+        if (GSYVideoManager.backFromWindowFull(this)) {
             return
         }
         //释放所有
@@ -161,7 +241,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         if (transition != null) {
             transition.addListener(object : Transition.TransitionListener {
                 override fun onTransitionStart(transition: Transition?) {
-
                 }
 
                 override fun onTransitionEnd(transition: Transition?) {
@@ -170,17 +249,13 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 }
 
                 override fun onTransitionCancel(transition: Transition?) {
-
                 }
 
                 override fun onTransitionPause(transition: Transition?) {
-
                 }
 
                 override fun onTransitionResume(transition: Transition?) {
-
                 }
-
             })
             return true
         }

@@ -2,17 +2,29 @@ package com.example.module_video.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.compose.ui.graphics.BlendMode
+import com.example.module_base.base.BaseApplication
+import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.domain.SwitchVideoModel
+import com.lzf.easyfloat.EasyFloat
+import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
+import com.lzf.easyfloat.anim.DefaultAnimator
+import com.lzf.easyfloat.enums.ShowPattern
+import com.lzf.easyfloat.enums.SidePattern
+import com.lzf.easyfloat.interfaces.OnFloatCallbacks
+import com.lzf.easyfloat.interfaces.OnInvokeView
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
-import moe.codeest.enviews.ENPlayView
 import java.io.File
 import java.util.*
 
@@ -24,40 +36,71 @@ import java.util.*
  * @time 2021/3/2 14:08:48
  * @class describe
  */
-class PlayVideoView(context: Context?, attrs: AttributeSet?) :
-        StandardGSYVideoPlayer(context, attrs) {
-    constructor(context: Context) : this(context, null)
+class PlayVideoView : StandardGSYVideoPlayer {
+    constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag) {}
+    constructor(context: Context) : super(context) {}
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
-    override fun getLayoutId(): Int = R.layout.widget_play_video
+    override fun getLayoutId(): Int{
+      return  if (mIfCurrentIsFullscreen) {
+            R.layout.widget_play_video_land
+        }else{
+            R.layout.widget_play_video_normal
+        }
+    }
+
     private var mUrlList: List<SwitchVideoModel> = ArrayList()
 
     //数据源
     private var mSourcePosition = 0
 
     private val mMoreScale: TextView = findViewById(R.id.switch_Size)
+    private val mChangeSpeed: TextView = findViewById(R.id.switch_speed)
+    val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
 
     init {
         // setStatusBar(context,mTopContainer,LayoutType.CONSTRAINTLAYOUT,)
+        mType=GSYVideoType.getShowType()
+        LogUtils.i("-------resolveTypeUI------qq  $mType-----------")
+       resolveTypeUI()
 
-        //切换清晰度
+        //切换尺寸
         mMoreScale.setOnClickListener { v: View? ->
             if (!mHadPlay) {
                 return@setOnClickListener
             }
-            if (mType == 0) {
-                mType = 1
-            } else if (mType == 1) {
-                mType = 2
-            } else if (mType == 2) {
-                mType = 3
-            } else if (mType == 3) {
-                mType = 4
-            } else if (mType == 4) {
-                mType = 0
+            when (mType) {
+                0 -> {
+                    mType = 1
+                }
+                1 -> {
+                    mType = 2
+                }
+                2 -> {
+                    mType = 3
+                }
+                3 -> {
+                    mType = 4
+                }
+                4 -> {
+                    mType = 0
+                }
+                -4 -> {
+                    mType = 0
+                }
+
             }
             resolveTypeUI()
         }
+
+        //切换速度
+        mChangeSpeed.text="播放速度：$speed"
+        mChangeSpeed.setOnClickListener {
+            resolveSpeedUI()
+        }
+
     }
+
 
 
     /**
@@ -69,7 +112,7 @@ class PlayVideoView(context: Context?, attrs: AttributeSet?) :
      * @return
      */
     override fun startWindowFullscreen(context: Context?, actionBar: Boolean, statusBar: Boolean): GSYBaseVideoPlayer? {
-        val playVideoView = super.startWindowFullscreen(context, true, true) as PlayVideoView
+        val playVideoView = super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
         playVideoView.mSourcePosition = mSourcePosition
         playVideoView.mType = mType
         playVideoView.mUrlList = mUrlList
@@ -110,13 +153,12 @@ class PlayVideoView(context: Context?, attrs: AttributeSet?) :
      * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
      */
     private fun resolveTypeUI() {
-        if (!mHadPlay) {
-            return
-        }
+        LogUtils.i("-------resolveTypeUI------qq  $mType-----------")
         when (mType) {
             1 -> {
                 mMoreScale.text = "16:9"
                 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9)
+
             }
             2 -> {
                 mMoreScale.text = "4:3"
@@ -134,10 +176,45 @@ class PlayVideoView(context: Context?, attrs: AttributeSet?) :
                 mMoreScale.text = "原始比例"
                 GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT)
             }
+            -4 -> {
+                mMoreScale.text = "拉伸全屏"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
+            }
         }
         changeTextureViewShowType()
         if (mTextureView != null) mTextureView.requestLayout()
     }
+
+
+
+    private fun resolveSpeedUI() {
+        when (speed) {
+            1f -> {
+                speed = 1.25f
+            }
+            1.25f -> {
+                speed = 1.5f
+            }
+            1.5f -> {
+                speed = 2f
+            }
+            2f -> {
+                speed = 3f
+            }
+            3f -> {
+                speed = 0.5f
+            }
+            0.5f -> {
+                speed = 0.75f
+            }
+            0.75f -> {
+                speed = 1f
+            }
+        }
+        mChangeSpeed.text = "播放速度：$speed"
+        setSpeedPlaying(speed, true)
+    }
+
 
 
     /**
@@ -186,5 +263,29 @@ class PlayVideoView(context: Context?, attrs: AttributeSet?) :
             }
         }
     }
+
+
+    private val isLinkScroll = false
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+        if (isLinkScroll && !isIfCurrentIsFullscreen) {
+            parent.requestDisallowInterceptTouchEvent(true)
+        }
+        return super.onInterceptTouchEvent(ev)
+    }
+
+    override fun lockTouchLogic() {
+       // super.lockTouchLogic()
+        if (mLockCurScreen) {
+            mLockScreen.setImageResource(R.mipmap.icon_video_unlock)
+            mLockCurScreen = false
+        } else {
+            mLockScreen.setImageResource(R.mipmap.icon_video_lock)
+            mLockCurScreen = true
+            hideAllWidget()
+        }
+    }
+
+
+
 
 }

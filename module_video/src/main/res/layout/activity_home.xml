@@ -19,7 +19,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <!--  app:itemIconTint="@color/selector_bottom_type"
+                    app:itemTextColor="@color/selector_bottom_type"-->
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -27,10 +28,10 @@
             android:layout_height="wrap_content"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/my_navigation_items"
+            app:itemTextAppearanceActive="@style/bottom_select_text"
+            app:itemTextAppearanceInactive="@style/bottom_normal_text"
+            app:itemBackground="@color/theme_bg_color"
             app:itemIconTint="@color/selector_bottom_type"
-            app:itemTextColor="@color/selector_bottom_type"
-            app:itemRippleColor="@android:color/transparent"
-            android:background="@color/theme_bg_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

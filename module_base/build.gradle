@@ -87,6 +87,10 @@ dependencies {
     api rootProject.ext.dependencies["RxTool"]
     //MagicIndicator
     api rootProject.ext.dependencies["MagicIndicator"]
+    //EasyFloat
+    api rootProject.ext.dependencies["EasyFloat"]
+    //BasePopup
+    api rootProject.ext.dependencies["BasePopup"]
 
 
     //日志打印
