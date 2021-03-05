@@ -8,8 +8,6 @@ import com.example.module_base.utils.Constants
 import com.example.module_base.utils.MyStatusBarUtil
 import com.example.module_base.utils.PackageUtil
 import com.example.module_base.utils.toolbarEvent
-import com.example.module_base.widget.MyToolbar
-import com.tamsiree.rxkit.RxKeyboardTool
 import kotlinx.android.synthetic.main.activity_deal.*
 
 

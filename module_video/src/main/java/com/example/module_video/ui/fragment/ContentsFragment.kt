@@ -36,9 +36,9 @@ class ContentsFragment:BaseVmFragment<FragmentContentsBinding,ContentsViewModel>
         @JvmStatic
         fun getInstance(position:Int):ContentsFragment{
             return ContentsFragment().apply {
-                val bundle = Bundle()
+             /*   val bundle = Bundle()
                 bundle.putInt(Constants.KEY_TYPE_FRAGMENT,position)
-                arguments=bundle
+                arguments=bundle*/
             }
         }
     }
@@ -51,7 +51,7 @@ class ContentsFragment:BaseVmFragment<FragmentContentsBinding,ContentsViewModel>
     private var mType=0
 
     override fun initView() {
-        binding.apply {
+ /*       binding.apply {
             contentList.layoutManager=LinearLayoutManager(activity)
             contentList.adapter=mMediaFileAdapter
         }
@@ -59,29 +59,28 @@ class ContentsFragment:BaseVmFragment<FragmentContentsBinding,ContentsViewModel>
         mType=arguments?.getInt(Constants.KEY_TYPE_FRAGMENT)?:0
 
 
-        viewModel.getMediaFile(mType)
-        LogUtils.i("--arguments-------------${arguments}----$mType----")
+        viewModel.getMediaFile(mType)*/
 
     }
 
     override fun observerData() {
-        binding.apply {
+ /*       binding.apply {
             viewModel.apply {
                 videoList.observe(this@ContentsFragment,{
                     mMediaFileAdapter.setList(it)
                     LogUtils.i("--observerData-------------${it.size}--------")
                 })
             }
-        }
+        }*/
 
     }
 
     override fun initEvent() {
-        mMediaFileAdapter.setOnItemClickListener { adapter, view, position ->
+   /*     mMediaFileAdapter.setOnItemClickListener { adapter, view, position ->
             mMediaFileAdapter.data[position]?.let {
                 toPlayVideo(view,Gson().toJson(it))
             }
-        }
+        }*/
     }
 
 

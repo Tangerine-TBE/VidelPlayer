@@ -65,10 +65,10 @@ abstract class BaseViewFragment<T : ViewDataBinding>:Fragment() {
     }
 
 
+
+
+
     abstract fun getChildLayout(): Int
-
-
-
 
 
     override fun onDestroyView() {

@@ -53,18 +53,19 @@ class PlayVideoView : StandardGSYVideoPlayer {
 
     //数据源
     private var mSourcePosition = 0
+    //记住切换切换尺寸
+    private var mType = 0
+    //记住切换切换速度
+    private var mSpeed = 0
+
 
     private val mMoreScale: TextView = findViewById(R.id.switch_Size)
     private val mChangeSpeed: TextView = findViewById(R.id.switch_speed)
     val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
 
     init {
-        // setStatusBar(context,mTopContainer,LayoutType.CONSTRAINTLAYOUT,)
-        mType=GSYVideoType.getShowType()
-        LogUtils.i("-------resolveTypeUI------qq  $mType-----------")
-       resolveTypeUI()
-
         //切换尺寸
+        initSize()
         mMoreScale.setOnClickListener { v: View? ->
             if (!mHadPlay) {
                 return@setOnClickListener
@@ -94,13 +95,26 @@ class PlayVideoView : StandardGSYVideoPlayer {
         }
 
         //切换速度
-        mChangeSpeed.text="播放速度：$speed"
+        initSpeed()
         mChangeSpeed.setOnClickListener {
+            if (!mHadPlay) {
+                return@setOnClickListener
+            }
+            selectSpeed()
             resolveSpeedUI()
         }
 
     }
 
+    private fun initSize() {
+        mType = GSYVideoType.getShowType()
+        resolveTypeUI()
+    }
+
+    private fun initSpeed(){
+        mSpeed=speed
+        resolveSpeedUI()
+    }
 
 
     /**
@@ -114,10 +128,14 @@ class PlayVideoView : StandardGSYVideoPlayer {
     override fun startWindowFullscreen(context: Context?, actionBar: Boolean, statusBar: Boolean): GSYBaseVideoPlayer? {
         val playVideoView = super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
         playVideoView.mSourcePosition = mSourcePosition
-        playVideoView.mType = mType
         playVideoView.mUrlList = mUrlList
-        //sampleVideo.resolveTransform();
+
+        playVideoView.mType = mType
         playVideoView.resolveTypeUI()
+
+        playVideoView.mSpeed=mSpeed
+        playVideoView.resolveSpeedUI()
+
         //sampleVideo.resolveRotateUI();
         //这个播放器的demo配置切换到全屏播放器
         //这只是单纯的作为全屏播放显示，如果需要做大小屏幕切换，请记得在这里耶设置上视频全屏的需要的自定义配置
@@ -138,22 +156,24 @@ class PlayVideoView : StandardGSYVideoPlayer {
         if (gsyVideoPlayer != null) {
             val playVideoView = gsyVideoPlayer as PlayVideoView
             mSourcePosition = playVideoView.mSourcePosition
-            mType = playVideoView.mType
             setUp(mUrlList, mCache, mCachePath, mTitle)
+            mType = playVideoView.mType
             resolveTypeUI()
+
+            mSpeed=playVideoView.mSpeed
+            resolveSpeedUI()
+
         }
     }
 
 
-    //记住切换数据源类型
-    private var mType = 0
+
 
     /**
      * 显示比例
      * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
      */
     private fun resolveTypeUI() {
-        LogUtils.i("-------resolveTypeUI------qq  $mType-----------")
         when (mType) {
             1 -> {
                 mMoreScale.text = "16:9"
@@ -181,38 +201,43 @@ class PlayVideoView : StandardGSYVideoPlayer {
                 GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
             }
         }
+
+        LogUtils.i("*-mMoreScale--mIfCurrentIsFullscreen:${mIfCurrentIsFullscreen}--------${mMoreScale.hashCode()}-----------$mSpeed----------")
         changeTextureViewShowType()
         if (mTextureView != null) mTextureView.requestLayout()
     }
 
+    private fun selectSpeed(){
+        when (mSpeed) {
+            1f -> {
+                mSpeed = 1.25f
+            }
+            1.25f -> {
+                mSpeed = 1.5f
+            }
+            1.5f -> {
+                mSpeed = 2f
+            }
+            2f -> {
+                mSpeed = 3f
+            }
+            3f -> {
+                mSpeed = 0.5f
+            }
+            0.5f -> {
+                mSpeed = 0.75f
+            }
+            0.75f -> {
+                mSpeed = 1f
+            }
+        }
+    }
 
 
     private fun resolveSpeedUI() {
-        when (speed) {
-            1f -> {
-                speed = 1.25f
-            }
-            1.25f -> {
-                speed = 1.5f
-            }
-            1.5f -> {
-                speed = 2f
-            }
-            2f -> {
-                speed = 3f
-            }
-            3f -> {
-                speed = 0.5f
-            }
-            0.5f -> {
-                speed = 0.75f
-            }
-            0.75f -> {
-                speed = 1f
-            }
-        }
-        mChangeSpeed.text = "播放速度：$speed"
-        setSpeedPlaying(speed, true)
+        LogUtils.i("*---mIfCurrentIsFullscreen:${mIfCurrentIsFullscreen}--------${mChangeSpeed.hashCode()}-----------$mSpeed----------")
+        mChangeSpeed.text = "播放速度：$mSpeed"
+        setSpeedPlaying(mSpeed, true)
     }
 
 
@@ -255,7 +280,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
                     imageView.setImageResource(R.mipmap.icon_video_pause)
                 }
                 CURRENT_STATE_ERROR -> {
-                    imageView.setImageResource(R.drawable.video_click_error_selector)
+                    imageView.setImageResource(R.mipmap.icon_video_play)
                 }
                 else -> {
                     imageView.setImageResource(R.mipmap.icon_video_play)
@@ -283,6 +308,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
             mLockCurScreen = true
             hideAllWidget()
         }
+
     }
 
 

@@ -8,7 +8,7 @@
         <activity android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.activity.HomeActivity" android:launchMode="singleTask" />
+        <activity android:name=".ui.activity.HomeActivity" android:launchMode="singleTask"  android:windowSoftInputMode="adjustResize|stateHidden"/>
     </application>
 
 </manifest>

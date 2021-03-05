@@ -17,6 +17,36 @@ import kotlinx.coroutines.launch
  */
 class MediaViewModel:BaseViewModel() {
 
+    val currentPosition by lazy {
+        MutableLiveData<Int>()
+    }
+
+    val editAction by lazy {
+        MutableLiveData(false)
+    }
+
+    val searchAction by lazy {
+        MutableLiveData(false)
+    }
+
+    fun getEditAction_():Boolean=editAction.value?:false
+
+    fun getSearchAction_():Boolean=searchAction.value?:false
+
+    fun setEditAction(action:Boolean){
+        editAction.value=action
+    }
+
+    fun setSearchAction(action:Boolean){
+        searchAction.value=action
+    }
+
+
+
+    fun setCurrentPosition(position:Int){
+        currentPosition.value=position
+    }
+
 }
 
 

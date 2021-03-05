@@ -3,6 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+        <import type="android.view.View"/>
+        <variable
+            name="data"
+            type="com.example.module_video.viewmode.MediaViewModel" />
 
     </data>
 
@@ -12,9 +16,9 @@
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/homePager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
 
         <net.lucode.hackware.magicindicator.MagicIndicator
@@ -25,30 +29,119 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--搜索框-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_include"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingLeft="13dp"
+            android:layout_marginRight="8dp"
+            android:visibility="@{data.searchAction?View.VISIBLE:View.GONE}"
+            android:background="@drawable/shape_home_top_bg"
+            app:layout_constraintBottom_toBottomOf="@+id/editAction"
+            app:layout_constraintEnd_toEndOf="@+id/searchAction"
+            app:layout_constraintStart_toEndOf="@+id/homeIndicator"
+            app:layout_constraintTop_toTopOf="@+id/editAction">
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/search_delete"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginRight="12dp"
+                android:visibility="gone"
+                android:src="@mipmap/icon_small_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/searchAction"
             android:layout_width="42dp"
             android:layout_height="37dp"
-
             android:layout_marginRight="8dp"
-            android:background="@drawable/shape_home_top_bg"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
+            android:src="@mipmap/icon_search"
+            android:visibility="@{data.searchAction?View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/editAction"
+            app:layout_constraintEnd_toStartOf="@+id/editAction"
+            app:layout_constraintTop_toTopOf="@+id/editAction" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/editAction"
             android:layout_width="42dp"
             android:layout_height="37dp"
-            android:text="编辑"
             android:layout_marginRight="16dp"
             android:textColor="@color/theme_color"
             android:gravity="center"
+            android:text="@{data.editAction?`完成`:`编辑`}"
             android:background="@drawable/shape_home_top_bg"
             app:layout_constraintBottom_toBottomOf="@+id/homeIndicator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/homeIndicator" />
+
+        <!--全部资源-->
+        <include
+            android:id="@+id/layout_all"
+            layout="@layout/layout_media_all"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{data.currentPosition==0?View.VISIBLE:View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
+            />
+
+        <!--视频资源-->
+        <include
+            android:id="@+id/layout_video"
+            layout="@layout/layout_media_video"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{data.currentPosition==1?View.VISIBLE:View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
+            />
+
+        <!--音频资源-->
+        <include
+            android:id="@+id/layout_audio"
+            layout="@layout/layout_media_audio"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{data.currentPosition==2?View.VISIBLE:View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
+            />
+
+        <!--搜索资源-->
+        <include
+            android:id="@+id/layout_search"
+            layout="@layout/layout_media_search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="@{data.currentPosition==3?View.VISIBLE:View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

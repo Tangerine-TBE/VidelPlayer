@@ -5,15 +5,10 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
-import com.example.module_base.utils.formatTime
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemMediaFileContianerBinding
-
 import com.example.module_video.domain.MediaInformation
-import com.google.android.play.core.assetpacks.dd
-import com.tamsiree.rxkit.RxTimeTool
-import java.text.SimpleDateFormat
-import java.util.*
+
 
 /**
  * @name VidelPlayer
@@ -27,7 +22,7 @@ class MediaFileAdapter:BaseQuickAdapter<MediaInformation,BaseDataBindingHolder<I
     override fun convert(holder: BaseDataBindingHolder<ItemMediaFileContianerBinding>, item: MediaInformation) {
         holder.dataBinding?.apply {
             item?.let {
-                Glide.with(context).load(it.bitmap).apply(RequestOptions.bitmapTransform(RoundedCorners(4))).error(R.mipmap.app_logo).into(mediaPic)
+                Glide.with(context).load(it.bitmap).apply(RequestOptions.bitmapTransform(RoundedCorners(4))).error(R.mipmap.icon_audio_logo).into(mediaPic)
                 mediaName.text=it.name
                 mediaDuration.text="时长：${it.duration}"
                 mediaResolution.text=it.resolution

@@ -26,6 +26,7 @@ open class BasePopup<T:ViewDataBinding>(val activity: FragmentActivity?, layout:
 
     protected val mView = DataBindingUtil.inflate<T>(LayoutInflater.from(activity),layout,null,false)
     init {
+        animationStyle
         contentView = mView.root
         setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         isFocusable = true
