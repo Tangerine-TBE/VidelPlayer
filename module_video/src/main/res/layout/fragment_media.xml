@@ -95,52 +95,19 @@
             app:layout_constraintTop_toTopOf="@+id/homeIndicator" />
 
         <!--全部资源-->
-        <include
-            android:id="@+id/layout_all"
-            layout="@layout/layout_media_all"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/media_all"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="@{data.currentPosition==0?View.VISIBLE:View.GONE}"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
 
-        <!--视频资源-->
-        <include
-            android:id="@+id/layout_video"
-            layout="@layout/layout_media_video"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="@{data.currentPosition==1?View.VISIBLE:View.GONE}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
-            />
 
-        <!--音频资源-->
-        <include
-            android:id="@+id/layout_audio"
-            layout="@layout/layout_media_audio"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="@{data.currentPosition==2?View.VISIBLE:View.GONE}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
-            />
 
-        <!--搜索资源-->
-        <include
-            android:id="@+id/layout_search"
-            layout="@layout/layout_media_search"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="@{data.currentPosition==3?View.VISIBLE:View.GONE}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeIndicator"
-            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

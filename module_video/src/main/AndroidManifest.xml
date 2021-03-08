@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.module_video">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <application>
+    <application
+        >
+
+
         <activity android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.activity.HomeActivity" android:launchMode="singleTask"  android:windowSoftInputMode="adjustResize|stateHidden"/>
+
+        <provider
+            android:name="com.example.module_video.utils.MyFileProvider"
+            android:authorities="${applicationId}.myFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/my_file_paths" />
+        </provider>
+
     </application>
 
 </manifest>

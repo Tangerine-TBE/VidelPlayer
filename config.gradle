@@ -44,7 +44,7 @@ ext {
             "Gson"                      : "com.google.code.gson:gson:2.8.6",
 
             //图片加载
-            "glide"                     : "com.github.bumptech.glide:glide:4.11.0",
+            "glide"                     : "com.github.bumptech.glide:glide:4.12.0",
 
             //BaseRecyclerView
             "BaseRecyclerView"          : "com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4",
@@ -80,7 +80,7 @@ ext {
             "PickerView"                : 'com.contrarywind:Android-PickerView:4.1.9',
 
             //coroutines
-            "Coroutines"                : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1',
+            "Coroutines"                : 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3-native-mt',
 
             //数据库
             "litepal"                   : 'org.litepal.guolindev:core:3.2.2',

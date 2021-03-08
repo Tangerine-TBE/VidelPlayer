@@ -1,29 +1,20 @@
 package com.example.module_video.ui.fragment
 
-import android.content.Intent
-import android.content.IntentFilter
-import android.database.ContentObservable
-import android.os.Build
-import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
-import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.setStatusBar
-import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentMediaBinding
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.ValueMediaType
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.ui.adapter.IndicatorAdapter
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
 import com.example.module_video.ui.adapter.viewpager.HomePagerAdapter
+import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.viewmode.MediaViewModel
 import com.tamsiree.rxkit.RxKeyboardTool
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -49,17 +40,10 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
     private val mMediaAllAdapter by lazy {
         MediaFileAdapter()
     }
-    private val mMediaVideoAdapter by lazy {
-        MediaFileAdapter()
-    }
-    private val mMediaAudioAdapter by lazy {
-        MediaFileAdapter()
-    }
 
-    private val mMediaSearchAdapter by lazy {
-        MediaFileAdapter()
+    private val mItemSelectPopup by lazy {
+        ItemSelectPopup(activity)
     }
-
 
     override fun getViewModelClass(): Class<MediaViewModel> {
         return MediaViewModel::class.java
@@ -82,24 +66,26 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
     }
 
     private val mAllMediaList = ArrayList<MediaInformation>()
-
+    private var mAllResource: ValueMediaType? = null
     override fun observerData() {
         binding.apply {
             viewModel.apply {
                 val that = this@MediaFragment
-                MediaLiveData.observe(that, {
+                MediaLiveData.observe(that, { it ->
+                    mAllResource = it
                     //所有
                     mAllMediaList.clear()
                     mAllMediaList.addAll(it.videoList)
                     mAllMediaList.addAll(it.audioList)
                     mMediaAllAdapter.setList(mAllMediaList)
-                    //视频
-                    mMediaVideoAdapter.setList(it.videoList)
-                    //音频
-                    mMediaAudioAdapter.setList(it.audioList)
+                }
+                )
+
+                editAction.observe(that, {
+                    mMediaAllAdapter.setEditAction(it)
+                    viewModel.setSelectItemList(mMediaAllAdapter.getSelectList())
                 })
             }
-
         }
 
 
@@ -108,10 +94,11 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
     override fun initEvent() {
         binding.apply {
             mIndicatorAdapter.setOnIndicatorClickListener(object :
-                    IndicatorAdapter.OnIndicatorClickListener {
+                IndicatorAdapter.OnIndicatorClickListener {
                 override fun onIndicatorClick(position: Int) {
                     homePager.currentItem = position
                     viewModel.setCurrentPosition(position)
+                    setPositionData(position)
                 }
             })
 
@@ -134,6 +121,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             //编辑
             editAction.setOnClickListener {
                 viewModel.setEditAction(!viewModel.getEditAction_())
+
             }
 
             //搜索
@@ -143,23 +131,47 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 viewModel.setSearchAction(!viewModel.getSearchAction_())
             }
 
+
+            mMediaAllAdapter.setOnItemClickListener(object : MediaFileAdapter.OnItemClickListener {
+                override fun onItemClick(item: MediaInformation, position: Int) {
+                    if (viewModel.getEditAction_()) {
+                        viewModel.setSelectItemList(mMediaAllAdapter.getSelectList())
+                    } else {
+                        mItemSelectPopup?.apply {
+                            setTitleText(item)
+                            showPopupView(mediaAll)
+                        }
+                    }
+                }
+            })
+
+        }
+    }
+
+    private fun setPositionData(position: Int) {
+        mAllResource?.let {
+
+            mMediaAllAdapter.getSelectList().forEach {
+                LogUtils.i("*------------mMediaAllAdapter------------------${it.hashCode()}-")
+            }
+            when (position) {
+                0 -> {
+                    mMediaAllAdapter.setList(mAllMediaList)
+
+                }
+                1 -> {
+                    mMediaAllAdapter.setList(it.videoList)
+                }
+                2 -> {
+                    mMediaAllAdapter.setList(it.audioList)
+                }
+            }
         }
     }
 
     private fun FragmentMediaBinding.initRecycleViewType() {
-        layoutAll.mediaAll.layoutManager = LinearLayoutManager(activity)
-        layoutAll.mediaAll.adapter = mMediaAllAdapter
-
-        layoutVideo.mediaVideo.layoutManager = LinearLayoutManager(activity)
-        layoutVideo.mediaVideo.adapter = mMediaVideoAdapter
-
-        layoutAudio.mediaAudio.layoutManager = LinearLayoutManager(activity)
-        layoutAudio.mediaAudio.adapter = mMediaAudioAdapter
-
-
-        layoutSearch.mediaSearch.layoutManager = LinearLayoutManager(activity)
-        layoutSearch.mediaSearch.adapter = mMediaSearchAdapter
-
+        mediaAll.layoutManager = LinearLayoutManager(activity)
+        mediaAll.adapter = mMediaAllAdapter
     }
 
     private fun FragmentMediaBinding.initIndicator() {
@@ -171,5 +183,8 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
         ViewPagerHelper.bind(homeIndicator, homePager)
     }
 
+    override fun release() {
+        mItemSelectPopup?.dismiss()
+    }
 
 }

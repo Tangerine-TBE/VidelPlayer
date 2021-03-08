@@ -45,7 +45,7 @@ abstract class BaseVmFragment<T:ViewDataBinding,Vm:ViewModel>:BaseViewFragment<T
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(getViewModelClass())
+        viewModel = ViewModelProvider(requireActivity()).get(getViewModelClass())
     }
     abstract fun getViewModelClass(): Class<Vm>
 

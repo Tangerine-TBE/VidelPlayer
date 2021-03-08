@@ -9,6 +9,9 @@ package com.example.module_base.utils
  * @class describe
  */
 object Constants {
+    // 打开类型
+     const val DATA_TYPE_VIDEO = "video/*"
+
     //第一次
     const val IS_FIRST = "one"
     const val FIRST_TIME = "FIRST_TIME"

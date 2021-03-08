@@ -29,6 +29,11 @@ class MediaViewModel:BaseViewModel() {
         MutableLiveData(false)
     }
 
+    val selectItemList by lazy {
+        MutableLiveData<MutableList<MediaInformation>>()
+    }
+
+
     fun getEditAction_():Boolean=editAction.value?:false
 
     fun getSearchAction_():Boolean=searchAction.value?:false
@@ -42,10 +47,17 @@ class MediaViewModel:BaseViewModel() {
     }
 
 
-
     fun setCurrentPosition(position:Int){
         currentPosition.value=position
     }
+
+
+
+    fun setSelectItemList(list:MutableList<MediaInformation>){
+        selectItemList.value=list
+    }
+
+
 
 }
 

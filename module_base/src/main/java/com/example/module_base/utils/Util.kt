@@ -7,11 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.module_base.base.BaseApplication
@@ -21,6 +23,7 @@ import com.google.gson.Gson
 import com.permissionx.guolindev.PermissionX
 import com.tamsiree.rxkit.RxNetTool
 import com.tamsiree.rxkit.view.RxToast
+import java.io.File
 import java.util.*
 
 /**
@@ -34,18 +37,18 @@ import java.util.*
 
 
 //跳转Activity
-inline fun <reified T>toOtherActivity(activity: Activity?, block: Intent.() -> Unit){
+inline fun <reified T> toOtherActivity(activity: Activity?, block: Intent.() -> Unit) {
     val intent = Intent(activity, T::class.java)
     intent.block()
     activity?.startActivity(intent)
 }
 
 //跳转Activity
-inline fun <reified T>toOtherActivity(
-        activity: Activity?,
-        isFinish: Boolean,
-        block: Intent.() -> Unit
-){
+inline fun <reified T> toOtherActivity(
+    activity: Activity?,
+    isFinish: Boolean,
+    block: Intent.() -> Unit
+) {
     val intent = Intent(activity, T::class.java)
     intent.block()
     activity?.startActivity(intent)
@@ -55,24 +58,26 @@ inline fun <reified T>toOtherActivity(
 }
 
 //跳转Activity带请求码
-inline fun <reified T>toOtherResultActivity(
-        context: Activity?,
-        requestCode: Int,
-        block: Intent.() -> Unit
-){
+inline fun <reified T> toOtherResultActivity(
+    context: Activity?,
+    requestCode: Int,
+    block: Intent.() -> Unit
+) {
     val intent = Intent(context, T::class.java)
     intent.block()
     context?.startActivityForResult(intent, requestCode)
 }
+
 //复制
-fun copyContent(context: Context, result: String){
+fun copyContent(context: Context, result: String) {
     val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val mClipData = ClipData.newPlainText("text", result)
     cm.setPrimaryClip(mClipData)
     RxToast.normal("已复制到剪切板")
 }
+
 //分享
-fun shareContent(context: Context, result: String){
+fun shareContent(context: Context, result: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain" // 纯文本
         putExtra(Intent.EXTRA_SUBJECT, PackageUtil.getAppMetaData(context, Constants.APP_NAME))
@@ -80,16 +85,17 @@ fun shareContent(context: Context, result: String){
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
     context.startActivity(
-            Intent.createChooser(
-                    intent, PackageUtil.getAppMetaData(
-                    context,
-                    Constants.APP_NAME
+        Intent.createChooser(
+            intent, PackageUtil.getAppMetaData(
+                context,
+                Constants.APP_NAME
             )
-            )
+        )
     )
 }
+
 //设置页面和状态栏的距离
- fun setToolBar(activity: Activity, title: String, view: MyToolbar, color: Int = Color.WHITE) {
+fun setToolBar(activity: Activity, title: String, view: MyToolbar, color: Int = Color.WHITE) {
     MyStatusBarUtil.setColor(activity, color)
     view.setTitle(title)
 }
@@ -110,10 +116,11 @@ fun calLastedTime(endDate: Date, nowDate: Date): Long {
     val min = diff % nd % nh / nm
     // 计算差多少秒//输出结果
     val sec = diff % nd % nh % nm / ns;
-    return day+1
+    return day + 1
 }
+
 //toolbar事件
-fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit){
+fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit) {
     setOnBackClickListener(object : MyToolbar.OnBackClickListener {
         override fun onBack() {
             activity?.finish()
@@ -126,13 +133,15 @@ fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit){
 }
 
 //计时
-fun startCountDown(totalTime: Long, followTime: Long, finish: () -> Unit, ticking: () -> Unit) = object:CountDownTimer(
+fun startCountDown(totalTime: Long, followTime: Long, finish: () -> Unit, ticking: () -> Unit) =
+    object : CountDownTimer(
         totalTime,
         followTime
-){
+    ) {
         override fun onFinish() {
             finish()
         }
+
         override fun onTick(millisUntilFinished: Long) {
             ticking()
         }
@@ -140,17 +149,17 @@ fun startCountDown(totalTime: Long, followTime: Long, finish: () -> Unit, tickin
 
 
 //网络是否连接
-fun isConnectedWifi(context: Context)=RxNetTool.isConnected(context)
+fun isConnectedWifi(context: Context) = RxNetTool.isConnected(context)
 
 
 //弹出toast
-fun showToast(str: String){
+fun showToast(str: String) {
     RxToast.normal(str)
 }
 
 
 //弹出Dialog
-fun LoadingDialog.showDialog(activity: Activity?){
+fun LoadingDialog.showDialog(activity: Activity?) {
     activity?.let {
         if (!it.isFinishing) {
             show()
@@ -159,27 +168,27 @@ fun LoadingDialog.showDialog(activity: Activity?){
 }
 
 //不全屏
-inline fun <reified T : View>setStatusBar(
-        context: Context?,
-        view: T,
-        layoutType: LayoutType
-){
+inline fun <reified T : View> setStatusBar(
+    context: Context?,
+    view: T,
+    layoutType: LayoutType
+) {
     val layoutParams = when (layoutType) {
         LayoutType.RELATIVELAYOUT -> view.layoutParams as RelativeLayout.LayoutParams
         LayoutType.LINEARLAYOUT -> view.layoutParams as LinearLayout.LayoutParams
         LayoutType.CONSTRAINTLAYOUT -> view.layoutParams as ConstraintLayout.LayoutParams
-        else ->view.layoutParams as RelativeLayout.LayoutParams
+        else -> view.layoutParams as RelativeLayout.LayoutParams
     }
-    layoutParams.topMargin= MyStatusBarUtil.getStatusBarHeight(context)
-    view.layoutParams=layoutParams
+    layoutParams.topMargin = MyStatusBarUtil.getStatusBarHeight(context)
+    view.layoutParams = layoutParams
 }
 
 
 //获取当前线程名字
-fun getCurrentThreadName(): String =Thread.currentThread().name
+fun getCurrentThreadName(): String = Thread.currentThread().name
 
 
-fun toAppShop(activity: Activity?){
+fun toAppShop(activity: Activity?) {
     activity?.let {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
@@ -193,24 +202,24 @@ fun toAppShop(activity: Activity?){
 
 
 inline fun <reified T> gsonHelper(result: String?): T? =
-        try {
-            if (result!=null) {
-                Gson().fromJson(result, T::class.java)
-            } else {
-                null
-            }
-        }catch (e: Exception){
+    try {
+        if (result != null) {
+            Gson().fromJson(result, T::class.java)
+        } else {
             null
         }
+    } catch (e: Exception) {
+        null
+    }
 
 
 fun checkAppPermission(
-        permissions: ArrayList<String>,
-        success: () -> Unit,
-        fail: () -> Unit,
-        activity: FragmentActivity? = null,
-        fragment: Fragment? = null
-){
+    permissions: ArrayList<String>,
+    success: () -> Unit,
+    fail: () -> Unit,
+    activity: FragmentActivity? = null,
+    fragment: Fragment? = null
+) {
     try {
         val permissionCollection = if (activity == null) {
             PermissionX.init(fragment)
@@ -220,8 +229,8 @@ fun checkAppPermission(
         permissionCollection
             .permissions(permissions)
             .setDialogTintColor(
-                    Color.parseColor("#285FF5"),
-                    Color.parseColor("#285FF5")
+                Color.parseColor("#285FF5"),
+                Color.parseColor("#285FF5")
             )
             .onExplainRequestReason { scope, deniedList, beforeRequest ->
                 val msg = "即将申请的权限是程序必须依赖的权限"
@@ -238,7 +247,7 @@ fun checkAppPermission(
                     fail()
                 }
             }
-    }catch (e: Exception){
+    } catch (e: Exception) {
     }
 
 }
@@ -260,5 +269,27 @@ fun formatTime(timeTemp: Long): String {
         "00:00:" + if (second > 10) second.toString() + "" else "0$second"
     }
 }
+
+
+/**
+ * 产生打开视频或音频的Intent
+ * @param filePath 文件路径
+ * @param dataType 文件类型
+ * @return
+ */
+fun generateVideoAudioIntent(context: Context,filePath: String?, dataType: String): Intent? {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    val file = File(filePath)
+    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        FileProvider.getUriForFile(context,context.packageName+".myFileProvider",file)
+    } else {
+        Uri.fromFile(file)
+    }
+    intent.setDataAndType(uri, dataType)
+    return intent
+}
+
 
 
