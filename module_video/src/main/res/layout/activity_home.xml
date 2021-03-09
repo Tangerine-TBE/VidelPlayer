@@ -46,6 +46,16 @@
             />
 
 
+        <include
+            android:id="@+id/listActionLayout"
+            layout="@layout/layout_edit_list_action"
+            android:visibility="@{data.listEditAction?View.VISIBLE:View.GONE}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

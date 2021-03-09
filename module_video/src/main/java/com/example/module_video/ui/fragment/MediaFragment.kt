@@ -137,10 +137,15 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     if (viewModel.getEditAction_()) {
                         viewModel.setSelectItemList(mMediaAllAdapter.getSelectList())
                     } else {
-                        mItemSelectPopup?.apply {
-                            setTitleText(item)
-                            showPopupView(mediaAll)
-                        }
+
+
+                    }
+                }
+
+                override fun onItemSubClick(item: MediaInformation, position: Int) {
+                    mItemSelectPopup?.apply {
+                        setTitleText(item)
+                        showPopupView(mediaAll)
                     }
                 }
             })

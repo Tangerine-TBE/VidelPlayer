@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/icon_video_more"
             android:layout_marginRight="11dp"
+            android:paddingLeft="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/media_select"
             app:layout_constraintTop_toTopOf="parent" />

@@ -5,10 +5,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -17,6 +19,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.module_base.base.BaseApplication
+import com.example.module_base.utils.Constants.MIME_MapTable
 import com.example.module_base.widget.LoadingDialog
 import com.example.module_base.widget.MyToolbar
 import com.google.gson.Gson
@@ -25,6 +28,7 @@ import com.tamsiree.rxkit.RxNetTool
 import com.tamsiree.rxkit.view.RxToast
 import java.io.File
 import java.util.*
+
 
 /**
  * @name Wifi_Manager
@@ -45,9 +49,9 @@ inline fun <reified T> toOtherActivity(activity: Activity?, block: Intent.() -> 
 
 //跳转Activity
 inline fun <reified T> toOtherActivity(
-    activity: Activity?,
-    isFinish: Boolean,
-    block: Intent.() -> Unit
+        activity: Activity?,
+        isFinish: Boolean,
+        block: Intent.() -> Unit
 ) {
     val intent = Intent(activity, T::class.java)
     intent.block()
@@ -59,9 +63,9 @@ inline fun <reified T> toOtherActivity(
 
 //跳转Activity带请求码
 inline fun <reified T> toOtherResultActivity(
-    context: Activity?,
-    requestCode: Int,
-    block: Intent.() -> Unit
+        context: Activity?,
+        requestCode: Int,
+        block: Intent.() -> Unit
 ) {
     val intent = Intent(context, T::class.java)
     intent.block()
@@ -85,12 +89,12 @@ fun shareContent(context: Context, result: String) {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
     context.startActivity(
-        Intent.createChooser(
-            intent, PackageUtil.getAppMetaData(
-                context,
-                Constants.APP_NAME
+            Intent.createChooser(
+                    intent, PackageUtil.getAppMetaData(
+                    context,
+                    Constants.APP_NAME
             )
-        )
+            )
     )
 }
 
@@ -135,8 +139,8 @@ fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit) {
 //计时
 fun startCountDown(totalTime: Long, followTime: Long, finish: () -> Unit, ticking: () -> Unit) =
     object : CountDownTimer(
-        totalTime,
-        followTime
+            totalTime,
+            followTime
     ) {
         override fun onFinish() {
             finish()
@@ -169,9 +173,9 @@ fun LoadingDialog.showDialog(activity: Activity?) {
 
 //不全屏
 inline fun <reified T : View> setStatusBar(
-    context: Context?,
-    view: T,
-    layoutType: LayoutType
+        context: Context?,
+        view: T,
+        layoutType: LayoutType
 ) {
     val layoutParams = when (layoutType) {
         LayoutType.RELATIVELAYOUT -> view.layoutParams as RelativeLayout.LayoutParams
@@ -214,11 +218,11 @@ inline fun <reified T> gsonHelper(result: String?): T? =
 
 
 fun checkAppPermission(
-    permissions: ArrayList<String>,
-    success: () -> Unit,
-    fail: () -> Unit,
-    activity: FragmentActivity? = null,
-    fragment: Fragment? = null
+        permissions: ArrayList<String>,
+        success: () -> Unit,
+        fail: () -> Unit,
+        activity: FragmentActivity? = null,
+        fragment: Fragment? = null
 ) {
     try {
         val permissionCollection = if (activity == null) {
@@ -229,8 +233,8 @@ fun checkAppPermission(
         permissionCollection
             .permissions(permissions)
             .setDialogTintColor(
-                Color.parseColor("#285FF5"),
-                Color.parseColor("#285FF5")
+                    Color.parseColor("#285FF5"),
+                    Color.parseColor("#285FF5")
             )
             .onExplainRequestReason { scope, deniedList, beforeRequest ->
                 val msg = "即将申请的权限是程序必须依赖的权限"
@@ -271,25 +275,15 @@ fun formatTime(timeTemp: Long): String {
 }
 
 
-/**
- * 产生打开视频或音频的Intent
- * @param filePath 文件路径
- * @param dataType 文件类型
- * @return
- */
-fun generateVideoAudioIntent(context: Context,filePath: String?, dataType: String): Intent? {
-    val intent = Intent(Intent.ACTION_VIEW)
-    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    val file = File(filePath)
-    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        FileProvider.getUriForFile(context,context.packageName+".myFileProvider",file)
-    } else {
-        Uri.fromFile(file)
-    }
-    intent.setDataAndType(uri, dataType)
-    return intent
-}
+
+
+
+
+
+
+
+
+
 
 
 

@@ -93,6 +93,14 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
                     }
                     mListener?.onItemClick(media, position)
                 }
+
+
+                mediaMore.setOnClickListener {
+                    if (mEditAction) {
+                        return@setOnClickListener
+                    }
+                        mListener?.onItemSubClick(media, position)
+                    }
             }
 
         }
@@ -107,5 +115,7 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     interface OnItemClickListener {
         fun onItemClick(item: MediaInformation, position: Int)
+
+        fun onItemSubClick(item: MediaInformation, position: Int)
     }
 }

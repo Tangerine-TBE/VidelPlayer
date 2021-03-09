@@ -1,5 +1,6 @@
 package com.example.module_video.ui.adapter.recycleview
 
+import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
 import com.example.module_video.R

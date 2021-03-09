@@ -33,4 +33,10 @@ object DataProvider {
         ItemBean(title = "打开方式"),
         ItemBean(title = "删除"),
     )
+
+    val listPopup= arrayListOf(
+        ItemBean(title = "重命名"),
+        ItemBean(title = "删除"),
+    )
+
 }

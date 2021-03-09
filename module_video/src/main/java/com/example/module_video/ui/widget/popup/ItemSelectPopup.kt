@@ -1,15 +1,17 @@
 package com.example.module_video.ui.widget.popup
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BasePopup
-import com.example.module_base.utils.Constants
-import com.example.module_base.utils.generateVideoAudioIntent
 import com.example.module_video.R
 import com.example.module_video.databinding.PopupItemSelectBinding
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.adapter.recycleview.PopupSelectItemAdapter
+import com.example.module_video.utils.FileUtil
+import java.io.File
 
 /**
  * @name VidelPlayer
@@ -23,39 +25,51 @@ class ItemSelectPopup(activity:FragmentActivity?):BasePopup<PopupItemSelectBindi
     private var mPopupSelectItemAdapter: PopupSelectItemAdapter = PopupSelectItemAdapter()
 
     init {
-        mView.apply {
-            itemSelectContainer.apply {
-                layoutManager=LinearLayoutManager(activity)
-                mPopupSelectItemAdapter.setList(DataProvider.homePopupList)
-                adapter=mPopupSelectItemAdapter
-            }
-
-            event()
-        }
+        event()
     }
 
     private var itemMsg:MediaInformation?=null
 
     fun setTitleText(info: MediaInformation?){
-        itemMsg=info
-        mView.selectTitle.text="${info?.name}"
+        mView. itemSelectContainer.apply {
+            adapter=mPopupSelectItemAdapter
+            layoutManager=LinearLayoutManager(activity)
+            mPopupSelectItemAdapter.setList(DataProvider.homePopupList)
+            itemMsg=info
+            mView.selectTitle.text="${info?.name}"
+        }
+
+    }
+
+    fun setTitleNormal(name:String){
+        mView.itemSelectContainer.apply {
+            adapter=mPopupSelectItemAdapter
+            layoutManager=LinearLayoutManager(activity)
+            mPopupSelectItemAdapter.setList(DataProvider.listPopup)
+        }
+        mView.selectTitle.text="$name"
     }
 
 
     fun event() {
         mPopupSelectItemAdapter.setOnItemClickListener { adapter, view, position ->
             when(position){
-                0->{}
-                1->{}
+                0->{
+                }
+                1->{
+
+                }
                 2->{
                     itemMsg?.let {
-                      activity?.startActivity(generateVideoAudioIntent(activity,it.path, Constants.DATA_TYPE_VIDEO))
+                        FileUtil.toAppOpenFile(activity, File(it.path))
                     }
                 }
-                3->{}
+                3->{
+
+                }
 
             }
-
+            dismiss()
         }
     }
 
