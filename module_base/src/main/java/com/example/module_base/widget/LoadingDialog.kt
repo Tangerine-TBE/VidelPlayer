@@ -17,7 +17,7 @@ class LoadingDialog(private val context: Context) {
 
     private var mLoadingView: LVCircularRing? = null
     private var mLoadingDialog: Dialog? = null
-    private var msg = "加载中···"
+    private var msg = "请稍等···"
     private var cancelable = true
     private var cancelout= false
 

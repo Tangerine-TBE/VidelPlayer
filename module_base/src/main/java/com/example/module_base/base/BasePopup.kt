@@ -85,5 +85,22 @@ open class BasePopup<T:ViewDataBinding>(val activity: FragmentActivity?, layout:
     }
 
 
+    inline fun addListener(crossinline sure:()->Unit={},crossinline cancel:()->Unit={}):OnActionClickListener{
+        val listener = object : OnActionClickListener {
+            override fun sure() {
+                sure()
+            }
+            override fun cancel() {
+                cancel()
+            }
+        }
+        setOnActionClickListener(listener)
+        return listener
+    }
+
+    inline  fun doSure(crossinline action: () -> Unit)=addListener( sure = action)
+
+    inline  fun doCancel(crossinline action: () -> Unit)=addListener( cancel = action)
+
 
 }

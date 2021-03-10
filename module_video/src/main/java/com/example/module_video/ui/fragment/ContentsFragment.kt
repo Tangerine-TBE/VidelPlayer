@@ -79,19 +79,5 @@ class ContentsFragment:BaseVmFragment<FragmentContentsBinding,ContentsViewModel>
     }
 
 
-   private fun toPlayVideo(view:View,msg:String){
-        val intent = Intent(activity, PlayVideoActivity::class.java)
-        intent.putExtra(PlayVideoActivity.TRANSITION, true)
-        intent.putExtra(PlayVideoActivity.VIDEO_MSG, msg)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val pair: Pair<View, String> = Pair<View, String>(view, PlayVideoActivity.IMG_TRANSITION)
-            val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    requireActivity(), pair
-            )
-            ActivityCompat.startActivity(requireActivity(), intent, activityOptions.toBundle())
-        } else {
-            activity?.startActivity(intent)
-            activity?.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
-        }
-    }
+
 }

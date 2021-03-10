@@ -11,8 +11,8 @@ import android.net.Uri
  * @time 2021/3/3 14:31:42
  * @class describe
  */
-data class MediaInformation(var id:Long=0L,var name:String?="",var duration:String?="",
+data class MediaInformation(var id:Long=0L,var name:String="",var duration:String?="",
                             var size:String?="",var date:String?="",
-                            var resolution:String?="",var path:String?="",
-                            var uri :String?="",val bitmap: Bitmap?=null
+                            var resolution:String?="",var path:String="",
+                            var uri :String="",val bitmap: Bitmap?=null,var type:Int=0
 )

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_bar"
     android:layout_width="match_parent"
-    android:layout_height="44dp">
+    android:layout_height="50dp">
 
     <ImageView
         android:id="@+id/iv_bar_back"
         android:layout_marginLeft="16dp"
-        android:src="@drawable/icon_base_back"
+        android:src="@drawable/icon_bar_white_back"
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content"
@@ -20,29 +20,44 @@
        android:text="工具箱"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/iv_bar_back"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content"/>
 
     <ImageView
         android:id="@+id/iv_bar_add"
-        android:visibility="gone"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="18dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
+        android:src="@drawable/icon_bar_add"
+        android:layout_toLeftOf="@+id/tv_bar_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/tv_bar_right"
-        android:visibility="gone"
+
+
+    <ImageView
+        android:id="@+id/iv_bar_right"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="24dp"
-        android:textColor="@color/black"
-        android:text="记录"
+        android:visibility="gone"
+        android:layout_marginRight="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/tv_bar_right"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_home_top_bg"
+        android:textSize="13sp"
+        android:textColor="@color/theme_color"
+        android:text="编辑"
+        android:gravity="center"
+        android:layout_width="42dp"
+        android:layout_height="37dp"/>
 
 </RelativeLayout>

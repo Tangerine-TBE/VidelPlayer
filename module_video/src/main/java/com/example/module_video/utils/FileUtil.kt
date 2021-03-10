@@ -123,9 +123,9 @@ object FileUtil {
      * 新建路径
      * @return String?
      */
-    private fun createFilePath():String?=
+     fun createFilePath():String=
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            BaseApplication.application.getExternalFilesDir("Video_File")?.path
+            BaseApplication.application.getExternalFilesDir("Video_File")?.path?:""
         } else {
             SD_APP_DIR
         }
@@ -163,9 +163,8 @@ object FileUtil {
      * @param source String?
      * @param destination String?
      */
-    fun moveFile(source: String?, destination: String?) {
-        File(source).renameTo(File(destination))
-    }
+    fun moveFile(source: String?, destination: String?)=File(source).renameTo(File(destination))
+
 
     /**
      * 新建文件夹
@@ -185,12 +184,17 @@ object FileUtil {
         val file = File(createFilePath())
         val listFiles = file.listFiles()
         listFiles?.forEach {
-            fileList.add(FileBean(it.name, it.listFiles().size,it.lastModified(),it.path))
+            fileList.add(FileBean(it.name, it.listFiles()?.size?:0,it.lastModified(),it.path))
         }
         fileList.sortByDescending { it.createDate }
         return fileList
     }
 
+    /**
+     * 删除文件
+     * @param file File
+     * @return Boolean
+     */
     fun deleteFile(file:File):Boolean{
       return  if (file.exists()) {
             if (file.isFile) {
@@ -200,7 +204,7 @@ object FileUtil {
                     deleteFile(it)
                 }
             }
-            file.delete()
+           file.delete()
         } else {
             false
         }

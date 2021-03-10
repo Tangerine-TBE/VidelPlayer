@@ -2,8 +2,10 @@ package com.example.module_video.ui.fragment
 
 import androidx.navigation.fragment.findNavController
 import com.example.module_base.base.BaseVmFragment
+import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentSetBinding
+import com.example.module_video.ui.activity.PlayListActivity
 import com.example.module_video.viewmode.SetViewModel
 
 /**
@@ -22,6 +24,14 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(){
 
     override fun initView() {
 
+    }
+
+    override fun initEvent() {
+        binding.apply {
+            test.setOnClickListener {
+                toOtherActivity<PlayListActivity>(activity){}
+            }
+        }
     }
 
 }

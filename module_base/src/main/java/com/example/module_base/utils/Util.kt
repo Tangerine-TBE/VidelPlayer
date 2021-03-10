@@ -133,6 +133,10 @@ fun MyToolbar.toolbarEvent(activity: Activity, event: () -> Unit) {
         override fun onRightTo() {
             event()
         }
+
+        override fun onRightTwoTo() {
+
+        }
     })
 }
 

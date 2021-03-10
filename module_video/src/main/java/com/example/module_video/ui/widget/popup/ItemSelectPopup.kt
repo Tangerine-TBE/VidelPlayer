@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BasePopup
 import com.example.module_video.R
 import com.example.module_video.databinding.PopupItemSelectBinding
+import com.example.module_video.domain.ItemBean
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.adapter.recycleview.PopupSelectItemAdapter
@@ -24,51 +25,19 @@ import java.io.File
 class ItemSelectPopup(activity:FragmentActivity?):BasePopup<PopupItemSelectBinding>(activity,R.layout.popup_item_select,ViewGroup.LayoutParams.MATCH_PARENT) {
     private var mPopupSelectItemAdapter: PopupSelectItemAdapter = PopupSelectItemAdapter()
 
-    init {
-        event()
-    }
-
-    private var itemMsg:MediaInformation?=null
-
-    fun setTitleText(info: MediaInformation?){
-        mView. itemSelectContainer.apply {
-            adapter=mPopupSelectItemAdapter
-            layoutManager=LinearLayoutManager(activity)
-            mPopupSelectItemAdapter.setList(DataProvider.homePopupList)
-            itemMsg=info
-            mView.selectTitle.text="${info?.name}"
-        }
-
-    }
-
-    fun setTitleNormal(name:String){
+    fun setTitleNormal(name:String?,list:List<ItemBean>){
         mView.itemSelectContainer.apply {
             adapter=mPopupSelectItemAdapter
             layoutManager=LinearLayoutManager(activity)
-            mPopupSelectItemAdapter.setList(DataProvider.listPopup)
+            mPopupSelectItemAdapter.setList(list)
         }
         mView.selectTitle.text="$name"
     }
 
 
-    fun event() {
-        mPopupSelectItemAdapter.setOnItemClickListener { adapter, view, position ->
-            when(position){
-                0->{
-                }
-                1->{
-
-                }
-                2->{
-                    itemMsg?.let {
-                        FileUtil.toAppOpenFile(activity, File(it.path))
-                    }
-                }
-                3->{
-
-                }
-
-            }
+    fun setItemAction(vararg block: ()->Unit){
+        mPopupSelectItemAdapter?.setOnItemClickListener { adapter, view, position ->
+            block[position]()
             dismiss()
         }
     }

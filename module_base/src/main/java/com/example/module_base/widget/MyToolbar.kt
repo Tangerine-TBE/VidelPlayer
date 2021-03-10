@@ -30,10 +30,12 @@ class MyToolbar @JvmOverloads constructor(
             mTitleColor = getColor(R.styleable.MyToolbar_titleColor, Color.WHITE)
             mBarBgColor = getColor(R.styleable.MyToolbar_barBgColor, Color.WHITE)
             mRightTitleColor = getColor(R.styleable.MyToolbar_rightTitleColor, Color.WHITE)
-            mLeftIcon = getResourceId(R.styleable.MyToolbar_backIconStyle, R.drawable.icon_base_back)
+            mLeftIcon = getResourceId(R.styleable.MyToolbar_backIconStyle, R.drawable.icon_bar_white_back)
             mRightIcon = getResourceId(R.styleable.MyToolbar_rightIconStyle, -1)
+            mRightTwoIcon = getResourceId(R.styleable.MyToolbar_rightIconTwoStyle, -1)
             isHaveAdd = getBoolean(R.styleable.MyToolbar_has_right_icon, false)
             isHaveRight = getBoolean(R.styleable.MyToolbar_hasRightTitle, false)
+            isHaveRightTwo = getBoolean(R.styleable.MyToolbar_has_right_two_icon, false)
             isHaveBack = getBoolean(R.styleable.MyToolbar_has_right_icon, true)
             recycle()
         }
@@ -42,20 +44,18 @@ class MyToolbar @JvmOverloads constructor(
     }
 
 
-
-
-
-
     private var mTitle: String = ""
     private var mRightTitle: String? = null
     private var mTitleColor: Int = Color.BLACK
     private var mBarBgColor: Int = Color.WHITE
-    private var mLeftIcon: Int?=null
+    private var mLeftIcon: Int? = null
     private var mRightIcon: Int? = null
+    private var mRightTwoIcon: Int? = null
     private var isHaveAdd: Boolean? = null
     private var isHaveBack: Boolean? = null
+    private var isHaveRightTwo: Boolean? = null
     private var isHaveRight: Boolean? = null
-    private var mRightTitleColor: Int ?=null
+    private var mRightTitleColor: Int? = null
 
 
     private fun initView() {
@@ -79,6 +79,12 @@ class MyToolbar @JvmOverloads constructor(
             }
         }
 
+        mRightTwoIcon?.let {
+            if (it != -1) {
+                iv_bar_right.setImageResource(it)
+            }
+        }
+
 
 
         if (isHaveAdd!!) {
@@ -86,6 +92,13 @@ class MyToolbar @JvmOverloads constructor(
         } else {
             iv_bar_add.visibility = View.GONE
         }
+
+        if (isHaveRightTwo!!) {
+            iv_bar_right.visibility = View.VISIBLE
+        } else {
+            iv_bar_right.visibility = View.GONE
+        }
+
 
         if (isHaveBack!!) {
             iv_bar_back.visibility = View.VISIBLE
@@ -122,6 +135,10 @@ class MyToolbar @JvmOverloads constructor(
             mOnBackClickListener?.onRightTo()
         }
 
+        iv_bar_right.setOnClickListener {
+            mOnBackClickListener?.onRightTwoTo()
+        }
+
     }
 
     private var mOnBackClickListener: OnBackClickListener? = null
@@ -139,7 +156,41 @@ class MyToolbar @JvmOverloads constructor(
         fun onBack()
 
         fun onRightTo()
+
+        fun onRightTwoTo()
     }
+
+
+    inline fun addBarListener(
+        crossinline comeBack: () -> Unit = {},
+        crossinline rightTo: () -> Unit = {},
+        crossinline rightTwoTo: () -> Unit = {}
+    ): OnBackClickListener {
+        val listener = object : OnBackClickListener {
+            override fun onBack() {
+                comeBack()
+            }
+
+            override fun onRightTo() {
+                rightTo()
+            }
+
+            override fun onRightTwoTo() {
+                rightTwoTo()
+            }
+
+        }
+        setOnBackClickListener(listener)
+        return listener
+    }
+
+    inline fun doComeBack(crossinline action: () -> Unit) = addBarListener(comeBack = action)
+
+    inline fun doOnRightTo(crossinline action: () -> Unit) = addBarListener(rightTo = action)
+
+    inline fun doRightTwoTo(crossinline action: () -> Unit) = addBarListener(rightTwoTo = action)
+
+
 }
 
 

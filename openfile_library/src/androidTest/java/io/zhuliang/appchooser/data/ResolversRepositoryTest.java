@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -34,7 +34,7 @@ public class ResolversRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        mResolversRepository = new ResolversRepository(InstrumentationRegistry.getTargetContext());
+        mResolversRepository = new ResolversRepository(InstrumentationRegistry.getInstrumentation().getTargetContext());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ResolversRepositoryTest {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, mimeType);
 
-        Context context = InstrumentationRegistry.getContext();
+        Context context = InstrumentationRegistry.getInstrumentation().getContext();
         PackageManager packageManager = context.getPackageManager();
         // 根据Intent查询匹配的Activity列表
         List<ResolveInfo> resolvers =

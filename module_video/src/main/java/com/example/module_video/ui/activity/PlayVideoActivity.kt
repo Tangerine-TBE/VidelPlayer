@@ -1,13 +1,21 @@
 package com.example.module_video.ui.activity
 
 import android.annotation.TargetApi
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.transition.Transition
+import android.view.View
 import android.view.animation.BounceInterpolator
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.fragment.app.FragmentActivity
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyStatusBarUtil
@@ -36,8 +44,26 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     companion object {
         const val IMG_TRANSITION = "IMG_TRANSITION"
         const val TRANSITION = "TRANSITION"
+        const val VIDEO_MSG = "VIDEO_MSG"
 
-        const val VIDEO_MSG="VIDEO_MSG"
+         fun toPlayVideo(activity: FragmentActivity?, view: View, msg:String){
+             activity?.let {
+                 val intent = Intent(activity, PlayVideoActivity::class.java)
+                 intent.putExtra(TRANSITION, true)
+                 intent.putExtra(VIDEO_MSG, msg)
+                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                     val pair: Pair<View, String> = Pair<View, String>(view, IMG_TRANSITION)
+                     val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                         it, pair
+                     )
+                     ActivityCompat.startActivity(it, intent, activityOptions.toBundle())
+                 } else {
+                    it.startActivity(intent)
+                     it.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+                 }
+             }
+
+        }
     }
 
 
@@ -54,8 +80,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     override fun initView() {
         binding.apply {
             val showType = GSYVideoType.getShowType()
-
-
             LogUtils.i("----GSYVideoType-------$showType------------")
             initVideoPlayer()
         }

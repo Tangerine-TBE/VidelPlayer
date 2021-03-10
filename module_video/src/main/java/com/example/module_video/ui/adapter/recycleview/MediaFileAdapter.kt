@@ -91,7 +91,7 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
                             mediaSelect.setImageResource(R.mipmap.icon_select1)
                         }
                     }
-                    mListener?.onItemClick(media, position)
+                    mListener?.onItemClick(media, position,itemView)
                 }
 
 
@@ -114,7 +114,7 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: MediaInformation, position: Int)
+        fun onItemClick(item: MediaInformation, position: Int,view: View)
 
         fun onItemSubClick(item: MediaInformation, position: Int)
     }
