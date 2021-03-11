@@ -185,7 +185,6 @@ inline fun <reified T : View> setStatusBar(
         LayoutType.RELATIVELAYOUT -> view.layoutParams as RelativeLayout.LayoutParams
         LayoutType.LINEARLAYOUT -> view.layoutParams as LinearLayout.LayoutParams
         LayoutType.CONSTRAINTLAYOUT -> view.layoutParams as ConstraintLayout.LayoutParams
-        else -> view.layoutParams as RelativeLayout.LayoutParams
     }
     layoutParams.topMargin = MyStatusBarUtil.getStatusBarHeight(context)
     view.layoutParams = layoutParams

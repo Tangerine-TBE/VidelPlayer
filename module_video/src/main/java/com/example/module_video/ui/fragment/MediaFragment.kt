@@ -1,6 +1,5 @@
 package com.example.module_video.ui.fragment
 
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.text.TextUtils
 import android.view.View
@@ -8,7 +7,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.setStatusBar
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentMediaBinding
@@ -25,6 +23,8 @@ import com.example.module_video.ui.widget.popup.InputPopup
 import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.FileUtil
+import com.example.module_video.utils.GeneralState
+import com.example.module_video.utils.MediaState
 import com.example.module_video.viewmode.MediaViewModel
 import com.google.gson.Gson
 import com.tamsiree.rxkit.RxKeyboardTool
@@ -76,8 +76,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
 
     override fun initView() {
-        //查询资源
-        MediaLiveData.getMediaResource()
+
         binding.apply {
             data = viewModel
             //设置滑动栏
@@ -111,6 +110,14 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     mMediaResource?.let {
                         setPositionData(it)
                     }
+                })
+
+                deleteFileState.observe(that,{
+                    when(it){
+                        GeneralState.LOADING->mLoadingDialog.show()
+                        GeneralState.SUCCESS->mLoadingDialog.dismiss()
+                    }
+
                 })
 
             }
@@ -216,7 +223,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     mItemValue?.let {
                         val name = getContent()
                         if (!TextUtils.isEmpty(name)) {
-                            viewModel.reNameToMediaFile(name,it)
+                            viewModel.reNameToMediaFile(name,it,it.type)
                         } else {
                             RxToast.normal("文件名不能为空！")
                         }
@@ -274,6 +281,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
         mItemSelectPopup?.dismiss()
         mRenamePopup?.dismiss()
         mDeletePopup?.dismiss()
+        mLoadingDialog.dismiss()
     }
 
 }

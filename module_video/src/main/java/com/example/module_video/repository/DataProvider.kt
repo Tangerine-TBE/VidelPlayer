@@ -39,4 +39,9 @@ object DataProvider {
         ItemBean(title = "删除"),
     )
 
+    val listMsgPopup= arrayListOf(
+        ItemBean(title = "打开方式"),
+        ItemBean(title = "删除"),
+    )
+
 }

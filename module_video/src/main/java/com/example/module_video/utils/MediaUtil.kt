@@ -57,10 +57,10 @@ object MediaUtil {
                 val path = getString(getColumnIndexOrThrow(MediaStore.Video.Media.DATA)) // 路径
                 val resolution = getString(getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)) // 分辨率
                 val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
-                LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
+             //   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(date), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
-                        ?: "", path, uri.toString(), bitmap,0))
+                        ?: "", path, uri.toString(), bitmap,MediaState.VIDEO))
             }
             close()
         }
@@ -83,9 +83,9 @@ object MediaUtil {
                 val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
                 val date = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED))//添加时间
                 val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
-                LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
+             //   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
-                        "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,1))
+                        "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,MediaState.AUDIO))
             }
             close()
         }
@@ -103,7 +103,7 @@ object MediaUtil {
         val contentValues = if (type == MediaState.AUDIO) {
             contentValuesOf(MediaStore.Audio.Media.DISPLAY_NAME to name,MediaStore.Audio.Media.DATA to path)
         } else {
-            contentValuesOf(MediaStore.Video.Media.DISPLAY_NAME to name,MediaStore.Audio.Media.DATA to path)
+            contentValuesOf(MediaStore.Video.Media.DISPLAY_NAME to name,MediaStore.Video.Media.DATA to path)
         }
         return contentResolver.update(uri, contentValues, null, null)
     }

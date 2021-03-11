@@ -1,12 +1,15 @@
 package com.example.module_video.viewmode
 
 import android.net.Uri
+import androidx.core.content.contentValuesOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.module_base.base.BaseViewModel
 import com.example.module_base.utils.LogUtils
-import com.example.module_video.domain.FileBean
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.PlayListMsgBean
+import com.example.module_video.livedata.PlayListLiveData
+import com.example.module_video.repository.db.DbHelper
 import com.example.module_video.utils.FileUtil
 import com.example.module_video.utils.GeneralState
 import com.example.module_video.utils.MediaState
@@ -44,6 +47,9 @@ class MediaViewModel:BaseViewModel() {
         MutableLiveData<MutableList<MediaInformation>>()
     }
 
+    val deleteFileState by lazy {
+        MutableLiveData<GeneralState>()
+    }
 
     fun getEditAction_():Boolean=editAction.value?:false
 
@@ -70,7 +76,7 @@ class MediaViewModel:BaseViewModel() {
 
 
 
-     fun reNameToMediaFile(name:String,msg:MediaInformation){
+     fun reNameToMediaFile(name:String,msg:MediaInformation,state:MediaState){
         viewModelScope.launch {
             var destPath: String
             val updateState = withContext(Dispatchers.IO) {
@@ -86,7 +92,7 @@ class MediaViewModel:BaseViewModel() {
             }
             withContext(Dispatchers.IO){
                 if (updateState) {
-                  val reNameToMedia = MediaUtil.reNameToMedia(Uri.parse(msg.uri), name,destPath,MediaState.VIDEO)
+                  val reNameToMedia = MediaUtil.reNameToMedia(Uri.parse(msg.uri), name,destPath,state)
                 }
             }
         }
@@ -101,27 +107,28 @@ class MediaViewModel:BaseViewModel() {
         }
     }
 
+    fun deleteFile(pathList:MutableList<String>){
+        viewModelScope.launch (Dispatchers.IO){
+            pathList.forEach {
+                val deleteFile = FileUtil.deleteFile(File(it))
+            }
+        }
+
+    }
+
+
+
     //FileList
     val listEditAction by lazy {
         MutableLiveData(false)
     }
-    val fileList by lazy {
-        MutableLiveData<MutableList<FileBean>>()
-    }
-    val createFileSate by lazy {
-        MutableLiveData<Boolean>()
-    }
 
     val selectItems by lazy {
-        MutableLiveData<MutableList<FileBean>>()
+        MutableLiveData<MutableList<PlayListMsgBean>>()
     }
 
-    val deleteFileState by lazy {
-        MutableLiveData<GeneralState>()
-    }
-
-    fun setSelectItems(list:MutableList<FileBean>){
-        selectItems.value=list
+    fun setSelectItems(listBean:MutableList<PlayListMsgBean>){
+        selectItems.value=listBean
     }
 
     fun getListEditAction_()=listEditAction.value?:false
@@ -131,53 +138,41 @@ class MediaViewModel:BaseViewModel() {
     }
 
 
-    fun getFolderList(){
-        fileList.postValue(FileUtil.getFileList())
-    }
-
-    fun createFileFolder(name:String){
-        viewModelScope.launch (Dispatchers.IO){
-            val createFile = FileUtil.createFile(name)
-            createFileSate.postValue(createFile)
-            if (createFile) {
-                getFolderList()
+    fun addNewPlayList(msgBean:PlayListMsgBean){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                DbHelper.addListFile<PlayListMsgBean>("name=?",msgBean.name,msgBean){null}
             }
+            PlayListLiveData.getPlayList()
         }
-
     }
 
-    fun deleteFile(list:MutableList<String>){
-        viewModelScope.launch (Dispatchers.IO) {
 
-            var isDelete=false
-            list.forEach {
-                isDelete= FileUtil.deleteFile(File(it))
-            }
-
-            if (isDelete) {
-                getFolderList()
-
-            }
-
-        }
-
-    }
-
-    fun reNameFolder(oldPath:String?, name:String){
-        viewModelScope.launch (Dispatchers.IO){
-            val newFile = File("${FileUtil.createFilePath()}/$name")
-            createFileSate.value=if (newFile.exists()) {
-                false
-            }else{
-                if (File(oldPath).renameTo(newFile)) {
-                    getFolderList()
-                    true
-                } else {
-                    false
+    fun deletePlayList(list:MutableList<String>){
+        viewModelScope.launch  {
+            withContext(Dispatchers.IO){
+                list.forEach {
+                    DbHelper.deleteListFile<PlayListMsgBean>("name=?",it)
                 }
             }
+            PlayListLiveData.getPlayList()
         }
+    }
 
+
+    fun reNamePlayList(oldName:String, newName:String){
+        viewModelScope.launch {
+            val size = withContext(Dispatchers.IO) {
+                DbHelper.updateListFile<PlayListMsgBean>(
+                    "name=?",
+                    oldName
+                ) { contentValuesOf("name" to newName) }
+            }
+
+          if (size>0){
+              PlayListLiveData.getPlayList()
+          }
+        }
     }
 
 }

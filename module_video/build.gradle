@@ -71,4 +71,6 @@ dependencies {
     compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'*/
 
     implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
+
+    debugImplementation   "com.glance.guolindev:glance:1.0.0-alpha01"
 }

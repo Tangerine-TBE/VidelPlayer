@@ -51,11 +51,7 @@ object MediaLiveData : BaseLiveData<ValueMediaType>(){
         BaseApplication.application.contentResolver.registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,true,mAudioObserver)
     }
 
-    override fun onInactive() {
-        super.onInactive()
-      //  BaseApplication.application.contentResolver.unregisterContentObserver(mVideoObserver)
-      //  BaseApplication.application.contentResolver.unregisterContentObserver(mAudioObserver)
-    }
+
 
 
     class VideoObserver:ContentObserver(BaseApplication.mHandler){

@@ -8,7 +8,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application android:requestLegacyExternalStorage="true">
-        <activity android:name=".ui.activity.PlayListActivity"></activity>
+        <activity android:name=".ui.activity.SelectFileActivity" android:launchMode="singleTop"></activity>
+        <activity android:name=".ui.activity.PlayListMsgActivity" android:launchMode="singleTop" />
+        <activity android:name=".ui.activity.PlayListActivity" android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

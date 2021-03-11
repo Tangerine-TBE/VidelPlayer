@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.module_base.utils.gsonHelper
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemFileListContainerBinding
-import com.example.module_video.domain.FileBean
-import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.MediaDataBean
+import com.example.module_video.domain.PlayListMsgBean
 import com.tamsiree.rxkit.RxTimeTool
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,9 +27,9 @@ import java.util.*
 class FileListAdapter : RecyclerView.Adapter<FileListAdapter.MyHolder>() {
 
     private var mEditAction = false
-    private var mSelectItemList = ArrayList<FileBean>()
+    private var mSelectItemList = ArrayList<PlayListMsgBean>()
 
-    private val mList = ArrayList<FileBean>()
+    private val mList = ArrayList<PlayListMsgBean>()
 
     fun setEditAction(edit: Boolean) {
         mSelectItemList.clear()
@@ -53,25 +54,28 @@ class FileListAdapter : RecyclerView.Adapter<FileListAdapter.MyHolder>() {
     }
 
     override fun getItemCount(): Int = mList.size
-    fun setList(list: MutableList<FileBean>) {
+    fun setList(listBean: MutableList<PlayListMsgBean>) {
         mList.clear()
-        mList.addAll(list)
+        mList.addAll(listBean)
         notifyDataSetChanged()
     }
 
 
     inner class MyHolder(itemView: View, val binding: ItemFileListContainerBinding) :
         RecyclerView.ViewHolder(itemView) {
-        fun setItemData(item: FileBean, position: Int) {
+        fun setItemData(item: PlayListMsgBean, position: Int) {
             binding.apply {
                 listName.text = "${item.name}"
                 listDate.text = "${
                     RxTimeTool.date2String(
-                        Date(item.createDate),
+                        Date(item.date),
                         SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     )
                 }"
-                listSize.text = "${item.subProject}个项目"
+
+                val gsonHelper = gsonHelper<MediaDataBean>(item.media)
+
+                listSize.text = "${gsonHelper?.idList?.size?:0}个项目"
 
 
                 listSelect.visibility = if (mEditAction) View.VISIBLE else View.GONE
@@ -117,8 +121,8 @@ class FileListAdapter : RecyclerView.Adapter<FileListAdapter.MyHolder>() {
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: FileBean, position: Int)
+        fun onItemClick(item: PlayListMsgBean, position: Int)
 
-        fun onItemSubClick(item: FileBean, position: Int)
+        fun onItemSubClick(item: PlayListMsgBean, position: Int)
     }
 }

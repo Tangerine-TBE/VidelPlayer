@@ -11,9 +11,10 @@ import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityHomeBinding
-import com.example.module_video.domain.FileBean
 import com.example.module_video.domain.ItemBean
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.PlayListMsgBean
+import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.adapter.recycleview.BottomAdapter
 import com.example.module_video.ui.fragment.FileListFragment
@@ -21,7 +22,6 @@ import com.example.module_video.ui.fragment.MediaFragment
 import com.example.module_video.ui.fragment.SetFragment
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.FileUtil
-import com.example.module_video.utils.GeneralState
 import com.example.module_video.viewmode.MediaViewModel
 
 
@@ -64,10 +64,12 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     private var hasData=false
 
-    private var mFileList :MutableList<FileBean> = ArrayList()
+    private var mFileListBean :MutableList<PlayListMsgBean> = ArrayList()
     private var mMediaList:MutableList<MediaInformation> = ArrayList()
 
     override fun observerData() {
+        //查询资源
+        MediaLiveData.getMediaResource()
         binding.apply {
             viewModel.apply {
                 val that = this@HomeActivity
@@ -82,7 +84,7 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
                 //媒体库选择的item
                 selectItems.observe(that, {
-                    mFileList=it
+                    mFileListBean=it
                     hasData= it.size>0
                     listActionLayout.apply {
                         deleteListActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_delete_select else R.mipmap.icon_edit_delete_normal)
@@ -176,20 +178,20 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                 listActionLayout.listIncludeActionLayout.setOnClickListener {
                     if (hasData) {
                         val itemList = ArrayList<ItemBean>()
-                        mFileList.forEach {
+                        mFileListBean.forEach {
                             itemList.add(ItemBean(title = it.name))
                         }
                         setContent(itemList)
                         showPopupView(homeFragment)
                     }
                 }
-                mRemindListPopup.doSure {
-                    mFileList?.let { it ->
+                doSure {
+                    mFileListBean?.let { it ->
                         val pathList = ArrayList<String>()
                         it.forEach {
-                            pathList.add(it.path)
+                            pathList.add(it.name)
                         }
-                        viewModel.deleteFile(pathList)
+                        viewModel.deletePlayList(pathList)
                         viewModel.setListEditAction(false)
                     }
 

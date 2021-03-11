@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="list_db" ></dbname>
+    <version value="1" ></version>
+    <list>
+        <mapping class="com.example.module_video.domain.PlayListMsgBean"></mapping>
+    </list>
+
+</litepal>

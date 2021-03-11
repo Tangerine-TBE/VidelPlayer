@@ -2,6 +2,7 @@ package com.example.module_video.domain
 
 import android.graphics.Bitmap
 import android.net.Uri
+import com.example.module_video.utils.MediaState
 
 /**
  * @name VidelPlayer
@@ -14,5 +15,5 @@ import android.net.Uri
 data class MediaInformation(var id:Long=0L,var name:String="",var duration:String?="",
                             var size:String?="",var date:String?="",
                             var resolution:String?="",var path:String="",
-                            var uri :String="",val bitmap: Bitmap?=null,var type:Int=0
+                            var uri :String="",val bitmap: Bitmap?=null,var type:MediaState=MediaState.VIDEO
 )

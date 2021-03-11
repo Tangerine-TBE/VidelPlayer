@@ -5,17 +5,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
 import com.example.module_base.utils.setStatusBar
+import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentListBinding
-import com.example.module_video.domain.FileBean
-import com.example.module_video.domain.ItemBean
+import com.example.module_video.domain.*
+import com.example.module_video.livedata.PlayListLiveData
 import com.example.module_video.repository.DataProvider
+import com.example.module_video.ui.activity.PlayListMsgActivity
 import com.example.module_video.ui.adapter.recycleview.FileListAdapter
 import com.example.module_video.ui.widget.popup.InputPopup
 import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.ui.widget.popup.RemindPopup
+import com.example.module_video.utils.Constants
 import com.example.module_video.viewmode.MediaViewModel
+import com.google.gson.Gson
 import com.tamsiree.rxkit.view.RxToast
+import java.util.*
 
 /**
  * @name VidelPlayer
@@ -50,6 +55,10 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         ItemSelectPopup(activity)
     }
 
+    companion object{
+        const val MODEL_CHECK=0
+        const val MODEL_NEW=1
+    }
 
     override fun getViewModelClass(): Class<MediaViewModel> {
         return MediaViewModel::class.java
@@ -58,7 +67,6 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
     override fun getChildLayout(): Int = R.layout.fragment_list
 
     override fun initView() {
-        viewModel.getFolderList()
         binding.apply {
             data=viewModel
             setStatusBar(context, listBar, LayoutType.LINEARLAYOUT)
@@ -72,19 +80,19 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        PlayListLiveData.getPlayList()
+    }
+
     override fun observerData() {
         binding.apply {
             viewModel.apply {
                 val that=this@FileListFragment
-                fileList.observe(that,{
+                PlayListLiveData.observe(that,{
                     mFileListAdapter.setList(it)
                 })
 
-                createFileSate.observe(that,{
-                    if (!it){
-                        RxToast.normal("文件已存在！")
-                    }
-                })
 
                 listEditAction.observe(that,{
                     mFileListAdapter.setEditAction(it)
@@ -96,7 +104,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         }
     }
 
-    private var mFileBean:FileBean?=null
+    private var mFileBean:PlayListMsgBean?=null
     override fun initEvent() {
         binding.apply {
             //编辑
@@ -109,12 +117,16 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
                 mCreateListPopup.showPopupView(fileListContainer)
             }
 
-            //新建弹窗
+            //新建列表弹窗
             mCreateListPopup.apply {
                 doSure {
                     val name = getContent()
                     if (!TextUtils.isEmpty(name)) {
-                        viewModel.createFileFolder(name)
+                        toOtherActivity<PlayListMsgActivity>(activity){
+                            putExtra(Constants.KEY_MODE, MODEL_NEW)
+                            putExtra(Constants.KEY_NAME, name)
+                        }
+                        viewModel.addNewPlayList(PlayListMsgBean(name,Gson().toJson(MediaDataBean(null)),System.currentTimeMillis()))
                     } else {
                         RxToast.normal("文件名不能为空！")
                     }
@@ -122,16 +134,18 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
             }
             //列表监听
             mFileListAdapter.setOnItemClickListener(object : FileListAdapter.OnItemClickListener {
-                override fun onItemClick(item: FileBean, position: Int) {
+                override fun onItemClick(item: PlayListMsgBean, position: Int) {
                     if (viewModel.getListEditAction_()) {
                         viewModel.setSelectItems(mFileListAdapter.getSelectList())
                     } else {
-
-
+                        toOtherActivity<PlayListMsgActivity>(activity){
+                            putExtra(Constants.KEY_NAME,item.name )
+                            putExtra(Constants.KEY_MODE, MODEL_CHECK)
+                        }
                     }
                 }
 
-                override fun onItemSubClick(item: FileBean, position: Int) {
+                override fun onItemSubClick(item: PlayListMsgBean, position: Int) {
                     mItemSelectPopup?.apply {
                         mFileBean=item
                         setTitleNormal(item.name,DataProvider.listPopup)
@@ -167,7 +181,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
                     mFileBean?.let {
                         val name = getContent()
                         if (!TextUtils.isEmpty(name)) {
-                            viewModel.reNameFolder(it.path,name)
+                           viewModel.reNamePlayList(it.name,name)
                         } else {
                             RxToast.normal("文件名不能为空！")
                         }
@@ -177,7 +191,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
             //删除动作
             mDeletePopup.doSure {
                 mFileBean?.let {
-                    viewModel.deleteFile(arrayListOf(it.path))
+                    viewModel.deletePlayList(arrayListOf(it.name))
                 }
             }
         }

@@ -10,6 +10,12 @@ package com.example.module_video.utils
  */
 object Constants {
 
-    //fragment  ket
+    //-------------fragment  key----------
     const val KEY_TYPE_FRAGMENT="KEY_TYPE_FRAGMENT"
+
+    //---------------activity key-----------
+    const val KEY_NAME="KEY_NAME"
+    //PlayListMsgActivity
+    const val KEY_MODE="KEY_MODE"
+
 }

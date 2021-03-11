@@ -195,13 +195,13 @@ object FileUtil {
      * @param file File
      * @return Boolean
      */
-    fun deleteFile(file:File):Boolean{
+    fun deleteFileDir(file:File):Boolean{
       return  if (file.exists()) {
             if (file.isFile) {
                 file.delete()
             } else if (file.isDirectory) {
                 file.listFiles()?.forEach {
-                    deleteFile(it)
+                    deleteFileDir(it)
                 }
             }
            file.delete()
@@ -209,6 +209,18 @@ object FileUtil {
             false
         }
     }
+
+    /**
+     * 删除文件
+     * @param file File
+     * @return Boolean
+     */
+    fun deleteFile(file:File)=if (file.exists()) {
+            file.delete()
+        } else {
+            false
+        }
+
 }
 
 

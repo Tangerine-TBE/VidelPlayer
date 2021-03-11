@@ -33,8 +33,26 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
         notifyDataSetChanged()
     }
 
+    fun selectAllItems(){
+        mSelectItemList.clear()
+        mSelectItemList.addAll(mList-mSelectItemList)
+        notifyDataSetChanged()
+    }
+
+    fun noSelectAllItems(){
+        mSelectItemList.clear()
+        mSelectItemList.addAll(mList-mSelectItemList)
+        notifyDataSetChanged()
+    }
+
+    fun getData()=mList
 
     fun getSelectList() = mSelectItemList
+
+    fun clearSelectList(){
+        mSelectItemList.clear()
+        notifyDataSetChanged()
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -63,9 +81,11 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
         RecyclerView.ViewHolder(itemView) {
         fun setItemData(media: MediaInformation, position: Int) {
             binding.apply {
+
                 Glide.with(itemView.context).load(media.bitmap)
-                    .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
-                    .error(R.mipmap.icon_audio_logo).into(mediaPic)
+                            .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
+                            .error(R.mipmap.icon_audio_logo).into(mediaPic)
+
                 mediaName.text = media.name
                 mediaDuration.text = "时长：${media.duration}"
                 mediaResolution.text = media.resolution

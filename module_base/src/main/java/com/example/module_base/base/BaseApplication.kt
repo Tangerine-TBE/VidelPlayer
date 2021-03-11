@@ -44,8 +44,8 @@ open class BaseApplication : Application() {
         RxTool.init(this@BaseApplication)
         GlobalScope.launch {
             SPUtil.init(this@BaseApplication)
-        //    LitePal.initialize(this@BaseApplication)
-          //  LitePal.getDatabase()
+           LitePal.initialize(this@BaseApplication)
+            LitePal.getDatabase()
             ARouter.init(this@BaseApplication)
             //用户反馈
             FeedbackAPI.init(this@BaseApplication, "25822454", "7a8bb94331a5141dcea61ecb1056bbbd")
