@@ -8,5 +8,5 @@ package com.example.module_video.domain
  * @time 2021/3/8 15:07:36
  * @class describe
  */
-data class ItemBean(var normalIcon:Int=0,var selectIcon:Int=0,var title:String="") {
+data class ItemBean(var normalIcon:Int=0,var selectIcon:Int=0,var title:String="",var isLogin:Boolean=false) {
 }

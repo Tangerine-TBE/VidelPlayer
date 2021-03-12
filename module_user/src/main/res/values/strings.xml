@@ -1,0 +1,14 @@
+<resources>
+
+
+    <string name="login_hint">Login ID</string>
+    <string name="login_phone_hint">Please enter your mobile phone number</string>
+    <string name="login_pwd_hint">Please enter your password</string>
+    <string name="login_find_pwd_hint">Forget the password</string>
+    <string name="login_go_hint">Login immediately</string>
+    <string name="login_register_hint">New user registration</string>
+    <string name="find_pwd">Retrieve password</string>
+    <string name="register_hint">Register</string>
+    <string name="code_hint">Please enter the verification code</string>
+    <string name="get_code_hint">Get code</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="fill" >
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+
+    <item android:gravity="left|center_vertical" android:left="86.5dp">
+        <bitmap android:src="@mipmap/qdy_title_two" />
+    </item>
+
+    <item android:gravity="right|center_vertical">
+        <bitmap android:src="@mipmap/qdy_logo"/>
+    </item>
+
+    <item android:gravity="left|center_vertical" android:left="55.5dp" android:bottom="50dp">
+        <bitmap android:src="@mipmap/qdy_title_one"/>
+    </item>
+</layer-list>

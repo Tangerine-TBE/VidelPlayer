@@ -42,7 +42,7 @@ public class FloatActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (Build.VERSION.SDK_INT >= 23){
-            //todo 用23以上编译即可出现canDrawOverlays
+
             if (Util.hasPermission(this)) {
                 mPermissionListener.onSuccess();
             } else {

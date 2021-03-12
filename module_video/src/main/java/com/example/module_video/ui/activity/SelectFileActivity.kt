@@ -2,6 +2,7 @@ package com.example.module_video.ui.activity
 
 import android.text.TextUtils
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LayoutType
@@ -14,6 +15,7 @@ import com.example.module_video.livedata.PlayListLiveData
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
 import com.example.module_video.utils.Constants
 import com.example.module_video.viewmode.SelectFileViewModel
+import com.tamsiree.rxkit.RxKeyboardTool
 import com.tamsiree.rxkit.view.RxToast
 
 class SelectFileActivity : BaseVmViewActivity<ActivitySelectMediaBinding, SelectFileViewModel>() {
@@ -57,6 +59,9 @@ class SelectFileActivity : BaseVmViewActivity<ActivitySelectMediaBinding, Select
                     mMediaFileAdapter.setEditAction(true)
                 })
 
+                searchMediaList.observe(that,{
+                    mMediaFileAdapter.setList(it)
+                })
 
                 addListState.observe(that, {
                     if (it) finish() else RxToast.normal("添加失败！")
@@ -68,6 +73,25 @@ class SelectFileActivity : BaseVmViewActivity<ActivitySelectMediaBinding, Select
 
     override fun initEvent() {
         binding.apply {
+            searchInput.doOnTextChanged { text, start, before, count ->
+                if (text?.length ?: 0 > 0) {
+                    visibleView(searchDelete)
+                    mAllMediaList.let {
+                        viewModel.getSearchList(text.toString().trim(),it)
+                    }
+                } else {
+                    goneView(searchDelete)
+                    mMediaFileAdapter.setList(mAllMediaList)
+                }
+            }
+
+            //删除
+            searchDelete.setOnClickListener {
+                searchInput.setText("")
+                RxKeyboardTool.hideSoftInput(searchInput)
+                mMediaFileAdapter.setList(mAllMediaList)
+            }
+
             selectBack.setOnClickListener {
                 finish()
             }

@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
+import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityHomeBinding
 import com.example.module_video.domain.ItemBean
+import com.example.module_video.domain.MediaDataBean
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.PlayListMsgBean
 import com.example.module_video.livedata.MediaLiveData
@@ -23,6 +25,7 @@ import com.example.module_video.ui.fragment.SetFragment
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.FileUtil
 import com.example.module_video.viewmode.MediaViewModel
+import com.google.gson.Gson
 
 
 class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
@@ -143,7 +146,14 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                     //移动
                     actionMove.setOnClickListener {
                         if (hasData) {
-                            LogUtils.i("------bottomActionLayout----------------move")
+                            val itemList = ArrayList<Long>()
+                            mMediaList.forEach {
+                                itemList.add(it.id)
+                            }
+                            toOtherActivity<PlayListActivity>(activity) {
+                                putExtra(PlayListActivity.KEY_MEDIA_LIST, Gson().toJson(MediaDataBean(itemList)))
+                            }
+                            viewModel.setEditAction(false)
                         }
                     }
                     //删除

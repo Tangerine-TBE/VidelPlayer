@@ -51,6 +51,11 @@ class MediaViewModel:BaseViewModel() {
         MutableLiveData<GeneralState>()
     }
 
+
+    val searchMediaList by lazy {
+        MutableLiveData<MutableList<MediaInformation>>()
+    }
+
     fun getEditAction_():Boolean=editAction.value?:false
 
     fun getSearchAction_():Boolean=searchAction.value?:false
@@ -73,6 +78,17 @@ class MediaViewModel:BaseViewModel() {
     fun setSelectItemList(list:MutableList<MediaInformation>){
         selectItemList.value=list
     }
+
+    fun getSearchList(name: String, list: MutableList<MediaInformation>) {
+        val searchList = ArrayList<MediaInformation>()
+        list.forEach {
+            if (it.name.toLowerCase().contains(name.toLowerCase())) {
+                searchList.add(it)
+            }
+            searchMediaList.value=searchList
+        }
+    }
+
 
 
 

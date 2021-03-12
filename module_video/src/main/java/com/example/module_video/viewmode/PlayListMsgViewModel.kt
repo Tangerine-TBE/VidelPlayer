@@ -39,20 +39,19 @@ class PlayListMsgViewModel : BaseViewModel() {
         MutableLiveData(false)
     }
 
-    val selectAllAction by lazy {
+
+    val selectAllState by lazy {
         MutableLiveData(false)
+    }
+
+    fun setSelectAllState(state:Boolean){
+        selectAllState.value=state
     }
 
     fun getEditAction_(): Boolean = editAction.value ?: false
 
-    fun getSelectAllAction_(): Boolean = selectAllAction.value ?: false
-
     fun setEditAction(action: Boolean) {
         editAction.value = action
-    }
-
-    fun setSelectAllAction(action: Boolean){
-        selectAllAction.value= action
     }
 
 
@@ -69,21 +68,20 @@ class PlayListMsgViewModel : BaseViewModel() {
 
     fun getPlayListMsg(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            playListMsg.postValue(DbHelper.queryListFile("name=?", name))
+            playListMsg.postValue( DbHelper.queryListFile<PlayListMsgBean>("name=?", name)[0])
         }
     }
 
 
     fun deleteListMsg(name: String, list: MutableList<Long>) {
         viewModelScope.launch(Dispatchers.IO) {
-            DbHelper.queryListFile<PlayListMsgBean>("name=?", name)?.let {
+            DbHelper.queryListFile<PlayListMsgBean>("name=?", name)[0]?.let {
                 gsonHelper<MediaDataBean>(it.media)?.apply {
                     idList?.let {
                         idList?.removeAll(list)
                           withContext(Dispatchers.IO) {
                             doDelete(name, idList)
                         }
-                       // PlayListLiveData.getPlayList()
                         getPlayListMsg(name)
                     }
                 }

@@ -24,14 +24,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--搜索框-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/search_include"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            android:background="@drawable/shape_home_top_bg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playListBar" >
+
+            <EditText
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:hint="搜索"
+                android:gravity="center"
+                android:textColorHint="@color/item_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/search_delete"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginRight="12dp"
+                android:visibility="gone"
+                android:src="@mipmap/icon_small_delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listContainer"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playListBar" />
+            app:layout_constraintTop_toBottomOf="@+id/search_include" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

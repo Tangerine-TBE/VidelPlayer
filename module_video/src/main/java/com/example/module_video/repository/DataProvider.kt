@@ -44,4 +44,20 @@ object DataProvider {
         ItemBean(title = "删除"),
     )
 
+    val setFunctionList= arrayListOf(
+            ItemBean(title = "密码锁定"),
+            ItemBean(title = "硬件加速"),
+            ItemBean(title = "字幕大小"),
+            ItemBean(title = "字幕文本编码"),
+    )
+
+    val setConnectUsList= arrayListOf(
+            ItemBean(title = "意见反馈"),
+            ItemBean(title = "联系客服"),
+            ItemBean(title = "关于我们"),
+            ItemBean(title = "隐私政策"),
+            ItemBean(title = "用户协议"),
+            ItemBean(title = "系统隐私权限"),
+    )
+
 }

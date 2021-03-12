@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.LayoutType
 import com.example.module_base.utils.setStatusBar
+import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentMediaBinding
 import com.example.module_video.domain.ItemBean
+import com.example.module_video.domain.MediaDataBean
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.ValueMediaType
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.repository.DataProvider
+import com.example.module_video.ui.activity.PlayListActivity
 import com.example.module_video.ui.activity.PlayVideoActivity
 import com.example.module_video.ui.adapter.IndicatorAdapter
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
@@ -89,6 +92,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
 
     private var mMediaResource:ValueMediaType?=null
+
     private val mAllMediaList = ArrayList<MediaInformation>()
     private var mItemValue: MediaInformation? = null
     override fun observerData() {
@@ -97,9 +101,8 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 val that = this@MediaFragment
                 MediaLiveData.observe(that, {
                     mMediaResource=it
-                    setPositionData(it)
-                }
-                )
+                    mMediaAllAdapter.setList(setPositionData(it))
+                })
 
                 editAction.observe(that, {
                     mMediaAllAdapter.setEditAction(it)
@@ -107,9 +110,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 })
 
                 currentPosition.observe(that,{
-                    mMediaResource?.let {
-                        setPositionData(it)
-                    }
+                    setMediaListData()
                 })
 
                 deleteFileState.observe(that,{
@@ -117,7 +118,10 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                         GeneralState.LOADING->mLoadingDialog.show()
                         GeneralState.SUCCESS->mLoadingDialog.dismiss()
                     }
+                })
 
+                searchMediaList.observe(that,{
+                    mMediaAllAdapter.setList(it)
                 })
 
             }
@@ -141,8 +145,12 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             searchInput.doOnTextChanged { text, start, before, count ->
                 if (text?.length ?: 0 > 0) {
                     showView(searchDelete)
+                    mMediaResource?.let {
+                        viewModel.getSearchList(text.toString().trim(), setPositionData(it))
+                    }
                 } else {
                     goneView(searchDelete)
+                    setMediaListData()
                 }
             }
 
@@ -151,6 +159,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 searchInput.setText("")
                 RxKeyboardTool.hideSoftInput(searchInput)
                 viewModel.setSearchAction(false)
+                setMediaListData()
             }
 
             //编辑
@@ -190,32 +199,37 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 setItemAction({
                     //重命名
                     mRenamePopup.apply {
-                        mItemValue?.let {
+                        doItemAction {
                             setHint(it.name)
                             showPopupView(mediaAll)
                             mItemSelectPopup.dismiss()
                         }
                     }
                 }, {
-
-                    },
-                    {
-                        mItemValue?.let {
-                            FileUtil.toAppOpenFile(activity, File(it.path))
+                    //添加到列表
+                    doItemAction {
+                        toOtherActivity<PlayListActivity>(activity) {
+                            putExtra(PlayListActivity.KEY_MEDIA_LIST,Gson().toJson(MediaDataBean(arrayListOf(it.id))))
                         }
-                    },
-                    {
-                        mItemValue?.let {
-                            //删除
-                            mDeletePopup.apply {
-                                setContent(arrayListOf(ItemBean(title = it.name?:"")))
-                                showPopupView(mediaAll)
-                                mItemSelectPopup.dismiss()
+                    }
+                },
+                        {
+                            //打开方式
+                            doItemAction {
+                                FileUtil.toAppOpenFile(activity, File(it.path))
                             }
-                        }
+                        },
+                        {
+                            doItemAction {
+                                //删除
+                                mDeletePopup.apply {
+                                    setContent(arrayListOf(ItemBean(title = it.name ?: "")))
+                                    showPopupView(mediaAll)
+                                    mItemSelectPopup.dismiss()
+                                }
+                            }
 
-                    })
-
+                        })
             }
             //重命名
             mRenamePopup.apply {
@@ -243,25 +257,36 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
     }
 
-    private fun setPositionData(it:ValueMediaType) {
-            when (viewModel.getCurrentPosition_()) {
+    private fun setMediaListData() {
+        mMediaResource?.let {
+            mMediaAllAdapter.setList(setPositionData(it))
+        }
+    }
+
+    private fun doItemAction(block:(MediaInformation)->Unit){
+        mItemValue?.let {
+            block(it)
+        }
+    }
+
+    private fun setPositionData(it:ValueMediaType)=
+           when (viewModel.getCurrentPosition_()) {
                 0 -> {
                     //所有
                     mAllMediaList.apply {
                         clear()
                         addAll(it.videoList)
                         addAll(it.audioList)
-                        mMediaAllAdapter.setList(mAllMediaList)
                     }
                 }
                 1 -> {
-                    mMediaAllAdapter.setList(it.videoList)
+                  it.videoList
                 }
                 2 -> {
-                    mMediaAllAdapter.setList(it.audioList)
+                  it.audioList
                 }
+               else->mAllMediaList
             }
-        }
 
     private fun FragmentMediaBinding.initRecycleViewType() {
         mediaAll.layoutManager = LinearLayoutManager(activity)

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemMediaFileContianerBinding
 import com.example.module_video.domain.MediaInformation
@@ -24,8 +25,12 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     private var mEditAction = false
     private var mSelectItemList = ArrayList<MediaInformation>()
-
     private val mList = ArrayList<MediaInformation>()
+    private var mSelectAllState=false
+
+
+
+    fun getSelectState()=mSelectAllState
 
     fun setEditAction(edit: Boolean) {
         mSelectItemList.clear()
@@ -35,22 +40,18 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     fun selectAllItems(){
         mSelectItemList.clear()
-        mSelectItemList.addAll(mList-mSelectItemList)
+        mSelectItemList.addAll(mList.toSet())
+        mSelectAllState=true
         notifyDataSetChanged()
+
     }
 
-    fun noSelectAllItems(){
-        mSelectItemList.clear()
-        mSelectItemList.addAll(mList-mSelectItemList)
-        notifyDataSetChanged()
-    }
-
-    fun getData()=mList
 
     fun getSelectList() = mSelectItemList
 
-    fun clearSelectList(){
+    fun clearAllItems(){
         mSelectItemList.clear()
+        mSelectAllState=false
         notifyDataSetChanged()
     }
 
@@ -81,19 +82,22 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
         RecyclerView.ViewHolder(itemView) {
         fun setItemData(media: MediaInformation, position: Int) {
             binding.apply {
-
                 Glide.with(itemView.context).load(media.bitmap)
                             .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
                             .error(R.mipmap.icon_audio_logo).into(mediaPic)
-
                 mediaName.text = media.name
                 mediaDuration.text = "时长：${media.duration}"
                 mediaResolution.text = media.resolution
                 mediaDate.text = "${media.date}    ${media.size}"
 
                 mediaSelect.visibility = if (mEditAction) View.VISIBLE else View.GONE
+
+
+
                 if (mSelectItemList.contains(media)) {
-                    mSelectItemList.add(media)
+                    if (!mSelectAllState){
+                        mSelectItemList.add(media)
+                    }
                     mediaSelect.setImageResource(R.mipmap.icon_select1)
                 } else {
                     mSelectItemList.remove(media)
@@ -111,6 +115,7 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
                             mediaSelect.setImageResource(R.mipmap.icon_select1)
                         }
                     }
+                    mSelectAllState=mSelectItemList.size==mList.size
                     mListener?.onItemClick(media, position,itemView)
                 }
 

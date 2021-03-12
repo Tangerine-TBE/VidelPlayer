@@ -40,5 +40,5 @@ object DbHelper {
 
 
 
-    inline fun <reified T>queryListFile(condition: String,value: String): T =LitePal.where(condition,value).find(T::class.java)[0]
+    inline fun <reified T>queryListFile(condition: String,value: String): MutableList<T> =LitePal.where(condition,value).find(T::class.java)
 }
