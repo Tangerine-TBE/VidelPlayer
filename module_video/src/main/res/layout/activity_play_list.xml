@@ -18,6 +18,7 @@
             app:toolbarTitle="播放列表"
             app:has_right_two_icon="true"
             app:rightIconTwoStyle="@mipmap/icon_file_list_add"
+            app:backIconStyle="@drawable/icon_bar_white_back"
             app:barBgColor="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -2,10 +2,12 @@ package com.example.module_video.ui.fragment
 
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
+import com.example.module_base.activity.AboutActivity
+import com.example.module_base.activity.DealViewActivity
 import com.example.module_base.base.BaseVmFragment
-import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.setStatusBar
-import com.example.module_base.utils.toOtherActivity
+import com.example.module_base.utils.*
+import com.example.module_base.utils.Constants.SET_DEAL1
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentSetBinding
 import com.example.module_video.domain.ItemBean
@@ -65,12 +67,14 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(){
                 layoutManager=LinearLayoutManager(activity)
                 mUsSetAdapter.setList(DataProvider.setConnectUsList)
                 adapter=mUsSetAdapter
+                mUsSetAdapter.setHasContact()
             }
 
             mSetContainer.apply {
                 layoutManager=LinearLayoutManager(activity)
                 mFunctionAdapter.setList(DataProvider.setFunctionList)
                 adapter=mFunctionAdapter
+
             }
 
 
@@ -79,8 +83,22 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(){
 
     override fun initEvent() {
         binding.apply {
-
-
+            mUsSetAdapter.setOnItemClickListener { adapter, view, position ->
+                when (position) {
+                    0->FeedbackAPI.openFeedbackActivity()
+                    1->{
+                        copyContent(context,"2681706890@qq.com")
+                    }
+                    2-> toOtherActivity<AboutActivity>(activity){}
+                    3-> toOtherActivity<DealViewActivity>(activity){
+                        putExtra(SET_DEAL1,2)
+                    }
+                    4-> toOtherActivity<DealViewActivity>(activity){
+                        putExtra(SET_DEAL1,1)
+                    }
+                    5->PermissionUtil.gotoPermission(activity)
+                }
+            }
         }
     }
 

@@ -10,11 +10,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".activity.AboutActivity">
 
 
         <com.example.module_base.widget.MyToolbar
             android:id="@+id/about_toolbar"
+            app:backIconStyle="@drawable/icon_base_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:barBgColor="@color/transparent"

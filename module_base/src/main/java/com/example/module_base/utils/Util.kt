@@ -73,8 +73,8 @@ inline fun <reified T> toOtherResultActivity(
 }
 
 //复制
-fun copyContent(context: Context, result: String) {
-    val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+fun copyContent(context: Context?, result: String) {
+    val cm = context?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val mClipData = ClipData.newPlainText("text", result)
     cm.setPrimaryClip(mClipData)
     RxToast.normal("已复制到剪切板")

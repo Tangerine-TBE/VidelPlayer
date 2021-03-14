@@ -14,6 +14,7 @@
         <com.example.module_base.widget.MyToolbar
             android:id="@+id/privacy_toolbar"
             app:toolbarTitle="协议"
+            app:backIconStyle="@drawable/icon_base_back"
             app:barBgColor="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

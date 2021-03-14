@@ -29,7 +29,7 @@ class DealViewActivity : BaseViewActivity<ActivityDealBinding>()  {
                 mContent=R.string.user
             }
             2-> {
-                mTitleMsg="隐私协议"
+                mTitleMsg="隐私政策"
                 mContent=R.string.privacy
             }
             3->{
