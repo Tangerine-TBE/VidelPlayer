@@ -37,7 +37,7 @@
 
 
     <EditText
-        android:paddingRight="@dimen/dp_80"
+        android:paddingRight="80dp"
         android:id="@+id/login_verification_code"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

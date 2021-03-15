@@ -17,7 +17,15 @@ import com.example.module_video.domain.ItemBean
  */
 class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContainerBinding>>(R.layout.item_set_container) {
 
+    private var mListener:OnCheckListener?=null
     private var hasContact=false
+    private var hasSwitch=false
+
+
+    fun setHasSwitch(){
+        hasSwitch=true
+        notifyDataSetChanged()
+    }
 
     fun setHasContact(){
         hasContact=true
@@ -26,12 +34,36 @@ class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContaine
 
     override fun convert(holder: BaseDataBindingHolder<ItemSetContainerBinding>, item: ItemBean) {
         holder.dataBinding?.apply {
-            setTitle.text="${item.title}"
+            setTitle.text = "${item.title}"
             if (hasContact) {
-                if (holder.adapterPosition==1){
-                    hintText.text="2681706890@qq.com"
+                if (holder.adapterPosition == 1) {
+                    hintText.text = "2681706890@qq.com"
+                }
+            }
+
+            if (hasSwitch) {
+                if (holder.adapterPosition == 0) {
+                    switchBt.isChecked=item.hasPwd
+                    imageView.visibility = View.GONE
+                    switchBt.visibility = View.VISIBLE
+
+                    switchBt.setOnClickListener {
+                        mListener?.onClick()
+                    }
+
                 }
             }
         }
+    }
+
+
+
+    interface OnCheckListener{
+        fun onCheck(b:Boolean)
+        fun onClick()
+    }
+
+    fun setOnCheckListener(listener:OnCheckListener){
+        mListener=listener
     }
 }

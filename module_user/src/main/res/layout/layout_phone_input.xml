@@ -10,39 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+86"
-            android:textColor="@color/theme_color"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@+id/nameInput"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameInput" />
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="1dp"
-            android:layout_height="12dp"
-            android:layout_marginLeft="18dp"
-            android:background="#FF6B6B"
-            app:layout_constraintBottom_toBottomOf="@+id/nameInput"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="@id/nameInput" />
 
         <EditText
             android:id="@+id/nameInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
             android:background="@null"
-            android:hint="@string/login_phone_hint"
-            android:inputType="phone"
             android:ellipsize="middle"
+            android:hint="@string/login_phone_hint"
+            android:textColor="@color/white"
+            android:inputType="phone"
             android:textColorHint="#B3B3B3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -50,9 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="12dp"
-            android:background="@color/theme_color"
+            android:background="#3D5A87"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/nameInput" />
 
 
         <EditText
@@ -64,6 +44,7 @@
             android:ellipsize="middle"
             android:inputType="textPassword"
             android:hint="@string/login_pwd_hint"
+            android:textColor="@color/white"
             android:textColorHint="#B3B3B3"
             app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -73,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="12dp"
-            android:background="@color/theme_color"
+            android:background="#3D5A87"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pwdInput" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,7 @@ class LoginActivity : BaseVmViewActivity<ActivityLoginBinding, LoginViewModel>()
 
     override fun initView() {
         binding.apply {
-            setStatusBar(this@LoginActivity, binding.loginToolbar, LayoutType.LINEARLAYOUT)
+            setStatusBar(this@LoginActivity, binding.loginToolbar, LayoutType.CONSTRAINTLAYOUT)
         }
 
     }

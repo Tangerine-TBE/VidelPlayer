@@ -18,3 +18,15 @@ enum class MediaState{
 enum class GeneralState{
     LOADING,SUCCESS
 }
+
+enum class InputPwdState{
+    BEGIN,AGAIN,ERROR,NONE
+}
+
+enum class BackState{
+    CANCEL,DELETE
+}
+
+enum class CheckState{
+    EXIT,UNLOCK,ERROR
+}

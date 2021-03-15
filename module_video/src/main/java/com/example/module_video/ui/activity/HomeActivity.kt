@@ -52,7 +52,7 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     override fun getLayoutView(): Int = R.layout.activity_home
     override fun initView() {
-        FileUtil.createFileDir()
+      //  FileUtil.createFileDir()
         binding.apply {
             data = viewModel
             showFragment(mMediaFragment)

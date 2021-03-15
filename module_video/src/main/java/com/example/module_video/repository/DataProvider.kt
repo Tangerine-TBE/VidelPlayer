@@ -44,12 +44,6 @@ object DataProvider {
         ItemBean(title = "删除"),
     )
 
-    val setFunctionList= arrayListOf(
-            ItemBean(title = "密码锁定"),
-            ItemBean(title = "硬件加速"),
-            ItemBean(title = "字幕大小"),
-            ItemBean(title = "字幕文本编码"),
-    )
 
     val setConnectUsList= arrayListOf(
             ItemBean(title = "意见反馈"),

@@ -3,14 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.module_video">
 
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application android:requestLegacyExternalStorage="true">
-        <activity android:name=".ui.activity.SelectFileActivity" android:launchMode="singleTop"></activity>
-        <activity android:name=".ui.activity.PlayListMsgActivity" android:launchMode="singleTop" />
-        <activity android:name=".ui.activity.PlayListActivity" android:launchMode="singleTop"/>
+        <activity android:name=".ui.activity.LockActivity"></activity>
+        <activity
+            android:name=".ui.activity.SelectFileActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.PlayListMsgActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.PlayListActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

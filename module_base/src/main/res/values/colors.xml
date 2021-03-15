@@ -3,10 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
-
     <color name="theme_color">#29FFE9</color>
     <color name="theme_bg_color">#081B39</color>
-
+    <color name="themeColor">@color/theme_color</color>
     <color name="item_theme_color">#1FFFFFFF</color>
 
 </resources>
