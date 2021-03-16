@@ -7,8 +7,10 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.module_base.base.BaseVmViewActivity
-import com.example.module_base.utils.LogUtils
+import com.example.module_base.provider.ModuleProvider
+import com.example.module_base.utils.Constants
 import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityHomeBinding
@@ -23,11 +25,10 @@ import com.example.module_video.ui.fragment.FileListFragment
 import com.example.module_video.ui.fragment.MediaFragment
 import com.example.module_video.ui.fragment.SetFragment
 import com.example.module_video.ui.widget.popup.RemindPopup
-import com.example.module_video.utils.FileUtil
 import com.example.module_video.viewmode.MediaViewModel
 import com.google.gson.Gson
 
-
+@Route(path = ModuleProvider.ROUTE_HOME_ACTIVITY)
 class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     private val mBottomAnimationShow by lazy {
@@ -52,7 +53,7 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     override fun getLayoutView(): Int = R.layout.activity_home
     override fun initView() {
-      //  FileUtil.createFileDir()
+        sp.putBoolean(Constants.IS_FIRST, false)
         binding.apply {
             data = viewModel
             showFragment(mMediaFragment)
@@ -252,5 +253,10 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
         return super.onKeyDown(keyCode, event)
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        when (intent.getIntExtra(ModuleProvider.FRAGMENT_ID, 5)) {
+            3->showFragment(mSetFragment)
+        }
+    }
 }

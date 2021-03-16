@@ -3,6 +3,7 @@ package com.example.module_user.ui.activity
 import android.graphics.Color
 import android.graphics.Paint
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.provider.ModuleProvider
 import com.example.module_base.utils.*

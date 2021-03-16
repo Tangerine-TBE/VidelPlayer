@@ -1,5 +1,6 @@
 package com.example.module_video.repository
 
+import android.Manifest
 import com.example.module_video.R
 import com.example.module_video.domain.ItemBean
 
@@ -12,7 +13,14 @@ import com.example.module_video.domain.ItemBean
  * @class describe
  */
 object DataProvider {
+    val permissionList = arrayListOf(
+        ItemBean(icon = R.mipmap.icon_ps_store, title = "储存", hint = "为您扫描手机上的音视频文件"),
+    )
 
+    val askAllPermissionLis = arrayListOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    )
 
     val homeItemList= arrayListOf(
         "所有",

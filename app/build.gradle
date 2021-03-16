@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -16,6 +17,14 @@ android {
         flavorDimensions "versionCode"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //Arouter路由配置
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+
     }
 
     dataBinding{
@@ -162,4 +171,11 @@ dependencies {
 
     implementation project(path: ':module_base')
     implementation project(path: ':module_video')
+    implementation project(path: ':module_ad')
+
+
+    //阿里路由
+    kapt rootProject.ext.dependencies["arouter_compiler"]
+    api  rootProject.ext.dependencies["arouter_annotation"]
+
 }

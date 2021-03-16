@@ -64,7 +64,7 @@ class RegisterPwdActivity :
                         NetState.SUCCESS -> {
                             dismiss()
                             showToast(it.msg)
-                            ARouter.getInstance().build(ModuleProvider.ROUTE_MAIN_ACTIVITY).withInt(ModuleProvider.FRAGMENT_ID, 3).navigation()
+                            ARouter.getInstance().build(ModuleProvider.ROUTE_HOME_ACTIVITY).withInt(ModuleProvider.FRAGMENT_ID, 3).navigation()
                         }
                         NetState.ERROR -> {
                             dismiss()

@@ -20,6 +20,7 @@
             android:hint="@string/login_phone_hint"
             android:textColor="@color/white"
             android:inputType="phone"
+            android:textSize="15sp"
             android:textColorHint="#B3B3B3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +32,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="12dp"
             android:background="#3D5A87"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameInput" />
 
@@ -44,6 +46,7 @@
             android:ellipsize="middle"
             android:inputType="textPassword"
             android:hint="@string/login_pwd_hint"
+            android:textSize="15sp"
             android:textColor="@color/white"
             android:textColorHint="#B3B3B3"
             app:layout_constraintTop_toBottomOf="@+id/view3" />

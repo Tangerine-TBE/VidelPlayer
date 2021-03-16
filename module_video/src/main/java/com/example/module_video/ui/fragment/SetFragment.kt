@@ -11,6 +11,7 @@ import com.example.module_base.utils.Constants.SET_DEAL1
 import com.example.module_user.domain.ValueUserInfo
 import com.example.module_user.livedata.UserInfoLiveData
 import com.example.module_user.ui.activity.LoginActivity
+import com.example.module_user.utils.NetState
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentSetBinding
 import com.example.module_video.domain.ItemBean
@@ -78,9 +79,6 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
             add(ItemBean(title = "字幕文本编码"))
             mFunctionAdapter.setList(this)
         }
-
-
-
     }
 
     override fun initView() {
@@ -117,14 +115,30 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
             viewModel.apply {
                 val that=this@SetFragment
                 UserInfoLiveData.observe(that, {
+                    userId = it.userInfo?.data?.id.toString()
                     currentLoginState = it.loginState
                     mGeneralList.clear()
                     mGeneralList.apply {
                         add(ItemBean(title = if (it.loginState) "ID:${it?.userInfo?.data?.id?.toString()?:""}" else "登陆/注册"))
                         add( ItemBean(title = "移除底部广告"))
-                        add(ItemBean(title = "账号注销"))
-                        add(ItemBean(title = "退出登录"))
+                        if(it.loginState){
+                            add(ItemBean(title = "退出登录"))
+                            add(ItemBean(title = "账号注销"))
+                        }
                         mGeneralAdapter.setList(this)
+                    }
+                })
+
+                logOutState.observe(that,{
+                    mLoadingDialog?.apply {
+                        when (it.state) {
+                            NetState.LOADING -> showDialog(activity)
+                            NetState.SUCCESS, NetState.ERROR -> {
+                                dismiss()
+                                showToast(it.msg)
+                            }
+                        }
+
                     }
                 })
             }
@@ -134,6 +148,7 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
 
     }
 
+    private var userId=""
     override fun initEvent() {
         binding.apply {
             mFunctionAdapter.setOnCheckListener(object : SetAdapter.OnCheckListener {
@@ -152,13 +167,13 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
                     1->{
 
                     }
-                    2-> if (currentLoginState) mLogoutPopup.showPopupView(mSetContainer)
-                    3-> if (currentLoginState) mExitPopup.showPopupView(mSetContainer)
+                    2-> if (currentLoginState) mExitPopup.showPopupView(mSetContainer)
+                    3->if (currentLoginState) mLogoutPopup.showPopupView(mSetContainer)
                 }
             }
 
             mLogoutPopup.doSure {
-
+                viewModel.toLogOut(userId)
             }
 
             mExitPopup.doSure {
@@ -190,6 +205,10 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
                 }
             }
         }
+    }
+
+    override fun release() {
+        mLoadingDialog.dismiss()
     }
 
 }

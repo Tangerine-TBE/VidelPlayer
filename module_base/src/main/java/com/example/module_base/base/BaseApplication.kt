@@ -27,33 +27,39 @@ import org.litepal.LitePal
  */
 open class BaseApplication : Application() {
 
-    companion object{
-        lateinit var application:BaseApplication
+    companion object {
+        lateinit var application: BaseApplication
         lateinit var mHandler: Handler
         lateinit var mContext: Context
-        lateinit var mPackName:String
+        lateinit var mPackName: String
     }
 
     override fun onCreate() {
         super.onCreate()
-        application=this
-        mContext=applicationContext
-        mHandler=Handler(Looper.getMainLooper())
-        mPackName=packageName
+        application = this
+        mContext = applicationContext
+        mHandler = Handler(Looper.getMainLooper())
+        mPackName = packageName
         initData()
-        RxTool.init(this@BaseApplication)
         GlobalScope.launch {
             SPUtil.init(this@BaseApplication)
-           LitePal.initialize(this@BaseApplication)
+            RxTool.init(this@BaseApplication)
+            LitePal.initialize(this@BaseApplication)
             LitePal.getDatabase()
+            ARouter.openDebug()
+            ARouter.openLog()
             ARouter.init(this@BaseApplication)
             //用户反馈
             FeedbackAPI.init(this@BaseApplication, "25822454", "7a8bb94331a5141dcea61ecb1056bbbd")
             val jsonObject = JSONObject()
             try {
                 jsonObject.put("appId", packageName)
-                jsonObject.put("appName",PackageUtil.getAppMetaData(this@BaseApplication,
-                    ModuleProvider.APP_NAME))
+                jsonObject.put(
+                    "appName", PackageUtil.getAppMetaData(
+                        this@BaseApplication,
+                        ModuleProvider.APP_NAME
+                    )
+                )
                 jsonObject.put("ver", PackageUtil.packageCode2(applicationContext))
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -62,7 +68,11 @@ open class BaseApplication : Application() {
 
         }
         //友盟
-        UMConfigure.init(applicationContext, UMConfigure.DEVICE_TYPE_PHONE, "01a1119aa055917f8816f3a")
+        UMConfigure.init(
+            applicationContext,
+            UMConfigure.DEVICE_TYPE_PHONE,
+            "01a1119aa055917f8816f3a"
+        )
         UMConfigure.setLogEnabled(true)
 
 

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -15,6 +16,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        //Arouter路由配置
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
+            }
+        }
+
     }
 
 
@@ -58,10 +67,10 @@ dependencies {
     // Jetpack Compose Integration
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha07"
 
-    implementation project(path:":module_base")
-    implementation project(path:":openfile_library")
-    implementation project(path:":module_user")
-
+    implementation project(path: ':module_base')
+    implementation project(path: ':openfile_library')
+    implementation project(path: ':module_user')
+    implementation project(path: ':module_ad')
 /*    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
     compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
@@ -73,4 +82,8 @@ dependencies {
     implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
 
     debugImplementation   "com.glance.guolindev:glance:1.0.0-alpha01"
+
+    //阿里路由
+    kapt rootProject.ext.dependencies["arouter_compiler"]
+    api  rootProject.ext.dependencies["arouter_annotation"]
 }

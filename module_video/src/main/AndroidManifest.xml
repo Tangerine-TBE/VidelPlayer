@@ -9,16 +9,23 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application android:requestLegacyExternalStorage="true">
-        <activity android:name=".ui.activity.LockActivity"></activity>
+        <activity android:name=".ui.activity.BeginActivity"></activity>
+        <activity android:name=".ui.activity.LockActivity" android:launchMode="singleTop" android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SelectFileActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+
+            />
         <activity
             android:name=".ui.activity.PlayListMsgActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activity.PlayListActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -26,6 +33,7 @@
         <activity
             android:name=".ui.activity.HomeActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <provider

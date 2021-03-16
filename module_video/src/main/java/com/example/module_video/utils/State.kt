@@ -30,3 +30,8 @@ enum class BackState{
 enum class CheckState{
     EXIT,UNLOCK,ERROR
 }
+
+//网络请求进度
+enum class RequestNetState{
+    SUCCESS,ERROR,LOADING,EMPTY
+}
