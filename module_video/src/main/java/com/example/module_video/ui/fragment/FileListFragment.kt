@@ -3,12 +3,11 @@ package com.example.module_video.ui.fragment
 import android.text.TextUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmFragment
-import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.setStatusBar
-import com.example.module_base.utils.toOtherActivity
+import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentListBinding
 import com.example.module_video.domain.*
+import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.livedata.PlayListLiveData
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.activity.PlayListMsgActivity
@@ -67,6 +66,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
     override fun getChildLayout(): Int = R.layout.fragment_list
 
     override fun initView() {
+
         binding.apply {
             data=viewModel
             setStatusBar(context, listBar, LayoutType.LINEARLAYOUT)

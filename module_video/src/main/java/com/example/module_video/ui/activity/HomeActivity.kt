@@ -4,14 +4,15 @@ package com.example.module_video.ui.activity
 import android.net.Uri
 import android.view.KeyEvent
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.provider.ModuleProvider
-import com.example.module_base.utils.Constants
-import com.example.module_base.utils.toOtherActivity
+import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityHomeBinding
 import com.example.module_video.domain.ItemBean
@@ -58,6 +59,8 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
             data = viewModel
             showFragment(mMediaFragment)
 
+
+
             bottomNavigationView.apply {
                 layoutManager = GridLayoutManager(this@HomeActivity, 3)
                 mBottomAdapter.setList(DataProvider.homeBottomList)
@@ -66,14 +69,14 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
         }
     }
 
-    private var hasData=false
+    private var hasData = false
 
-    private var mFileListBean :MutableList<PlayListMsgBean> = ArrayList()
-    private var mMediaList:MutableList<MediaInformation> = ArrayList()
+    private var mFileListBean: MutableList<PlayListMsgBean> = ArrayList()
+    private var mMediaList: MutableList<MediaInformation> = ArrayList()
 
     override fun observerData() {
-        //查询资源
-        MediaLiveData.getMediaResource()
+
+
         binding.apply {
             viewModel.apply {
                 val that = this@HomeActivity
@@ -82,14 +85,14 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                     bottomActionLayout.bottomInclude.startAnimation(if (it) mBottomAnimationShow else mBottomAnimationExit)
                 })
                 //播放列表编辑
-                listEditAction.observe(that,{
-                   listActionLayout.listIncludeActionLayout.startAnimation(if (it) mBottomAnimationShow else mBottomAnimationExit)
+                listEditAction.observe(that, {
+                    listActionLayout.listIncludeActionLayout.startAnimation(if (it) mBottomAnimationShow else mBottomAnimationExit)
                 })
 
                 //媒体库选择的item
                 selectItems.observe(that, {
-                    mFileListBean=it
-                    hasData= it.size>0
+                    mFileListBean = it
+                    hasData = it.size > 0
                     listActionLayout.apply {
                         deleteListActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_delete_select else R.mipmap.icon_edit_delete_normal)
                         deleteListActionTitle.setTextColor(
@@ -104,8 +107,8 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
                 //播放列表选择的item
                 selectItemList.observe(that, {
-                    hasData=it.size>0
-                    mMediaList=it
+                    hasData = it.size > 0
+                    mMediaList = it
                     bottomActionLayout.apply {
                         moveActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_remove_select else R.mipmap.icon_edit_remove_normal)
                         deleteActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_delete_select else R.mipmap.icon_edit_delete_normal)
@@ -152,7 +155,10 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                                 itemList.add(it.id)
                             }
                             toOtherActivity<PlayListActivity>(activity) {
-                                putExtra(PlayListActivity.KEY_MEDIA_LIST, Gson().toJson(MediaDataBean(itemList)))
+                                putExtra(
+                                    PlayListActivity.KEY_MEDIA_LIST,
+                                    Gson().toJson(MediaDataBean(itemList))
+                                )
                             }
                             viewModel.setEditAction(false)
                         }
@@ -241,7 +247,7 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode==KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             viewModel.apply {
                 if (getEditAction_() || getListEditAction_()) {
                     setEditAction(false)
@@ -256,7 +262,7 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
     override fun onResume() {
         super.onResume()
         when (intent.getIntExtra(ModuleProvider.FRAGMENT_ID, 5)) {
-            3->showFragment(mSetFragment)
+            3 -> showFragment(mSetFragment)
         }
     }
 }

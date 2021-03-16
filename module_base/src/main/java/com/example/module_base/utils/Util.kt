@@ -1,5 +1,6 @@
 package com.example.module_base.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -15,6 +16,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -258,6 +260,28 @@ fun checkAppPermission(
     }
 
 }
+
+val askAllPermissionLis = arrayListOf(
+    Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+)
+
+
+fun lacksPermissions(): Boolean {
+    for ( permission in askAllPermissionLis) {
+        if (lacksPermission(permission)){
+            return true
+        }
+    }
+    return false
+}
+/**
+ * 判断是否缺少权限
+ */
+private fun lacksPermission(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(BaseApplication.application, permission) ===
+            PackageManager.PERMISSION_GRANTED }
+
 
 fun formatTime(timeTemp: Long): String {
     val second = timeTemp % 60

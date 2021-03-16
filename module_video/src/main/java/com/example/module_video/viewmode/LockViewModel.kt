@@ -66,7 +66,7 @@ class LockViewModel : BaseViewModel() {
 
     private var errorCount=0
 
-    fun setInputState(realPosition: Int) {
+    fun setInputState(realPosition: Int,openAction:Int) {
         if (realPosition == 12) {
             if (!sp.getBoolean(Constants.SP_SET_PWD_STATE)) {
                 //设置密码
@@ -193,7 +193,9 @@ class LockViewModel : BaseViewModel() {
                                 val savePwd = getString(Constants.SP_SET_PWD)
                                 if (checkPwd.toString() == savePwd) {
                                     LogUtils.i("---检查密码-------------$savePwd-------${checkPwd}--------")
-                                    putBoolean(Constants.SP_SET_PWD_STATE,false)
+                                    if (openAction == 0) {
+                                        putBoolean(Constants.SP_SET_PWD_STATE,false)
+                                    }
                                     checkState.value= CheckState.UNLOCK
                                 } else {
                                     if (errorCount>1) {

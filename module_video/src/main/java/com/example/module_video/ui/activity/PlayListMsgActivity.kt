@@ -11,10 +11,7 @@ import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayListMsgBinding
-import com.example.module_video.domain.ItemBean
-import com.example.module_video.domain.MediaDataBean
-import com.example.module_video.domain.MediaInformation
-import com.example.module_video.domain.ValueMediaType
+import com.example.module_video.domain.*
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
@@ -222,7 +219,7 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                             PlayVideoActivity.toPlayVideo(
                                     this@PlayListMsgActivity,
                                     view,
-                                    Gson().toJson(item)
+                                    Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),position
                             )
                         }
                     }

@@ -2,25 +2,15 @@ package com.example.module_video.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.graphics.BlendMode
-import com.example.module_base.base.BaseApplication
 import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
-import com.example.module_video.domain.SwitchVideoModel
-import com.lzf.easyfloat.EasyFloat
-import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
-import com.lzf.easyfloat.anim.DefaultAnimator
-import com.lzf.easyfloat.enums.ShowPattern
-import com.lzf.easyfloat.enums.SidePattern
-import com.lzf.easyfloat.interfaces.OnFloatCallbacks
-import com.lzf.easyfloat.interfaces.OnInvokeView
+import com.example.module_video.domain.MediaInformation
+import com.example.module_video.ui.widget.popup.play.PlayListPopup
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
@@ -41,31 +31,88 @@ class PlayVideoView : StandardGSYVideoPlayer {
     constructor(context: Context) : super(context) {}
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
-    override fun getLayoutId(): Int{
-      return  if (mIfCurrentIsFullscreen) {
+    override fun getLayoutId(): Int {
+        return if (mIfCurrentIsFullscreen) {
             R.layout.widget_play_video_land
-        }else{
+        } else {
             R.layout.widget_play_video_normal
         }
     }
 
-    private var mUrlList: List<SwitchVideoModel> = ArrayList()
+    private var mUrlList: List<MediaInformation> = ArrayList()
 
     //数据源
     private var mSourcePosition = 0
+
     //记住切换切换尺寸
     private var mType = 0
+
     //记住切换切换速度
     private var mSpeed = 0
 
-
+    //尺寸
     private val mMoreScale: TextView = findViewById(R.id.switch_Size)
+
+    //速度
     private val mChangeSpeed: TextView = findViewById(R.id.switch_speed)
+
+    //更多
+    private val mMore: ImageView = findViewById(R.id.more)
+
+    //列表
+    private val mPlayList: ImageView = findViewById(R.id.playList)
+    //上一个
+    private val mPre: ImageView = findViewById(R.id.pre)
+    //下一个
+    private val mNext: ImageView = findViewById(R.id.next)
+    //小窗
     val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
+
 
     init {
         //切换尺寸
         initSize()
+        //切换速度
+        initSpeed()
+        //点击事件
+        initEvent()
+    }
+
+
+
+    private fun initEvent() {
+        mPre.setOnClickListener {
+          if (mSourcePosition>0){
+              mSourcePosition--
+              setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
+              startPlayLogic()
+          }
+
+
+        }
+
+        mNext.setOnClickListener {
+            if (mSourcePosition<mUrlList.size-1){
+                mSourcePosition++
+                setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
+                startPlayLogic()
+            }
+
+
+        }
+
+        mChangeSpeed.setOnClickListener {
+            if (!mHadPlay) {
+                return@setOnClickListener
+            }
+            selectSpeed()
+            resolveSpeedUI()
+        }
+
+        mPlayList.setOnClickListener {
+            PlayListPopup(context).showPopupWindow(it)
+        }
+
         mMoreScale.setOnClickListener { v: View? ->
             if (!mHadPlay) {
                 return@setOnClickListener
@@ -93,17 +140,6 @@ class PlayVideoView : StandardGSYVideoPlayer {
             }
             resolveTypeUI()
         }
-
-        //切换速度
-        initSpeed()
-        mChangeSpeed.setOnClickListener {
-            if (!mHadPlay) {
-                return@setOnClickListener
-            }
-            selectSpeed()
-            resolveSpeedUI()
-        }
-
     }
 
     private fun initSize() {
@@ -111,10 +147,11 @@ class PlayVideoView : StandardGSYVideoPlayer {
         resolveTypeUI()
     }
 
-    private fun initSpeed(){
-        mSpeed=speed
+    private fun initSpeed() {
+        mSpeed = speed
         resolveSpeedUI()
     }
+
 
 
     /**
@@ -125,15 +162,20 @@ class PlayVideoView : StandardGSYVideoPlayer {
      * @param statusBar
      * @return
      */
-    override fun startWindowFullscreen(context: Context?, actionBar: Boolean, statusBar: Boolean): GSYBaseVideoPlayer? {
-        val playVideoView = super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
+    override fun startWindowFullscreen(
+        context: Context?,
+        actionBar: Boolean,
+        statusBar: Boolean
+    ): GSYBaseVideoPlayer? {
+        val playVideoView =
+            super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
         playVideoView.mSourcePosition = mSourcePosition
         playVideoView.mUrlList = mUrlList
 
         playVideoView.mType = mType
         playVideoView.resolveTypeUI()
 
-        playVideoView.mSpeed=mSpeed
+        playVideoView.mSpeed = mSpeed
         playVideoView.resolveSpeedUI()
 
         //sampleVideo.resolveRotateUI();
@@ -151,7 +193,11 @@ class PlayVideoView : StandardGSYVideoPlayer {
      * @param vp
      * @param gsyVideoPlayer
      */
-    override fun resolveNormalVideoShow(oldF: View?, vp: ViewGroup?, gsyVideoPlayer: GSYVideoPlayer?) {
+    override fun resolveNormalVideoShow(
+        oldF: View?,
+        vp: ViewGroup?,
+        gsyVideoPlayer: GSYVideoPlayer?
+    ) {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
         if (gsyVideoPlayer != null) {
             val playVideoView = gsyVideoPlayer as PlayVideoView
@@ -160,13 +206,11 @@ class PlayVideoView : StandardGSYVideoPlayer {
             mType = playVideoView.mType
             resolveTypeUI()
 
-            mSpeed=playVideoView.mSpeed
+            mSpeed = playVideoView.mSpeed
             resolveSpeedUI()
 
         }
     }
-
-
 
 
     /**
@@ -207,7 +251,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
         if (mTextureView != null) mTextureView.requestLayout()
     }
 
-    private fun selectSpeed(){
+    private fun selectSpeed() {
         when (mSpeed) {
             1f -> {
                 mSpeed = 1.25f
@@ -241,7 +285,6 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
 
-
     /**
      * 设置播放URL
      *
@@ -250,9 +293,15 @@ class PlayVideoView : StandardGSYVideoPlayer {
      * @param title         title
      * @return
      */
-    fun setUp(url: List<SwitchVideoModel>, cacheWithPlay: Boolean, title: String?): Boolean {
+    fun setUp(
+        url: List<MediaInformation>,
+        position: Int,
+        cacheWithPlay: Boolean,
+        title: String?
+    ): Boolean {
+        mSourcePosition = position
         mUrlList = url
-        return setUp(url[mSourcePosition].url, cacheWithPlay, title)
+        return setUp(url[mSourcePosition].uri, cacheWithPlay, title)
     }
 
 
@@ -265,15 +314,20 @@ class PlayVideoView : StandardGSYVideoPlayer {
      * @param title         title
      * @return
      */
-    fun setUp(url: List<SwitchVideoModel>, cacheWithPlay: Boolean, cachePath: File?, title: String?): Boolean {
+    private fun setUp(
+        url: List<MediaInformation>,
+        cacheWithPlay: Boolean,
+        cachePath: File?,
+        title: String?
+    ): Boolean {
         mUrlList = url
-        return setUp(url[mSourcePosition].url, cacheWithPlay, cachePath, title)
+        return setUp(url[mSourcePosition].uri, cacheWithPlay, cachePath, title)
     }
 
 
     override fun updateStartImage() {
-        mStartButton.visibility=View.VISIBLE
-      if (mStartButton is ImageView) {
+        mStartButton.visibility = View.VISIBLE
+        if (mStartButton is ImageView) {
             val imageView = mStartButton as ImageView
             when (mCurrentState) {
                 CURRENT_STATE_PLAYING -> {
@@ -299,7 +353,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
     override fun lockTouchLogic() {
-       // super.lockTouchLogic()
+        // super.lockTouchLogic()
         if (mLockCurScreen) {
             mLockScreen.setImageResource(R.mipmap.icon_video_unlock)
             mLockCurScreen = false
@@ -310,8 +364,6 @@ class PlayVideoView : StandardGSYVideoPlayer {
         }
 
     }
-
-
 
 
 }

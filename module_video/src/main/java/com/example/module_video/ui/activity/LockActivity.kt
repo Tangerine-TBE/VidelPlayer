@@ -5,9 +5,11 @@ import android.content.Context
 import android.util.Log
 import android.view.KeyEvent
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.module_ad.utils.Contents
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyActivityManager
+import com.example.module_base.utils.toOtherActivity
 import com.example.module_base.utils.toolbarEvent
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityLockBinding
@@ -52,9 +54,12 @@ class LockActivity : BaseVmViewActivity<ActivityLockBinding, LockViewModel>() {
     }
     
 
+    private var mOpenAction=0
 
     override fun initView() {
         binding.apply {
+            mOpenAction= intent.getIntExtra(Contents.KEY_ACTION, 0)
+
             passwordContainer.apply {
                 layoutManager = GridLayoutManager(this@LockActivity, 4)
                 adapter = mPwdAdapter
@@ -94,19 +99,19 @@ class LockActivity : BaseVmViewActivity<ActivityLockBinding, LockViewModel>() {
                     mPwdAdapter.setList(it.list)
                 })
 
-                checkState.observe(that,{
-                    when(it){
-                        CheckState.EXIT->{
-                            hintInput.text="应用已经被锁住，请重启应用"
-                            inputPwdList[11].title="退出应用"
+                checkState.observe(that, {
+                    when (it) {
+                        CheckState.EXIT -> {
+                            hintInput.text = "应用已经被锁住，请重启应用"
+                            inputPwdList[11].title = "退出应用"
                             mInputPwdAdapter.setList(inputPwdList)
                             mPwdAdapter.setList(hintList)
                         }
-                        CheckState.UNLOCK->{
-                            finish()
+                        CheckState.UNLOCK -> {
+                            if (mOpenAction == 0) finish() else toOtherActivity<HomeActivity>(this@LockActivity,true){}
                         }
-                        CheckState.ERROR->{
-                            hintInput.text="密码错误，请再次输入"
+                        CheckState.ERROR -> {
+                            hintInput.text = "密码错误，请再次输入"
                             mPwdAdapter.setList(hintList)
                         }
                     }
@@ -149,7 +154,7 @@ class LockActivity : BaseVmViewActivity<ActivityLockBinding, LockViewModel>() {
                     }
                 }
                 val realPosition = position + 1
-                viewModel.setInputState(realPosition)
+                viewModel.setInputState(realPosition,mOpenAction)
             }
         }
     }

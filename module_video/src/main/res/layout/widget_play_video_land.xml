@@ -53,12 +53,12 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView7"
+            app:layout_constraintEnd_toStartOf="@+id/more"
             app:layout_constraintStart_toEndOf="@+id/back"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
@@ -152,11 +152,11 @@
             android:layout_marginRight="33dp"
             android:src="@mipmap/icon_video_recycle"
             app:layout_constraintBottom_toBottomOf="@+id/start"
-            app:layout_constraintEnd_toStartOf="@+id/imageView5"
+            app:layout_constraintEnd_toStartOf="@+id/pre"
             app:layout_constraintTop_toTopOf="@+id/start" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="33dp"
@@ -178,7 +178,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"
@@ -188,13 +188,13 @@
             app:layout_constraintTop_toTopOf="@+id/start" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/playList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="33dp"
             android:src="@mipmap/icon_video_list"
             app:layout_constraintBottom_toBottomOf="@+id/start"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toEndOf="@+id/next"
             app:layout_constraintTop_toTopOf="@+id/start" />
 
 
@@ -242,7 +242,7 @@
             android:textColor="@color/white"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/start"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintStart_toEndOf="@+id/playList"
             app:layout_constraintTop_toTopOf="@+id/start" />
 
         <TextView

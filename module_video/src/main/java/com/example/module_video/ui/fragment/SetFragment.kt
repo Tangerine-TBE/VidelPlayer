@@ -2,6 +2,7 @@ package com.example.module_video.ui.fragment
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
+import com.example.module_ad.utils.Contents
 import com.example.module_base.activity.AboutActivity
 import com.example.module_base.activity.DealViewActivity
 import com.example.module_base.base.BasePopup
@@ -157,7 +158,9 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
                 }
 
                 override fun onClick() {
-                    toOtherActivity<LockActivity>(activity) {}
+                    toOtherActivity<LockActivity>(activity) {
+                        putExtra(Contents.KEY_ACTION,0)
+                    }
                 }
             })
 

@@ -17,3 +17,6 @@ data class MediaInformation(var id:Long=0L,var name:String="",var duration:Strin
                             var resolution:String?="",var path:String="",
                             var uri :String="",val bitmap: Bitmap?=null,var type:MediaState=MediaState.VIDEO
 )
+
+
+data class PlayListBean(var list: MutableList<MediaInformation>)

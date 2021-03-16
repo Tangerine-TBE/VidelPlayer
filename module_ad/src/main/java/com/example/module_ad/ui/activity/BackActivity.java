@@ -78,7 +78,7 @@ public class BackActivity extends AppCompatActivity {
     }
 
     private void showTXBackAd() {
-        mTxSplashAd = new TXSplashAd(this, mAdContainer,false,BackActivity.class);
+        mTxSplashAd = new TXSplashAd(this, mAdContainer,false,BackActivity.class,0);
         mTxSplashAd.showAd();
         mTxSplashAd.setOnShowError(new IShowAdCallback(){
             @Override
@@ -98,7 +98,7 @@ public class BackActivity extends AppCompatActivity {
     }
 
     private void showBackTTAd() {
-        mTtSplashAd = new TTSplashAd(this, mAdContainer,false,BackActivity.class);
+        mTtSplashAd = new TTSplashAd(this, mAdContainer,false,BackActivity.class,0);
         mTtSplashAd.showAd();
         mTtSplashAd.setOnShowError(new IShowAdCallback() {
             @Override

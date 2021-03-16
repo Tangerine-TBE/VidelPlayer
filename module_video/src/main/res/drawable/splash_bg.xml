@@ -6,15 +6,12 @@
         </shape>
     </item>
 
-    <item android:gravity="left|center_vertical" android:left="86.5dp">
-        <bitmap android:src="@mipmap/qdy_title_two" />
-    </item>
 
-    <item android:gravity="right|center_vertical">
+    <item android:gravity="right|center">
         <bitmap android:src="@mipmap/qdy_logo"/>
     </item>
 
-    <item android:gravity="left|center_vertical" android:left="55.5dp" android:bottom="50dp">
-        <bitmap android:src="@mipmap/qdy_title_one"/>
+    <item android:gravity="left|center" android:left="48dp" android:bottom="18dp">
+        <bitmap android:src="@mipmap/qdy_title"/>
     </item>
 </layer-list>

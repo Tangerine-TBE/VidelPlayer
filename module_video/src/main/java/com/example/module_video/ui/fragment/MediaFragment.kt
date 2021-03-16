@@ -6,15 +6,10 @@ import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmFragment
-import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.setStatusBar
-import com.example.module_base.utils.toOtherActivity
+import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentMediaBinding
-import com.example.module_video.domain.ItemBean
-import com.example.module_video.domain.MediaDataBean
-import com.example.module_video.domain.MediaInformation
-import com.example.module_video.domain.ValueMediaType
+import com.example.module_video.domain.*
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.activity.PlayListActivity
@@ -79,7 +74,6 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
 
     override fun initView() {
-
         binding.apply {
             data = viewModel
             //设置滑动栏
@@ -87,7 +81,6 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             //设置不同类型列表
             initRecycleViewType()
         }
-
     }
 
 
@@ -181,7 +174,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     if (viewModel.getEditAction_()) {
                         viewModel.setSelectItemList(mMediaAllAdapter.getSelectList())
                     } else {
-                        PlayVideoActivity.toPlayVideo(activity,itemView,Gson().toJson(item))
+                        PlayVideoActivity.toPlayVideo(activity,itemView,Gson().toJson(PlayListBean(mMediaAllAdapter.getData())),position)
                     }
                 }
 

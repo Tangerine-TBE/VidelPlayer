@@ -23,6 +23,7 @@ import com.example.module_base.utils.gsonHelper
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayVideoBinding
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.PlayListBean
 import com.example.module_video.domain.SwitchVideoModel
 import com.example.module_video.ui.widget.FloatPlayerView
 import com.example.module_video.utils.floatUtil.FloatWindow
@@ -41,16 +42,19 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     private var isTransition = false
     private var isPlay = false
     private var isPause = false
+    private var playPosition=0
     companion object {
-        const val IMG_TRANSITION = "IMG_TRANSITION"
-        const val TRANSITION = "TRANSITION"
-        const val VIDEO_MSG = "VIDEO_MSG"
+       private const val IMG_TRANSITION = "IMG_TRANSITION"
+     private   const val TRANSITION = "TRANSITION"
+     private   const val VIDEO_MSG = "VIDEO_MSG"
+     private   const val PLAY_POSITION = "PLAY_POSITION"
 
-         fun toPlayVideo(activity: FragmentActivity?, view: View, msg:String){
+         fun toPlayVideo(activity: FragmentActivity?, view: View, msg:String,position:Int){
              activity?.let {
                  val intent = Intent(activity, PlayVideoActivity::class.java)
                  intent.putExtra(TRANSITION, true)
                  intent.putExtra(VIDEO_MSG, msg)
+                 intent.putExtra(PLAY_POSITION, position)
                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                      val pair: Pair<View, String> = Pair<View, String>(view, IMG_TRANSITION)
                      val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -87,18 +91,15 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         initTransition()
     }
 
+
     private fun ActivityPlayVideoBinding.initVideoPlayer() {
         //设置旋转
         orientationUtils = OrientationUtils(this@PlayVideoActivity, videoPlayer)
         val videoMsg = intent.getStringExtra(VIDEO_MSG)
+        playPosition=intent.getIntExtra(PLAY_POSITION,0)
         isTransition = intent.getBooleanExtra(TRANSITION, false)
-        gsonHelper<MediaInformation>(videoMsg)?.apply {
-            setFloatWindow("$uri")
-            val list = arrayListOf(
-                SwitchVideoModel(
-                    "$uri"
-                )
-            )
+        gsonHelper<PlayListBean>(videoMsg)?.apply {
+
             GSYVideoOptionBuilder()
                     .setIsTouchWiget(true)
                     .setRotateViewAuto(true)
@@ -115,12 +116,10 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
                             isPlay = true
                         }
-
                         override fun onEnterFullscreen(url: String?, vararg objects: Any?) {
                             super.onEnterFullscreen(url, *objects)
 
                         }
-
                         override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
                             super.onQuitFullscreen(url, *objects)
                             orientationUtils.backToProtVideo()
@@ -131,9 +130,9 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                         orientationUtils.isEnable = !lock
                     }
                     .build(videoPlayer)
-
-            videoPlayer.setUp(list, true, "$name")
-            videoPlayer.seekTo(100000)
+            if (list.size>playPosition){
+                videoPlayer.setUp(list, playPosition,true, list[playPosition].name)
+            }
         }
     }
 

@@ -9,7 +9,7 @@ import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityBeginBinding
-import com.example.module_video.repository.DataProvider.askAllPermissionLis
+import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.ui.widget.popup.AgreementPopup
 import com.example.module_video.viewmode.BeginViewModel
 
@@ -19,7 +19,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     private var showCount = 0
     private val mSplashHelper by lazy {
         SplashHelper(this, binding.mAdContainer,
-            if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) LockActivity::class.java else HomeActivity::class.java)
+            if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) LockActivity::class.java else HomeActivity::class.java,1)
     }
     private val mAgreementPopup by lazy {
         AgreementPopup(this)
@@ -33,6 +33,10 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     override fun initView() {
         sp.putBoolean(Contents.NO_BACK, true)
         viewModel.loadAdMsg()
+
+        if (lacksPermissions()) {
+            MediaLiveData.getMediaResource()
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -60,6 +64,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                     askAllPermissionLis, {
                         if (AdMsgUtil.getADKey() != null) {
                             mSplashHelper.showAd()
+                            MediaLiveData.getMediaResource()
                         } else {
                             goHome()
                         }
@@ -79,7 +84,9 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
 
     fun goHome() {
         if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) {
-            toOtherActivity<LockActivity>(this@BeginActivity, true) {}
+            toOtherActivity<LockActivity>(this@BeginActivity, true) {
+                putExtra(Contents.KEY_ACTION,1)
+            }
         } else {
             toOtherActivity<HomeActivity>(this@BeginActivity, true) {}
         }

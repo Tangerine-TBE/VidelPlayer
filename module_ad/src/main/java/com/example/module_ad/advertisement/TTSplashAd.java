@@ -11,6 +11,7 @@ import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
+import com.example.module_ad.utils.Contents;
 import com.example.module_ad.utils.DeviceUtils;
 import com.example.module_base.base.BaseApplication;
 
@@ -23,16 +24,18 @@ public class TTSplashAd extends AdWatcher {
 
     private FrameLayout mSplashContainer;
     private Activity mActivity;
+    private int mAction;
     private boolean mIsClose;
     private Class mClass;
     private static final int AD_TIME_OUT = 2000;
 
 
-    public TTSplashAd(Activity activity, FrameLayout frameLayout, boolean isClose, Class aClass) {
+    public TTSplashAd(Activity activity, FrameLayout frameLayout, boolean isClose, Class aClass,int action) {
         this.mSplashContainer=frameLayout;
         this.mActivity=activity;
         this.mIsClose=isClose;
         this.mClass=aClass;
+        mAction=action;
         mTTAdNative= TTAdManagerHolder.get().createAdNative(mActivity);
     }
 
@@ -166,11 +169,9 @@ public class TTSplashAd extends AdWatcher {
      */
     private void goToMainActivity(boolean b) {
         if (b) {
-            mActivity.startActivity(new Intent(mActivity,mClass));
-            mActivity.finish();
-        } else {
-            mActivity.finish();
+            mActivity.startActivity(new Intent(mActivity,mClass).putExtra(Contents.KEY_ACTION,mAction));
         }
+        mActivity.finish();
     }
 
 

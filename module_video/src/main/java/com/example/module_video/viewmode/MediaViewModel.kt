@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.module_base.base.BaseViewModel
 import com.example.module_base.utils.LogUtils
+import com.example.module_base.utils.lacksPermissions
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.PlayListMsgBean
 import com.example.module_video.livedata.PlayListLiveData
@@ -51,6 +52,10 @@ class MediaViewModel:BaseViewModel() {
         MutableLiveData<GeneralState>()
     }
 
+    val permissionState by lazy {
+        MutableLiveData(lacksPermissions())
+    }
+
 
     val searchMediaList by lazy {
         MutableLiveData<MutableList<MediaInformation>>()
@@ -75,9 +80,11 @@ class MediaViewModel:BaseViewModel() {
     }
 
 
-    fun setSelectItemList(list:MutableList<MediaInformation>){
-        selectItemList.value=list
+    fun setSelectItemList(list: MutableList<MediaInformation>) {
+        selectItemList.value = list
     }
+
+
 
     fun getSearchList(name: String, list: MutableList<MediaInformation>) {
         val searchList = ArrayList<MediaInformation>()

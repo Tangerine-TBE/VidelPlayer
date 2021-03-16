@@ -7,6 +7,9 @@ import com.example.module_base.utils.PackageUtil;
 
 public class Contents {
 
+    //intent
+    public static final String KEY_ACTION="KEY_ACTION";
+
     //是否后台
     public static final String NO_BACK = "no_back";
 

@@ -30,6 +30,8 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
 
 
+    fun getData()=mList;
+
     fun getSelectState()=mSelectAllState
 
     fun setEditAction(edit: Boolean) {

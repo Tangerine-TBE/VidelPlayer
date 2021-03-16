@@ -3,6 +3,8 @@ package com.example.module_ad.advertisement;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.FrameLayout;
+
+import com.example.module_ad.utils.Contents;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
 import com.qq.e.ads.splash.SplashAD;
@@ -18,16 +20,18 @@ public class TXSplashAd extends AdWatcher{
     private SplashAD mSplashAD;
     private Activity mActivity;
     private boolean mIsClose;
+    private int mAction;
     private Class mClass;
     private FrameLayout mSplashContainer;
     private int outTime=2000;
 
 
-    public TXSplashAd(Activity activity, FrameLayout frameLayout, boolean isClose, Class aClass) {
+    public TXSplashAd(Activity activity, FrameLayout frameLayout, boolean isClose, Class aClass,int action) {
         this.mActivity=activity;
         this.mSplashContainer=frameLayout;
         this.mIsClose=isClose;
         this.mClass=aClass;
+        mAction=action;
         GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey);
     }
 
@@ -89,7 +93,7 @@ public class TXSplashAd extends AdWatcher{
      */
     private void goToMainActivity(boolean b) {
         if (b) {
-            mActivity.startActivity(new Intent(mActivity,mClass));
+            mActivity.startActivity(new Intent(mActivity,mClass).putExtra(Contents.KEY_ACTION,mAction));
         }
         mActivity.finish();
     }
