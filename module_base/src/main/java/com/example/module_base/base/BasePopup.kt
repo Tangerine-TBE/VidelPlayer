@@ -12,6 +12,7 @@ import android.widget.PopupWindow
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
+import com.example.module_base.utils.SPUtil
 
 
 /**
@@ -23,6 +24,9 @@ import androidx.fragment.app.FragmentActivity
  * @class describe
  */
 open class BasePopup<T:ViewDataBinding>(val activity: FragmentActivity?, layout:Int, width:Int= ViewGroup.LayoutParams.WRAP_CONTENT, height:Int=ViewGroup.LayoutParams.WRAP_CONTENT): PopupWindow(width, height) {
+    protected val sp by lazy {
+        SPUtil.getInstance()
+    }
 
     protected val mView = DataBindingUtil.inflate<T>(LayoutInflater.from(activity),layout,null,false)
     init {
@@ -33,10 +37,13 @@ open class BasePopup<T:ViewDataBinding>(val activity: FragmentActivity?, layout:
         isOutsideTouchable = false
         intBgAnimation()
         setOnDismissListener {
-            mOutValueAnimator?.start()
-
+            onDisAction()
         }
         initEvent()
+    }
+
+    open fun onDisAction(){
+        mOutValueAnimator?.start()
     }
 
     open fun initEvent() {

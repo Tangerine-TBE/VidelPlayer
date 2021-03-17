@@ -20,7 +20,12 @@ class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContaine
     private var mListener:OnCheckListener?=null
     private var hasContact=false
     private var hasSwitch=false
+    private var hasSet=false
 
+    fun setHasSet(){
+        hasSet=true
+        notifyDataSetChanged()
+    }
 
     fun setHasSwitch(){
         hasSwitch=true
@@ -37,7 +42,7 @@ class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContaine
             setTitle.text = "${item.title}"
             if (hasContact) {
                 if (holder.adapterPosition == 1) {
-                    hintText.text = "2681706890@qq.com"
+                    hintText.text =item.hint
                 }
             }
 
@@ -53,6 +58,11 @@ class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContaine
 
                 }
             }
+
+            if (hasSet){
+                hintText.text =item.hint
+            }
+
         }
     }
 

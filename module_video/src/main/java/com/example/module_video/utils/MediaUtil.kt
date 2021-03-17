@@ -1,9 +1,6 @@
 package com.example.module_video.utils
 
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -114,6 +111,8 @@ object MediaUtil {
      * @return Int
      */
     fun deleteMedia(uri:Uri)= contentResolver.delete(uri,null,null)
+
+
 
 
 

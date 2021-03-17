@@ -186,7 +186,11 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                             viewModel.setSelectAllState(getSelectState())
                     }
                 } else {
-                    LogUtils.i("--setOnClickListener----------------listIcon-----------------")
+                    PlayVideoActivity.toPlayVideo(
+                        this@PlayListMsgActivity,
+                        it,
+                        Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),0
+                    )
                 }
             }
             //返回

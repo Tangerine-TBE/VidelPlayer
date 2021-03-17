@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/shape_video_play_popup_bg"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_arrow"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:tint="@color/theme_color"
-            android:src="@drawable/ic_popup_arrow"
-            tools:rotation="180"
-            tools:translationX="75dp"
-            tools:ignore="UseAppTint" />
-
         <TextView
-            android:id="@+id/tv_desc"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="12dp"
-            android:background="@color/theme_bg_color"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="带箭头的Popup"
-            android:textColor="@color/black"
-            android:textSize="25sp" />
-    </FrameLayout>
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="播放列表"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/videoPlayList"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

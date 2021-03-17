@@ -7,5 +7,6 @@
     <color name="theme_bg_color">#081B39</color>
     <color name="themeColor">@color/theme_color</color>
     <color name="item_theme_color">#1FFFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
 
 </resources>

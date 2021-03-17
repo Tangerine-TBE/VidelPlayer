@@ -2,19 +2,21 @@ package com.example.module_video.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.ui.widget.popup.play.PlayListPopup
+import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
+import moe.codeest.enviews.ENDownloadView
 import java.io.File
 import java.util.*
 
@@ -38,6 +40,9 @@ class PlayVideoView : StandardGSYVideoPlayer {
             R.layout.widget_play_video_normal
         }
     }
+    private val mPlayListPopup by lazy {
+        PlayListPopup(context)
+    }
 
     private var mUrlList: List<MediaInformation> = ArrayList()
 
@@ -50,24 +55,35 @@ class PlayVideoView : StandardGSYVideoPlayer {
     //记住切换切换速度
     private var mSpeed = 0
 
+    //播放模式
+    private var mPlayModel = PlayState.ORDERLY
+
+    //-------------------控件----------------------
     //尺寸
     private val mMoreScale: TextView = findViewById(R.id.switch_Size)
 
     //速度
     private val mChangeSpeed: TextView = findViewById(R.id.switch_speed)
 
+    //模式
+    private val mChangeModel: TextView = findViewById(R.id.action_recycle)
+
     //更多
     private val mMore: ImageView = findViewById(R.id.more)
 
     //列表
-    private val mPlayList: ImageView = findViewById(R.id.playList)
+    private val mPlayList: TextView = findViewById(R.id.playList)
+
     //上一个
     private val mPre: ImageView = findViewById(R.id.pre)
+
     //下一个
     private val mNext: ImageView = findViewById(R.id.next)
+
+    private val mCoverImage:ImageView = findViewById(R.id.thumbImage)
+
     //小窗
     val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
-
 
     init {
         //切换尺寸
@@ -78,70 +94,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
         initEvent()
     }
 
-
-
-    private fun initEvent() {
-        mPre.setOnClickListener {
-          if (mSourcePosition>0){
-              mSourcePosition--
-              setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
-              startPlayLogic()
-          }
-
-
-        }
-
-        mNext.setOnClickListener {
-            if (mSourcePosition<mUrlList.size-1){
-                mSourcePosition++
-                setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
-                startPlayLogic()
-            }
-
-
-        }
-
-        mChangeSpeed.setOnClickListener {
-            if (!mHadPlay) {
-                return@setOnClickListener
-            }
-            selectSpeed()
-            resolveSpeedUI()
-        }
-
-        mPlayList.setOnClickListener {
-            PlayListPopup(context).showPopupWindow(it)
-        }
-
-        mMoreScale.setOnClickListener { v: View? ->
-            if (!mHadPlay) {
-                return@setOnClickListener
-            }
-            when (mType) {
-                0 -> {
-                    mType = 1
-                }
-                1 -> {
-                    mType = 2
-                }
-                2 -> {
-                    mType = 3
-                }
-                3 -> {
-                    mType = 4
-                }
-                4 -> {
-                    mType = 0
-                }
-                -4 -> {
-                    mType = 0
-                }
-
-            }
-            resolveTypeUI()
-        }
-    }
-
+    //---------------------初始化-------------------------
     private fun initSize() {
         mType = GSYVideoType.getShowType()
         resolveTypeUI()
@@ -152,7 +105,104 @@ class PlayVideoView : StandardGSYVideoPlayer {
         resolveSpeedUI()
     }
 
+    //----------------------事件监听--------------------------
+    private fun initEvent() {
+        //上一个
+        mPre.setOnClickListener {
+            playPreAction()
+        }
+        //下一个
+        mNext.setOnClickListener {
+            playNextAction()
+        }
+        //切换播放速度
+        mChangeSpeed.setOnClickListener {
+            if (!mHadPlay) {
+                return@setOnClickListener
+            }
+            selectSpeed()
+            resolveSpeedUI()
+        }
+        //播放列表
+        mPlayList.setOnClickListener {
+            mPlayListPopup.apply {
+                setListData(mUrlList, mSourcePosition)
+                popupGravity = Gravity.TOP
+                showPopupWindow(it)
+            }
 
+        }
+        //切换尺寸
+        mMoreScale.setOnClickListener { v: View? ->
+            if (!mHadPlay) {
+                return@setOnClickListener
+            }
+            selectType()
+            resolveTypeUI()
+        }
+        //播放模式
+        mChangeModel.setOnClickListener {
+            if (!mHadPlay) {
+                return@setOnClickListener
+            }
+            selectModel()
+            resolvePlayModelUI()
+        }
+
+        mPlayListPopup.selectMedia {
+            mSourcePosition=it
+            startPlayVideo()
+        }
+    }
+
+
+    //---------------------播放动作---------------------------
+    private fun playPreAction() {
+        if (mSourcePosition > 0) {
+            mSourcePosition--
+            startPlayVideo()
+        }
+    }
+
+    private fun playNextAction() {
+        if (mSourcePosition < mUrlList.size - 1) {
+            mSourcePosition++
+            startPlayVideo()
+        } else {
+            mSourcePosition=0
+            startPlayVideo()
+        }
+    }
+
+    private fun playRandomAction() {
+        mSourcePosition = Random().nextInt(mUrlList.size)
+        startPlayVideo()
+    }
+
+    private fun playLoopAction() {
+        startPlayVideo()
+    }
+
+    private fun startPlayVideo() {
+        setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
+        startPlayLogic()
+        mPlayListPopup.setListPosition(mSourcePosition)
+    }
+
+    override fun onAutoCompletion() {
+        when (mPlayModel) {
+            PlayState.ORDERLY -> {
+                playNextAction()
+            }
+            PlayState.LOOP -> {
+                playLoopAction()
+            }
+            PlayState.RANDOM -> {
+                playRandomAction()
+            }
+        }
+
+    }
 
     /**
      * 全屏时将对应处理参数逻辑赋给全屏播放器
@@ -168,13 +218,14 @@ class PlayVideoView : StandardGSYVideoPlayer {
         statusBar: Boolean
     ): GSYBaseVideoPlayer? {
         val playVideoView =
-            super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
+                super.startWindowFullscreen(context, actionBar, statusBar) as PlayVideoView
         playVideoView.mSourcePosition = mSourcePosition
         playVideoView.mUrlList = mUrlList
 
+        playVideoView.mPlayModel = mPlayModel
+        resolvePlayModelUI()
         playVideoView.mType = mType
         playVideoView.resolveTypeUI()
-
         playVideoView.mSpeed = mSpeed
         playVideoView.resolveSpeedUI()
 
@@ -203,53 +254,49 @@ class PlayVideoView : StandardGSYVideoPlayer {
             val playVideoView = gsyVideoPlayer as PlayVideoView
             mSourcePosition = playVideoView.mSourcePosition
             setUp(mUrlList, mCache, mCachePath, mTitle)
+
             mType = playVideoView.mType
             resolveTypeUI()
-
             mSpeed = playVideoView.mSpeed
             resolveSpeedUI()
-
+            mPlayModel = playVideoView.mPlayModel
+            resolvePlayModelUI()
         }
     }
 
+    private fun selectModel() {
+        mPlayModel = when (mPlayModel) {
+            PlayState.ORDERLY -> PlayState.LOOP
+            PlayState.LOOP -> PlayState.RANDOM
+            PlayState.LOOP -> PlayState.ORDERLY
+            else->PlayState.ORDERLY
+        }
+    }
 
-    /**
-     * 显示比例
-     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
-     */
-    private fun resolveTypeUI() {
+    private fun selectType() {
         when (mType) {
+            0 -> {
+                mType = 1
+            }
             1 -> {
-                mMoreScale.text = "16:9"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9)
-
+                mType = 2
             }
             2 -> {
-                mMoreScale.text = "4:3"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3)
+                mType = 3
             }
             3 -> {
-                mMoreScale.text = "全屏"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL)
+                mType = 4
             }
             4 -> {
-                mMoreScale.text = "拉伸全屏"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
-            }
-            0 -> {
-                mMoreScale.text = "原始比例"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT)
+                mType = 0
             }
             -4 -> {
-                mMoreScale.text = "拉伸全屏"
-                GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
+                mType = 0
             }
-        }
 
-        LogUtils.i("*-mMoreScale--mIfCurrentIsFullscreen:${mIfCurrentIsFullscreen}--------${mMoreScale.hashCode()}-----------$mSpeed----------")
-        changeTextureViewShowType()
-        if (mTextureView != null) mTextureView.requestLayout()
+        }
     }
+
 
     private fun selectSpeed() {
         when (mSpeed) {
@@ -276,14 +323,6 @@ class PlayVideoView : StandardGSYVideoPlayer {
             }
         }
     }
-
-
-    private fun resolveSpeedUI() {
-        LogUtils.i("*---mIfCurrentIsFullscreen:${mIfCurrentIsFullscreen}--------${mChangeSpeed.hashCode()}-----------$mSpeed----------")
-        mChangeSpeed.text = "播放速度：$mSpeed"
-        setSpeedPlaying(mSpeed, true)
-    }
-
 
     /**
      * 设置播放URL
@@ -324,6 +363,88 @@ class PlayVideoView : StandardGSYVideoPlayer {
         return setUp(url[mSourcePosition].uri, cacheWithPlay, cachePath, title)
     }
 
+    override fun getVolumeLayoutId(): Int =R.layout.my_video_volume_dialog
+    //----------------------------UI控制-----------------------------------
+    /**
+     * 显示比例
+     * 注意，GSYVideoType.setShowType是全局静态生效，除非重启APP。
+     */
+    private fun resolveTypeUI() {
+        when (mType) {
+            1 -> {
+                mMoreScale.text = "16:9"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_16_9)
+
+            }
+            2 -> {
+                mMoreScale.text = "4:3"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_4_3)
+            }
+            3 -> {
+                mMoreScale.text = "全屏"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_FULL)
+            }
+            4 -> {
+                mMoreScale.text = "拉伸全屏"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
+            }
+            0 -> {
+                mMoreScale.text = "原始比例"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_TYPE_DEFAULT)
+            }
+            -4 -> {
+                mMoreScale.text = "拉伸全屏"
+                GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)
+            }
+        }
+
+        changeTextureViewShowType()
+        if (mTextureView != null) mTextureView.requestLayout()
+    }
+
+
+    private fun resolvePlayModelUI() {
+        mChangeModel.apply {
+            when (mPlayModel) {
+                PlayState.RANDOM -> {
+                    setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        context.getDrawable(R.mipmap.icon_video_random),
+                        null,
+                        null
+                    )
+                    text = "随机播放"
+                }
+
+                PlayState.ORDERLY -> {
+                    setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        context.getDrawable(R.mipmap.icon_video_orderly),
+                        null,
+                        null
+                    )
+                    text = "顺序播放"
+                }
+
+                PlayState.LOOP -> {
+                    setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        context.getDrawable(R.mipmap.icon_video_recycle1),
+                        null,
+                        null
+                    )
+                    text = "循环播放"
+                }
+            }
+        }
+
+    }
+
+
+    private fun resolveSpeedUI() {
+        mChangeSpeed.text = "播放速度：$mSpeed"
+        setSpeedPlaying(mSpeed, true)
+    }
 
     override fun updateStartImage() {
         mStartButton.visibility = View.VISIBLE
@@ -353,7 +474,6 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
     override fun lockTouchLogic() {
-        // super.lockTouchLogic()
         if (mLockCurScreen) {
             mLockScreen.setImageResource(R.mipmap.icon_video_unlock)
             mLockCurScreen = false
@@ -366,4 +486,79 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
 
+    override fun changeUiToNormal() {
+        if (!mLockCurScreen) {
+            Debuger.printfLog("changeUiToNormal")
+            setViewShowState(mTopContainer, VISIBLE)
+            setViewShowState(mBottomContainer, INVISIBLE)
+            setViewShowState(mStartButton, VISIBLE)
+            setViewShowState(mLoadingProgressBar, INVISIBLE)
+            setViewShowState(mThumbImageViewLayout, VISIBLE)
+            setViewShowState(mBottomProgressBar, INVISIBLE)
+            setViewShowState(mLockScreen, if (mIfCurrentIsFullscreen&&mNeedLockFull) VISIBLE else GONE)
+            updateStartImage()
+            if (mLoadingProgressBar is ENDownloadView) {
+                (mLoadingProgressBar as ENDownloadView).reset()
+            }
+        }
+    }
+
+    override fun changeUiToPlayingShow() {
+        if (!mLockCurScreen) {
+            Debuger.printfLog("changeUiToPlayingShow")
+            setViewShowState(mTopContainer, VISIBLE)
+            setViewShowState(mBottomContainer, VISIBLE)
+            setViewShowState(mStartButton, VISIBLE)
+            setViewShowState(mLoadingProgressBar, INVISIBLE)
+            setViewShowState(mThumbImageViewLayout, INVISIBLE)
+            setViewShowState(mBottomProgressBar, INVISIBLE)
+            setViewShowState(mLockScreen, if (mIfCurrentIsFullscreen&&mNeedLockFull) VISIBLE else GONE)
+            if (mLoadingProgressBar is ENDownloadView) {
+                (mLoadingProgressBar as ENDownloadView).reset()
+            }
+            updateStartImage()
+        }
+    }
+
+
+    override fun changeUiToPreparingShow() {
+        if (!mLockCurScreen) {
+            setViewShowState(mTopContainer, VISIBLE)
+            setViewShowState(mBottomContainer, VISIBLE)
+            setViewShowState(mStartButton, VISIBLE)
+            setViewShowState(mLoadingProgressBar, VISIBLE)
+            setViewShowState(mThumbImageViewLayout, INVISIBLE)
+            setViewShowState(mBottomProgressBar, INVISIBLE)
+            setViewShowState(mLockScreen, if (mIfCurrentIsFullscreen&&mNeedLockFull) VISIBLE else GONE)
+            if (mLoadingProgressBar is ENDownloadView) {
+                val enDownloadView = mLoadingProgressBar as ENDownloadView
+                if (enDownloadView.currentState == ENDownloadView.STATE_PRE) {
+                    (mLoadingProgressBar as ENDownloadView).start()
+                }
+            }
+        }
+
+    }
+
+    override fun changeUiToPlayingBufferingShow() {
+        if (!mLockCurScreen) {
+            setViewShowState(mTopContainer, VISIBLE)
+            setViewShowState(mBottomContainer, VISIBLE)
+            setViewShowState(mStartButton, VISIBLE)
+            setViewShowState(mLoadingProgressBar, VISIBLE)
+            setViewShowState(mThumbImageViewLayout, INVISIBLE)
+            setViewShowState(mBottomProgressBar, INVISIBLE)
+            setViewShowState(mLockScreen, if (mIfCurrentIsFullscreen&&mNeedLockFull) VISIBLE else GONE)
+            if (mLoadingProgressBar is ENDownloadView) {
+                val enDownloadView = mLoadingProgressBar as ENDownloadView
+                if (enDownloadView.currentState == ENDownloadView.STATE_PRE) {
+                    (mLoadingProgressBar as ENDownloadView).start()
+                }
+            }
+        }
+    }
+
+    enum class PlayState {
+        LOOP, RANDOM, ORDERLY
+    }
 }

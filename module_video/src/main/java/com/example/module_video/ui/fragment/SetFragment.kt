@@ -1,5 +1,6 @@
 package com.example.module_video.ui.fragment
 
+import android.content.SharedPreferences
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
 import com.example.module_ad.utils.Contents
@@ -19,6 +20,7 @@ import com.example.module_video.domain.ItemBean
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.activity.LockActivity
 import com.example.module_video.ui.adapter.recycleview.SetAdapter
+import com.example.module_video.ui.widget.popup.FunctionSelectPopup
 import com.example.module_video.ui.widget.popup.UserRemindPopup
 import com.example.module_video.utils.Constants
 import com.example.module_video.viewmode.SetViewModel
@@ -31,31 +33,29 @@ import com.example.module_video.viewmode.SetViewModel
  * @time 2021/3/1 11:55:03
  * @class describe
  */
-class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
-
+class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
     private val mGeneralAdapter by lazy {
         SetAdapter()
     }
-
-
     private val mUsSetAdapter by lazy {
         SetAdapter()
     }
-
     private val mFunctionAdapter by lazy {
         SetAdapter()
     }
-
     private val mExitPopup by lazy {
         UserRemindPopup(activity).apply {
        setRemindContent("您确定要退出登录吗？")
         }
     }
-
     private val mLogoutPopup by lazy {
         UserRemindPopup(activity).apply {
             setRemindContent("您确定要注销账号吗？")
         }
+    }
+    private val mCoreFunctionPopup by lazy {
+        FunctionSelectPopup(activity)
     }
 
 
@@ -66,24 +66,32 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
 
     override fun getChildLayout(): Int = R.layout.fragment_set
 
-
     private val mSetFunctionList = ArrayList<ItemBean>()
     private val mGeneralList = ArrayList<ItemBean>()
+
 
     override fun onResume() {
         super.onResume()
         mSetFunctionList.clear()
         mSetFunctionList.apply {
             add(ItemBean(title = "密码锁定", hasPwd = sp.getBoolean(Constants.SP_SET_PWD_STATE)))
-            add(ItemBean(title = "硬件加速"))
+            add(ItemBean(title = "内核设置",hint = getCoreType()))
             add(ItemBean(title = "字幕大小"))
             add(ItemBean(title = "字幕文本编码"))
+            mFunctionAdapter.setHasSet()
             mFunctionAdapter.setList(this)
         }
     }
 
-    override fun initView() {
+    private fun getCoreType()= when(sp.getInt(Constants.SP_CORE_TYPE)){
+           0->"IJK内核"
+           1->"EXO内核"
+           2->"系统内核"
+           else->"系统内核"
+       }
 
+    override fun initView() {
+        sp.prefs.registerOnSharedPreferenceChangeListener(this)
         binding.apply {
             setStatusBar(context, mNestedScrollView, LayoutType.LINEARLAYOUT)
 
@@ -151,18 +159,25 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
 
     private var userId=""
     override fun initEvent() {
-        binding.apply {
-            mFunctionAdapter.setOnCheckListener(object : SetAdapter.OnCheckListener {
-                override fun onCheck(b: Boolean) {
-
+        mFunctionAdapter.setOnCheckListener(object : SetAdapter.OnCheckListener {
+            override fun onCheck(b: Boolean) {}
+            override fun onClick() {
+                toOtherActivity<LockActivity>(activity) {
+                    putExtra(Contents.KEY_ACTION,0)
                 }
+            }
+        })
 
-                override fun onClick() {
-                    toOtherActivity<LockActivity>(activity) {
-                        putExtra(Contents.KEY_ACTION,0)
+        binding.apply {
+            mFunctionAdapter.setOnItemClickListener { adapter, view, position ->
+                when(position){
+                    1->{
+                        mCoreFunctionPopup.apply {
+                            showPopupView(mSetContainer)
+                        }
                     }
                 }
-            })
+            }
 
             mGeneralAdapter.setOnItemClickListener { adapter, view, position ->
                 when(position){
@@ -172,22 +187,6 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
                     }
                     2-> if (currentLoginState) mExitPopup.showPopupView(mSetContainer)
                     3->if (currentLoginState) mLogoutPopup.showPopupView(mSetContainer)
-                }
-            }
-
-            mLogoutPopup.doSure {
-                viewModel.toLogOut(userId)
-            }
-
-            mExitPopup.doSure {
-                UserInfoLiveData.setUserInfo(ValueUserInfo(false, null))
-            }
-
-
-
-            mFunctionAdapter.setOnItemClickListener { adapter, view, position ->
-                when (position) {
-
                 }
             }
 
@@ -207,11 +206,26 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>() {
                     5 -> PermissionUtil.gotoPermission(activity)
                 }
             }
+
+            mLogoutPopup.doSure {
+                viewModel.toLogOut(userId)
+            }
+
+            mExitPopup.doSure {
+                UserInfoLiveData.setUserInfo(ValueUserInfo(false, null))
+            }
+
         }
     }
 
     override fun release() {
         mLoadingDialog.dismiss()
+        sp.prefs.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        mSetFunctionList[1].hint=getCoreType()
+        mFunctionAdapter.setList(mSetFunctionList)
     }
 
 }

@@ -83,12 +83,25 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
     override fun initView() {
         binding.apply {
-            val showType = GSYVideoType.getShowType()
-            LogUtils.i("----GSYVideoType-------$showType------------")
             initVideoPlayer()
+            //第三方打开
+            byOtherApp()
+            //过渡动画
+            initTransition()
         }
-        //过渡动画
-        initTransition()
+    }
+
+    private fun ActivityPlayVideoBinding.byOtherApp() {
+        if (intent.action == Intent.ACTION_VIEW) {
+            intent.data?.apply {
+                path?.let {
+                    val index = it.lastIndexOf("/")
+                    val name = it.substring(index+1)
+                    videoPlayer.setUp(it, true, name)
+                    LogUtils.i("----GSYVideoType-------${path}------------")
+                }
+            }
+        }
     }
 
 
@@ -99,7 +112,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         playPosition=intent.getIntExtra(PLAY_POSITION,0)
         isTransition = intent.getBooleanExtra(TRANSITION, false)
         gsonHelper<PlayListBean>(videoMsg)?.apply {
-
             GSYVideoOptionBuilder()
                     .setIsTouchWiget(true)
                     .setRotateViewAuto(true)

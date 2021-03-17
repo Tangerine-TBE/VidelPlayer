@@ -20,8 +20,14 @@ object Constants {
     const val KEY_MODE="KEY_MODE"
 
 
-
     //----------------- sp ------------
+    //密码锁
     const val SP_SET_PWD="SP_SET_PWD"
     const val SP_SET_PWD_STATE="SP_SET_PWD_STATE"
+
+    //内核选择
+    const val SP_CORE_TYPE="SP_CORE_TYPE"
+
+
+
 }

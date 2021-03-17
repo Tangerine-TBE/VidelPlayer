@@ -27,8 +27,8 @@ android {
     }
 
 
-    dataBinding{
-        enabled=true
+    dataBinding {
+        enabled = true
     }
 
     buildTypes {
@@ -71,19 +71,18 @@ dependencies {
     implementation project(path: ':openfile_library')
     implementation project(path: ':module_user')
     implementation project(path: ':module_ad')
-/*    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
-    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
-    compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
-    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
-    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
-    compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.8'*/
 
-    implementation 'com.shuyu:GSYVideoPlayer:8.1.0'
 
-    debugImplementation   "com.glance.guolindev:glance:1.0.0-alpha01"
+
+    api 'com.shuyu:GSYVideoPlayer:8.1.1'
+//是否需要ExoPlayer模式
+    api 'com.shuyu:GSYVideoPlayer-exo2:8.1.1'
+//更多ijk的编码支持
+  //  implementation 'com.shuyu:gsyVideoPlayer-ex_so:8.1.1'
+
+    debugImplementation "com.glance.guolindev:glance:1.0.0-alpha01"
 
     //阿里路由
     kapt rootProject.ext.dependencies["arouter_compiler"]
-    api  rootProject.ext.dependencies["arouter_annotation"]
+    api rootProject.ext.dependencies["arouter_annotation"]
 }

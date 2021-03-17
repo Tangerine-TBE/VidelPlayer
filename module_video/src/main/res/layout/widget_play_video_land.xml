@@ -21,13 +21,21 @@
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitCenter">
 
-        android:scaleType="fitCenter"/>
+        <ImageView
+            android:id="@+id/thumbImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+    </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:background="@color/theme_bg_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/surface_container">
@@ -145,12 +153,15 @@
             app:layout_constraintTop_toTopOf="@+id/progress" />
 
 
-        <ImageView
+        <TextView
             android:id="@+id/action_recycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/icon_video_orderly"
+            android:text="顺序播放"
+            android:textSize="11sp"
+            android:textColor="@color/white"
             android:layout_marginRight="33dp"
-            android:src="@mipmap/icon_video_recycle"
             app:layout_constraintBottom_toBottomOf="@+id/start"
             app:layout_constraintEnd_toStartOf="@+id/pre"
             app:layout_constraintTop_toTopOf="@+id/start" />
@@ -187,12 +198,15 @@
             app:layout_constraintStart_toEndOf="@+id/start"
             app:layout_constraintTop_toTopOf="@+id/start" />
 
-        <ImageView
+        <TextView
             android:id="@+id/playList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/icon_video_list"
+            android:text="播放列表"
+            android:textSize="11sp"
+            android:textColor="@color/white"
             android:layout_marginLeft="33dp"
-            android:src="@mipmap/icon_video_list"
             app:layout_constraintBottom_toBottomOf="@+id/start"
             app:layout_constraintStart_toEndOf="@+id/next"
             app:layout_constraintTop_toTopOf="@+id/start" />
@@ -261,10 +275,22 @@
             app:layout_constraintTop_toTopOf="@+id/switch_Size" />
 
 
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
+    <ProgressBar
+        android:id="@+id/bottom_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:max="100"
+        android:progressDrawable="@drawable/my_video_progress" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

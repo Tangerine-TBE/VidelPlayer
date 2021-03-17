@@ -51,7 +51,7 @@ object DataProvider {
 
     val setConnectUsList= arrayListOf(
             ItemBean(title = "意见反馈"),
-            ItemBean(title = "联系客服"),
+            ItemBean(title = "联系客服",hint = "2681706890@qq.com"),
             ItemBean(title = "关于我们"),
             ItemBean(title = "隐私政策"),
             ItemBean(title = "用户协议"),

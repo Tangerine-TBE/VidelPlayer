@@ -40,9 +40,8 @@ open class BaseApplication : Application() {
         mContext = applicationContext
         mHandler = Handler(Looper.getMainLooper())
         mPackName = packageName
-        initData()
+        SPUtil.init(this@BaseApplication)
         GlobalScope.launch {
-            SPUtil.init(this@BaseApplication)
             RxTool.init(this@BaseApplication)
             LitePal.initialize(this@BaseApplication)
             LitePal.getDatabase()
@@ -74,7 +73,7 @@ open class BaseApplication : Application() {
             "01a1119aa055917f8816f3a"
         )
         UMConfigure.setLogEnabled(true)
-
+        initData()
 
     }
 
