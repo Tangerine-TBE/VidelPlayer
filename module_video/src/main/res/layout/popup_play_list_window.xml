@@ -20,6 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="播放列表"
+            android:drawableLeft="@mipmap/icon_list_logo"
+            android:drawablePadding="8dp"
+            android:gravity="center"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
