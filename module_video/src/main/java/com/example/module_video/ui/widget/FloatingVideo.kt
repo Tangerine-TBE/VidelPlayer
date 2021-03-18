@@ -5,10 +5,17 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Build
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import com.example.module_video.R
+import com.example.module_video.domain.MediaInformation
+import com.lzf.easyfloat.EasyFloat
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.utils.NetworkUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+import java.io.File
 import java.util.*
 
 /**
@@ -16,7 +23,10 @@ import java.util.*
  * Created by shuyu on 2017/12/25.
  */
 class FloatingVideo : StandardGSYVideoPlayer {
-    protected var mDismissControlViewTimer: Timer? = null
+
+    companion object{
+        const val SMALL_TAG="SMALL_TAG"
+    }
 
     /**
      * 1.5.0开始加入，如果需要不同布局区分功能，需要重载
@@ -24,6 +34,19 @@ class FloatingVideo : StandardGSYVideoPlayer {
     constructor(context: Context?, fullFlag: Boolean?) : super(context, fullFlag) {}
     constructor(context: Context?) : super(context) {}
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {}
+
+    //上一个
+    private lateinit var mPre: ImageView
+    //下一个
+    private lateinit var mNext: ImageView
+    //退出
+    private lateinit var mDelete: ImageView
+    //全屏
+    private lateinit var mFull: ImageView
+
+    override fun getLayoutId(): Int {
+        return R.layout.layout_floating_video
+    }
 
     override fun init(context: Context) {
         mContext = if (activityContext != null) {
@@ -33,6 +56,8 @@ class FloatingVideo : StandardGSYVideoPlayer {
         }
         initInflate(mContext)
         mTextureViewContainer = findViewById(R.id.surface_container)
+
+
         mStartButton = findViewById(R.id.start)
         if (isInEditMode) return
         mScreenWidth = activityContext.resources.displayMetrics.widthPixels
@@ -41,90 +66,115 @@ class FloatingVideo : StandardGSYVideoPlayer {
             activityContext.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         mStartButton = findViewById(com.shuyu.gsyvideoplayer.R.id.start)
         mStartButton.setOnClickListener { clickStartIcon() }
+
+        mPre = findViewById(R.id.small_pre)
+        mNext= findViewById(R.id.small_next)
+        mDelete = findViewById(R.id.small_delete)
+        mFull= findViewById(R.id.small_full)
+        initEvent()
     }
 
-    override fun getLayoutId(): Int {
-        return R.layout.layout_floating_video
+
+    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
+            parent.requestDisallowInterceptTouchEvent(true)
+        return super.onInterceptTouchEvent(ev)
     }
 
-    override fun startPrepare() {
-        if (gsyVideoManager.listener() != null) {
-            gsyVideoManager.listener().onCompletion()
+    private fun initEvent() {
+        //上一个
+        mPre.setOnClickListener {
+            playPreAction()
         }
-        gsyVideoManager.setListener(this)
-        gsyVideoManager.playTag = mPlayTag
-        gsyVideoManager.playPosition = mPlayPosition
-        mAudioManager.requestAudioFocus(
-            onAudioFocusChangeListener,
-            AudioManager.STREAM_MUSIC,
-            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
-        )
-        //((Activity) getActivityContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mBackUpPlayingBufferState = -1
-        gsyVideoManager.prepare(mUrl, mMapHeadData, mLooping, mSpeed, mCache, mCachePath, null)
-        setStateAndUi(CURRENT_STATE_PREPAREING)
+        //下一个
+        mNext.setOnClickListener {
+            playNextAction()
+        }
+        //退出
+        mDelete.setOnClickListener {
+            EasyFloat.dismissAppFloat(SMALL_TAG)
+            GSYVideoManager.releaseAllVideos()
+        }
+        //全屏
+        mFull.setOnClickListener {
+
+        }
+
+        
     }
+
+
+    private var mUrlList: List<MediaInformation> = ArrayList()
+
+    //数据源
+    private var mSourcePosition = 0
+
+
+    override fun updateStartImage() {
+        mStartButton.visibility = View.VISIBLE
+        if (mStartButton is ImageView) {
+            val imageView = mStartButton as ImageView
+            when (mCurrentState) {
+                CURRENT_STATE_PLAYING -> {
+                    imageView.setImageResource(R.mipmap.icon_video_pause)
+                }
+                CURRENT_STATE_ERROR -> {
+                    imageView.setImageResource(R.mipmap.icon_video_play)
+                }
+                else -> {
+                    imageView.setImageResource(R.mipmap.icon_video_play)
+                }
+            }
+        }
+    }
+    private fun playPreAction() {
+        if (mSourcePosition > 0) {
+            mSourcePosition--
+            startPlayVideo()
+        }
+    }
+
+    private fun playNextAction() {
+        if (mSourcePosition < mUrlList.size - 1) {
+            mSourcePosition++
+            startPlayVideo()
+        } else {
+            mSourcePosition=0
+            startPlayVideo()
+        }
+    }
+
+    private fun startPlayVideo() {
+        setUp(mUrlList, mSourcePosition, false, mUrlList[mSourcePosition].name)
+        startPlayLogic()
+    }
+
 
     override fun onAutoCompletion() {
-        setStateAndUi(CURRENT_STATE_AUTO_COMPLETE)
-        mSaveChangeViewTIme = 0
-        if (mTextureViewContainer.childCount > 0) {
-            mTextureViewContainer.removeAllViews()
-        }
-        if (!mIfCurrentIsFullscreen) gsyVideoManager.setLastListener(null)
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener)
-        //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        releaseNetWorkState()
-        if (mVideoAllCallBack != null && isCurrentMediaListener) {
-            mVideoAllCallBack.onAutoComplete(mOriginUrl, mTitle, this)
-        }
+        playNextAction()
     }
 
-    override fun onCompletion() {
-        //make me normal first
-        setStateAndUi(CURRENT_STATE_NORMAL)
-        mSaveChangeViewTIme = 0
-        if (mTextureViewContainer.childCount > 0) {
-            mTextureViewContainer.removeAllViews()
-        }
-        if (!mIfCurrentIsFullscreen) {
-            gsyVideoManager.setListener(null)
-            gsyVideoManager.setLastListener(null)
-        }
-        gsyVideoManager.currentVideoHeight = 0
-        gsyVideoManager.currentVideoWidth = 0
-        mAudioManager.abandonAudioFocus(onAudioFocusChangeListener)
-        //((Activity) getActivityContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        releaseNetWorkState()
-    }
 
     override fun getActivityContext(): Context {
         return context
     }
-
-    override fun isShowNetConfirm(): Boolean {
-        return false
+    /**
+     * 设置播放URL
+     *
+     * @param url           播放url
+     * @param cacheWithPlay 是否边播边缓存
+     * @param title         title
+     * @return
+     */
+    fun setUp(
+            url: List<MediaInformation>,
+            position: Int,
+            cacheWithPlay: Boolean,
+            title: String?
+    ): Boolean {
+        mSourcePosition = position
+        mUrlList = url
+        return setUp(url[mSourcePosition].uri, cacheWithPlay, title)
     }
 
-    override fun showWifiDialog() {
-        if (!NetworkUtils.isAvailable(mContext)) {
-            //Toast.makeText(mContext, getResources().getString(R.string.no_net), Toast.LENGTH_LONG).show();
-            startPlayLogic()
-            return
-        }
-        val builder = AlertDialog.Builder(activityContext)
-        builder.setMessage(resources.getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi))
-        builder.setPositiveButton(resources.getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_confirm)) { dialog, which ->
-            dialog.dismiss()
-            startPlayLogic()
-        }
-        builder.setNegativeButton(resources.getString(com.shuyu.gsyvideoplayer.R.string.tips_not_wifi_cancel)) { dialog, which -> dialog.dismiss() }
-        val alertDialog = builder.create()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            alertDialog.window!!.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
-        } else {
-            alertDialog.window!!.setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
-        }
-        alertDialog.show()
-    }
+
 }

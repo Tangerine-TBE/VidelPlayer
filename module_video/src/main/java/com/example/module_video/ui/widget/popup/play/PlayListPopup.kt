@@ -2,9 +2,7 @@ package com.example.module_video.ui.widget.popup.play
 
 import android.content.Context
 import android.graphics.Rect
-import android.view.Gravity
 import android.view.View
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.module_video.R
@@ -72,7 +70,7 @@ class PlayListPopup(context: Context) : BasePopupWindow(context) {
         }*/
     }
 
-     fun setListData(list:List<MediaInformation>,position:Int){
+     fun setListData(list: List<MediaInformation>, position: Int, mIfCurrentIsFullscreen: Boolean){
         mListContainer.apply {
             val divider: GridItemDecoration = GridItemDecoration.Builder(context)
                 .setColorResource(R.color.white_40)
@@ -81,7 +79,11 @@ class PlayListPopup(context: Context) : BasePopupWindow(context) {
                 .build()
             addItemDecoration(divider)
             layoutManager=LinearLayoutManager(context).apply {
-                layoutParams.height=RxDeviceTool.getScreenHeight(context)/4
+                if (mIfCurrentIsFullscreen) {
+                    layoutParams.height=RxDeviceTool.getScreenHeight(context)/2
+                } else {
+                    layoutParams.height=RxDeviceTool.getScreenHeight(context)/4
+                }
             }
             mAdapter.setList(list)
             mAdapter.setPosition(position)
@@ -98,6 +100,7 @@ class PlayListPopup(context: Context) : BasePopupWindow(context) {
     fun selectMedia(block:(position:Int)->Unit){
         mAdapter.setOnItemClickListener { adapter, view, position ->
             block(position)
+            dismiss()
         }
     }
 }

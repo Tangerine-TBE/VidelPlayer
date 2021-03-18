@@ -69,12 +69,11 @@ public class IFloatWindowImpl extends IFloatWindow {
         if (once) {
             mFloatView.init();
             once = false;
-            isShow = true;
         } else {
             if (isShow) return;
             getView().setVisibility(View.VISIBLE);
-            isShow = true;
         }
+        isShow = true;
     }
 
     @Override

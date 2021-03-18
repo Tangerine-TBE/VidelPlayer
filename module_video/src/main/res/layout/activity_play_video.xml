@@ -15,13 +15,6 @@
             android:layout_height="match_parent"
             />
 
-<!--
-        <com.example.module_video.ui.widget.LandLayoutVideo
-            android:id="@+id/videoPlayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
--->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

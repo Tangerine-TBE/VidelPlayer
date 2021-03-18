@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.ui.widget.popup.play.PlayListPopup
@@ -83,7 +84,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
     private val mCoverImage:ImageView = findViewById(R.id.thumbImage)
 
     //小窗
-    val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
+    private val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
 
     init {
         //切换尺寸
@@ -107,6 +108,10 @@ class PlayVideoView : StandardGSYVideoPlayer {
 
     //----------------------事件监听--------------------------
     private fun initEvent() {
+        mShowSmallWindow.setOnClickListener {
+            openSmall()
+        }
+
         //上一个
         mPre.setOnClickListener {
             playPreAction()
@@ -126,7 +131,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
         //播放列表
         mPlayList.setOnClickListener {
             mPlayListPopup.apply {
-                setListData(mUrlList, mSourcePosition)
+                setListData(mUrlList, mSourcePosition,mIfCurrentIsFullscreen)
                 popupGravity = Gravity.TOP
                 showPopupWindow(it)
             }
@@ -153,8 +158,21 @@ class PlayVideoView : StandardGSYVideoPlayer {
             mSourcePosition=it
             startPlayVideo()
         }
+
     }
 
+    fun getProgress()=currentPositionWhenPlaying
+
+
+    fun getPlayList()=mUrlList
+
+    fun getCurrentPosition()=mSourcePosition
+
+    private var openSmall={}
+
+    fun openSmallWindow(block:()->Unit){
+        openSmall=block
+    }
 
     //---------------------播放动作---------------------------
     private fun playPreAction() {
@@ -222,12 +240,20 @@ class PlayVideoView : StandardGSYVideoPlayer {
         playVideoView.mSourcePosition = mSourcePosition
         playVideoView.mUrlList = mUrlList
 
+        playVideoView.openSmall=openSmall
+
         playVideoView.mPlayModel = mPlayModel
         resolvePlayModelUI()
         playVideoView.mType = mType
         playVideoView.resolveTypeUI()
         playVideoView.mSpeed = mSpeed
         playVideoView.resolveSpeedUI()
+
+
+
+        mPlayListPopup.dismiss()
+
+        LogUtils.i("---playVideoView----Fullscreen----------------$mLockCurScreen-------")
 
         //sampleVideo.resolveRotateUI();
         //这个播放器的demo配置切换到全屏播放器
@@ -254,13 +280,15 @@ class PlayVideoView : StandardGSYVideoPlayer {
             val playVideoView = gsyVideoPlayer as PlayVideoView
             mSourcePosition = playVideoView.mSourcePosition
             setUp(mUrlList, mCache, mCachePath, mTitle)
-
             mType = playVideoView.mType
             resolveTypeUI()
             mSpeed = playVideoView.mSpeed
             resolveSpeedUI()
             mPlayModel = playVideoView.mPlayModel
             resolvePlayModelUI()
+            openSmall=playVideoView.openSmall
+            LogUtils.i("---playVideoView----Normal----------------$mLockCurScreen-------")
+            playVideoView.mPlayListPopup.dismiss()
         }
     }
 
@@ -482,7 +510,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
             mLockCurScreen = true
             hideAllWidget()
         }
-
+        LogUtils.i("---playVideoView-----lockTouchLogic-------------$mLockCurScreen----------")
     }
 
 
