@@ -24,6 +24,7 @@ import com.example.module_video.ui.widget.popup.FunctionSelectPopup
 import com.example.module_video.ui.widget.popup.UserRemindPopup
 import com.example.module_video.utils.Constants
 import com.example.module_video.viewmode.SetViewModel
+import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer
 
 /**
  * @name VidelPlayer
@@ -76,8 +77,6 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
         mSetFunctionList.apply {
             add(ItemBean(title = "密码锁定", hasPwd = sp.getBoolean(Constants.SP_SET_PWD_STATE)))
             add(ItemBean(title = "内核设置",hint = getCoreType()))
-            add(ItemBean(title = "字幕大小"))
-            add(ItemBean(title = "字幕文本编码"))
             mFunctionAdapter.setHasSet()
             mFunctionAdapter.setList(this)
         }
@@ -91,6 +90,10 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
        }
 
     override fun initView() {
+
+        val trackInfo = IjkExo2MediaPlayer(context).trackInfo
+
+
         sp.prefs.registerOnSharedPreferenceChangeListener(this)
         binding.apply {
             setStatusBar(context, mNestedScrollView, LayoutType.LINEARLAYOUT)

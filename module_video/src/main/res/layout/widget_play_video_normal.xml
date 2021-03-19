@@ -18,18 +18,18 @@
 
 
     <RelativeLayout
-        android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:scaleType="fitCenter">
 
+
         <ImageView
-            android:id="@+id/thumbImage"
+            android:id="@+id/audioLogo"
+            android:src="@mipmap/app_logo"
+            android:visibility="gone"
             android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop" />
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
     </RelativeLayout>
 
@@ -73,6 +73,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="20dp"
             android:paddingRight="24dp"
+            android:visibility="gone"
             android:src="@mipmap/icon_video_set"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -280,7 +281,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     
-    <ProgressBar
+   <!-- <ProgressBar
         android:id="@+id/bottom_progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
@@ -288,6 +289,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:max="100"
-        android:progressDrawable="@drawable/my_video_progress" />
+        android:progressDrawable="@drawable/my_video_progress" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

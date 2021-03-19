@@ -17,7 +17,6 @@ import com.example.module_base.utils.formatTime
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.ui.activity.PlayVideoActivity
-import com.google.android.play.core.assetpacks.dd
 import com.tamsiree.rxkit.RxTimeTool
 import com.umeng.analytics.pro.cr
 import kotlinx.coroutines.*

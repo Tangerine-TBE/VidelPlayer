@@ -1,8 +1,10 @@
 package com.example.module_video.ui.activity
 
 import android.annotation.TargetApi
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -10,15 +12,14 @@ import android.transition.Transition
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.BounceInterpolator
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.module_base.base.BaseApplication
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyStatusBarUtil
@@ -29,23 +30,24 @@ import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.PlayListBean
 import com.example.module_video.ui.widget.FloatPlayerView
 import com.example.module_video.ui.widget.FloatingVideo
-import com.example.module_video.ui.widget.ScaleFrameLayout
 import com.example.module_video.ui.widget.ScaleImage
+import com.example.module_video.ui.widget.popup.PlayErrorPopup
 import com.example.module_video.utils.floatUtil.FloatWindow
-import com.example.module_video.utils.floatUtil.MoveType
-import com.example.module_video.utils.floatUtil.Screen
 import com.example.module_video.viewmode.PlayVideoViewModel
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
 import com.lzf.easyfloat.anim.DefaultAnimator
 import com.lzf.easyfloat.enums.ShowPattern
-import com.lzf.easyfloat.enums.SidePattern
-import com.lzf.easyfloat.utils.DisplayUtils
+import com.lzf.easyfloat.interfaces.OnPermissionResult
+import com.lzf.easyfloat.permission.PermissionUtils
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.tamsiree.rxkit.RxDeviceTool
+import java.lang.Float.min
 import kotlin.math.max
 
 
@@ -55,18 +57,27 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     private var isPlay = false
     private var isPause = false
     private var playPosition=0
-    companion object {
-       private const val IMG_TRANSITION = "IMG_TRANSITION"
-     private   const val TRANSITION = "TRANSITION"
-     private   const val VIDEO_MSG = "VIDEO_MSG"
-     private   const val PLAY_POSITION = "PLAY_POSITION"
+    private var mChannel=0
 
-         fun toPlayVideo(activity: FragmentActivity?, view: View, msg: String, position: Int){
+    private val mPlayErrorPopup by lazy {
+        PlayErrorPopup(this)
+    }
+
+    companion object {
+        const val IMG_TRANSITION = "IMG_TRANSITION"
+        const val TRANSITION = "TRANSITION"
+        const val VIDEO_MSG = "VIDEO_MSG"
+        const val PLAY_POSITION = "PLAY_POSITION"
+        const val FROM_CHANNEL = "FROM_CHANNEL"
+        const val PROGRESS = "PROGRESS"
+
+         fun toPlayVideo(activity: FragmentActivity?, view: View, msg: String, position: Int,channel:Int=0){
              activity?.let {
                  val intent = Intent(activity, PlayVideoActivity::class.java)
                  intent.putExtra(TRANSITION, true)
                  intent.putExtra(VIDEO_MSG, msg)
                  intent.putExtra(PLAY_POSITION, position)
+                 intent.putExtra(FROM_CHANNEL, channel)
                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                      val pair: Pair<View, String> = Pair<View, String>(view, IMG_TRANSITION)
                      val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -82,18 +93,19 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         }
     }
 
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         MyStatusBarUtil.fullStateWindow(hasFocus, this)
     }
-
     override fun getLayoutView(): Int = R.layout.activity_play_video
     override fun getViewModelClass(): Class<PlayVideoViewModel> {
         return PlayVideoViewModel::class.java
     }
 
     override fun initView() {
+        if (EasyFloat.appFloatIsShow(FloatingVideo.SMALL_TAG)) {
+            EasyFloat.dismissAppFloat(FloatingVideo.SMALL_TAG)
+        }
         binding.apply {
             initVideoPlayer()
             //第三方打开
@@ -109,7 +121,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 path?.let {
                     val index = it.lastIndexOf("/")
                     val name = it.substring(index + 1)
-                    videoPlayer.setUp(arrayListOf(MediaInformation(uri = it, name = name)), 0, true, name)
+                   videoPlayer.setUp(arrayListOf(MediaInformation(uri=this.toString(), name = name)), 0, true, name)
                 }
             }
         }
@@ -123,8 +135,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         val videoMsg = intent.getStringExtra(VIDEO_MSG)
         playPosition=intent.getIntExtra(PLAY_POSITION, 0)
         isTransition = intent.getBooleanExtra(TRANSITION, false)
-
-
+        mChannel = intent.getIntExtra(FROM_CHANNEL, 0)
         GSYVideoOptionBuilder()
                 .setIsTouchWiget(true)
                 .setNeedLockFull(true)
@@ -155,8 +166,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
         gsonHelper<PlayListBean>(videoMsg)?.apply {
             if (list.size>playPosition){
-                if (FloatWindow.get() != null) {
-                    FloatWindow.destroy()
+                if (mChannel == 1) {
+                    videoPlayer.seekOnStart=intent.getIntExtra(PROGRESS, 0).toLong()
                 }
                 videoPlayer.setUp(list, playPosition, true, list[playPosition].name)
             }
@@ -180,7 +191,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                     true,
                     true
             )
-            LogUtils.i("---onConfigurationChanged-------------------${orientationUtils.screenType}--------------")
         }
     }
 
@@ -191,42 +201,48 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                     onBackPressed()
                 }
 
+
                 setGSYStateUiListener {
-                    when (it) {
-                       // GSYVideoView.CURRENT_STATE_PLAYING ->btPlay.setImageResource(R.mipmap.icon_video_play)
-                      //  GSYVideoView.CURRENT_STATE_PAUSE ->btPlay.setImageResource(R.mipmap.icon_video_pause)
+                    when(it){
+                        GSYVideoView.CURRENT_STATE_ERROR->{
+                            mPlayErrorPopup.showPopupView(this)
+                        }
                     }
                 }
 
                 openSmallWindow {
-                   /* if (FloatWindow.get() == null) {
-                        videoPlayer.apply {
-                            val floatPlayerView = FloatPlayerView(applicationContext)
-                            floatPlayerView.setCurrentResource(getPlayList(), getCurrentPosition(), getProgress())
-                            FloatWindow.with(applicationContext)
-                                    .setView(floatPlayerView)
-                                    .setWidth(Screen.width, 0.4f)
-                                    .setHeight(Screen.width, 0.4f)
-                                    .setX(Screen.width, 0.8f)
-                                    .setY(Screen.height, 0.3f)
-                                    .setMoveType(MoveType.slide)
-                                    .setFilter(false)
-                                    .setMoveStyle(500, BounceInterpolator())
-                                    .build()
-                            FloatWindow.get().show()
-                            finish()
-                        }
-                    }*/
-                    initSmallWindow()
-                    finish()
+                    checkPermission()
                 }
             }
+            mPlayErrorPopup.doSure {
+                finish()
+            }
+
+        }
+    }
+
+
+    private  fun checkPermission(){
+        if (PermissionUtils.checkPermission(this)) {
+            showSmallWindow()
+        } else {
+            AlertDialog.Builder(this)
+                    .setMessage("使用浮窗功能，需要您授权悬浮窗权限。")
+                    .setPositiveButton("去开启") { _, _ ->
+                        PermissionUtils.requestPermission(this, object : OnPermissionResult {
+                            override fun permissionResult(isOpen: Boolean) {
+                            }
+                        })
+                    }
+                    .setNegativeButton("取消") { _, _ -> }
+                    .show()
+
         }
     }
 
 
     override fun onPause() {
-     //   binding.videoPlayer.onVideoPause()
+       binding.videoPlayer.onVideoPause()
         super.onPause()
         isPause = true
 
@@ -245,6 +261,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
             getCurPlay().release()
         }
         orientationUtils.releaseListener()
+        mPlayErrorPopup.dismiss()
     }
 
     private fun getCurPlay(): GSYVideoPlayer {
@@ -316,30 +333,42 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         return false
     }
 
-    private val smallVideoPlayer by lazy {
-        FloatPlayerView(this)
-    }
 
-
-   private fun  initSmallWindow(){
+   private fun  showSmallWindow(){
         EasyFloat.with(this)
                 // 设置浮窗xml布局文件，并可设置详细信息
                 .setLayout(R.layout.layout_small_float) {
-                  val playContainer=it.findViewById<FrameLayout>(R.id.container)
+                    val smallVideoPlayer= FloatPlayerView(this)
+                    val playContainer=it.findViewById<FrameLayout>(R.id.container)
                     val content = it.findViewById<RelativeLayout>(R.id.rlContent)
                     playContainer.addView(smallVideoPlayer)
                     binding.videoPlayer.apply {
                         smallVideoPlayer.setCurrentResource(getPlayList(), getCurrentPosition(), getProgress())
                     }
                     val params = content.layoutParams as FrameLayout.LayoutParams
-                    it.findViewById<ScaleImage>(R.id.ivScale).onScaledListener =
-                            object : ScaleImage.OnScaledListener {
-                                override fun onScaled(x: Float, y: Float, event: MotionEvent) {
-                                    params.width = max(params.width + x.toInt(), 200)
-                                    params.height = max(params.height + y.toInt(), 200)
-                                    content.layoutParams = params
-                                }
+                    val scaleImage = it.findViewById<ScaleImage>(R.id.ivScale)
+                    scaleImage.setOnScaledListener(object : ScaleImage.OnScaledListener {
+                        override fun onScaled(x: Float, y: Float, event: MotionEvent) {
+                            val screenWidth = RxDeviceTool.getScreenWidth(BaseApplication.application)
+                            val screenHeight = RxDeviceTool.getScreenHeight(BaseApplication.application)
+                            var scaleWith = params.width + x.toInt()
+                            var scaleHeight =params.height + y.toInt()
+
+                            if (scaleWith<screenWidth/3){
+                                scaleWith=screenWidth/3
                             }
+                            if (screenHeight<screenHeight/5){
+                                scaleHeight=screenHeight/5
+                            }
+                            params.width = scaleWith.coerceAtMost(screenWidth)
+                            params.height = scaleHeight.coerceAtMost(screenHeight)
+                            content.layoutParams = params
+                            LogUtils.i("---OnScaledListener-----${  params.width}--------------${    params.height}------------------")
+                        }
+                    })
+                    smallVideoPlayer.videoPlayer.showScaleIcon {state->
+                        scaleImage.visibility=if (state) View.VISIBLE else View.GONE
+                    }
                 }
                 // 设置浮窗显示类型，默认只在当前Activity显示，可选一直显示、仅前台显示、仅后台显示
                 .setShowPattern(ShowPattern.ALL_TIME)
@@ -363,7 +392,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 // ps：通过Kotlin DSL实现的回调，可以按需复写方法，用到哪个写哪个
                 .registerCallback {
                     createResult { isCreated, msg, view ->  }
-                    show {  }
+                    show {       }
                     hide {  }
                     dismiss {  }
                     touchEvent { view, motionEvent ->  }
@@ -372,6 +401,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 }
                 // 创建浮窗（这是关键哦😂）
                 .show()
+               finish()
     }
 
 }

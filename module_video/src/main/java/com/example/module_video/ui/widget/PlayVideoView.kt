@@ -12,12 +12,14 @@ import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.ui.widget.popup.play.PlayListPopup
+import com.example.module_video.utils.MediaState
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import moe.codeest.enviews.ENDownloadView
+import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import java.io.File
 import java.util.*
 
@@ -81,7 +83,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
     //下一个
     private val mNext: ImageView = findViewById(R.id.next)
 
-    private val mCoverImage:ImageView = findViewById(R.id.thumbImage)
+    private val mAudioLogo:ImageView = findViewById(R.id.audioLogo)
 
     //小窗
     private val mShowSmallWindow: TextView = findViewById(R.id.switch_window)
@@ -110,6 +112,8 @@ class PlayVideoView : StandardGSYVideoPlayer {
     private fun initEvent() {
         mShowSmallWindow.setOnClickListener {
             openSmall()
+
+            gsyVideoManager
         }
 
         //上一个
@@ -205,6 +209,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
         setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
         startPlayLogic()
         mPlayListPopup.setListPosition(mSourcePosition)
+        IjkMediaPlayer().trackInfo
     }
 
     override fun onAutoCompletion() {
@@ -368,6 +373,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
     ): Boolean {
         mSourcePosition = position
         mUrlList = url
+        mAudioLogo.visibility=if (mUrlList[mSourcePosition].type== MediaState.AUDIO) View.VISIBLE else View.GONE
         return setUp(url[mSourcePosition].uri, cacheWithPlay, title)
     }
 
@@ -392,6 +398,8 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
     override fun getVolumeLayoutId(): Int =R.layout.my_video_volume_dialog
+
+    override fun getProgressDialogLayoutId():Int=R.layout.my_video_progress_dialog
     //----------------------------UI控制-----------------------------------
     /**
      * 显示比例
@@ -475,6 +483,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
     override fun updateStartImage() {
+
         mStartButton.visibility = View.VISIBLE
         if (mStartButton is ImageView) {
             val imageView = mStartButton as ImageView
@@ -515,6 +524,7 @@ class PlayVideoView : StandardGSYVideoPlayer {
 
 
     override fun changeUiToNormal() {
+
         if (!mLockCurScreen) {
             Debuger.printfLog("changeUiToNormal")
             setViewShowState(mTopContainer, VISIBLE)

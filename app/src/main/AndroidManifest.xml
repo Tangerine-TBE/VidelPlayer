@@ -7,9 +7,9 @@
     <application
         android:allowBackup="true"
         android:name=".MainApplication"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_logo"
         android:label="${app_name_channel}"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         tools:replace="android:allowBackup,android:label"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">

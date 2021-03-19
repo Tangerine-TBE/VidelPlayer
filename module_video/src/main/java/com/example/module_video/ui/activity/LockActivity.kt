@@ -18,8 +18,7 @@ import com.example.module_video.ui.adapter.recycleview.InputPwdAdapter
 import com.example.module_video.ui.adapter.recycleview.PwdAdapter
 import com.example.module_video.utils.*
 import com.example.module_video.viewmode.LockViewModel
-import com.glance.guolindev.Glance.context
-import kotlin.system.exitProcess
+
 
 
 class LockActivity : BaseVmViewActivity<ActivityLockBinding, LockViewModel>() {

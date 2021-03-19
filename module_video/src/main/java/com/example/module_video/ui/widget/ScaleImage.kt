@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatImageView
+import com.example.module_base.utils.LogUtils
 
 /**
  * @author: liuzhenfeng
@@ -18,7 +19,11 @@ class ScaleImage @JvmOverloads constructor(
     private var touchDownX = 0f
     private var touchDownY = 0f
 
-    var onScaledListener: OnScaledListener? = null
+    private var onScaledListener: OnScaledListener? = null
+
+    fun setOnScaledListener(listener:OnScaledListener){
+        onScaledListener=listener
+    }
 
     interface OnScaledListener {
         fun onScaled(x: Float, y: Float, event: MotionEvent)
@@ -38,8 +43,10 @@ class ScaleImage @JvmOverloads constructor(
                 touchDownY = event.y
             }
 
-            MotionEvent.ACTION_MOVE ->
+            MotionEvent.ACTION_MOVE ->{
                 onScaledListener?.onScaled(event.x - touchDownX, event.y - touchDownY, event)
+                LogUtils.i("---ACTION_MOVE---${event.x - touchDownX}------${event.y - touchDownY}---------------")
+            }
 
         }
         return true

@@ -1,21 +1,21 @@
 package com.example.module_video.ui.widget
 
-import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
-import android.os.Build
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
+import android.view.ViewGroup
 import android.widget.ImageView
+import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.PlayListBean
+import com.example.module_video.ui.activity.PlayVideoActivity
+import com.google.gson.Gson
 import com.lzf.easyfloat.EasyFloat
 import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.utils.NetworkUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-import java.io.File
 import java.util.*
 
 /**
@@ -43,6 +43,7 @@ class FloatingVideo : StandardGSYVideoPlayer {
     private lateinit var mDelete: ImageView
     //全屏
     private lateinit var mFull: ImageView
+    private lateinit var mInclude: ViewGroup
 
     override fun getLayoutId(): Int {
         return R.layout.layout_floating_video
@@ -64,23 +65,29 @@ class FloatingVideo : StandardGSYVideoPlayer {
         mScreenHeight = activityContext.resources.displayMetrics.heightPixels
         mAudioManager =
             activityContext.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        mStartButton = findViewById(com.shuyu.gsyvideoplayer.R.id.start)
+        mStartButton = findViewById(R.id.start)
+        mBottomContainer = findViewById(R.id.layout_bottom)
+
         mStartButton.setOnClickListener { clickStartIcon() }
 
         mPre = findViewById(R.id.small_pre)
         mNext= findViewById(R.id.small_next)
         mDelete = findViewById(R.id.small_delete)
         mFull= findViewById(R.id.small_full)
+        mInclude= findViewById(R.id.smallInclude)
+
         initEvent()
     }
 
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-            parent.requestDisallowInterceptTouchEvent(true)
-        return super.onInterceptTouchEvent(ev)
-    }
 
     private fun initEvent() {
+        mInclude.setOnClickListener {
+            LogUtils.i("--initEvent---------------mInclude------------------")
+            mBottomContainer.visibility=View.VISIBLE
+            scaleAction(true)
+        }
+
         //上一个
         mPre.setOnClickListener {
             playPreAction()
@@ -96,10 +103,13 @@ class FloatingVideo : StandardGSYVideoPlayer {
         }
         //全屏
         mFull.setOnClickListener {
-
+            context.startActivity(Intent(context,PlayVideoActivity::class.java).apply {
+                putExtra(PlayVideoActivity.VIDEO_MSG,  Gson().toJson(PlayListBean(mUrlList.toMutableList())))
+                putExtra(PlayVideoActivity.PLAY_POSITION,mSourcePosition)
+                putExtra(PlayVideoActivity.FROM_CHANNEL, 1)
+                putExtra(PlayVideoActivity.PROGRESS, currentPositionWhenPlaying)
+            })
         }
-
-        
     }
 
 
@@ -109,23 +119,7 @@ class FloatingVideo : StandardGSYVideoPlayer {
     private var mSourcePosition = 0
 
 
-    override fun updateStartImage() {
-        mStartButton.visibility = View.VISIBLE
-        if (mStartButton is ImageView) {
-            val imageView = mStartButton as ImageView
-            when (mCurrentState) {
-                CURRENT_STATE_PLAYING -> {
-                    imageView.setImageResource(R.mipmap.icon_video_pause)
-                }
-                CURRENT_STATE_ERROR -> {
-                    imageView.setImageResource(R.mipmap.icon_video_play)
-                }
-                else -> {
-                    imageView.setImageResource(R.mipmap.icon_video_play)
-                }
-            }
-        }
-    }
+
     private fun playPreAction() {
         if (mSourcePosition > 0) {
             mSourcePosition--
@@ -175,6 +169,56 @@ class FloatingVideo : StandardGSYVideoPlayer {
         mUrlList = url
         return setUp(url[mSourcePosition].uri, cacheWithPlay, title)
     }
+    override fun updateStartImage() {
+        mStartButton.visibility = View.VISIBLE
+        if (mStartButton is ImageView) {
+            val imageView = mStartButton as ImageView
+            when (mCurrentState) {
+                CURRENT_STATE_PLAYING -> {
+                    imageView.setImageResource(R.mipmap.icon_small_pause)
+                }
+                CURRENT_STATE_ERROR -> {
+                    imageView.setImageResource(R.mipmap.icon_small_play)
+                }
+                else -> {
+                    imageView.setImageResource(R.mipmap.icon_small_play)
+                }
+            }
+        }
+    }
 
+   override fun changeUiToNormal(){
+       setViewShowState(mStartButton, VISIBLE)
+       updateStartImage()
+
+   }
+    override fun changeUiToPlayingShow(){
+        setViewShowState(mStartButton, VISIBLE)
+        updateStartImage()
+    }
+
+    override fun changeUiToPreparingShow(){
+        setViewShowState(mStartButton, VISIBLE)
+    }
+
+    override fun changeUiToPlayingBufferingShow(){
+        setViewShowState(mStartButton, VISIBLE)
+    }
+
+
+    private var scaleAction:(Boolean)->Unit={false}
+
+    fun showScaleIcon(block:(Boolean)->Unit){
+        scaleAction=block
+    }
+
+
+    override fun  hideAllWidget(){
+        scaleAction(false)
+        setViewShowState(mBottomContainer, INVISIBLE)
+        setViewShowState(mTopContainer, INVISIBLE)
+        setViewShowState(mBottomProgressBar, VISIBLE)
+        setViewShowState(mStartButton, VISIBLE)
+    }
 
 }

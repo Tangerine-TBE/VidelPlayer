@@ -16,20 +16,16 @@ import com.example.module_video.domain.MediaInformation
 class FloatPlayerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-   private var videoPlayer=FloatingVideo(context)
+    var videoPlayer=FloatingVideo(context)
 
     init {
         val layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         layoutParams.gravity = Gravity.CENTER
         addView(videoPlayer, layoutParams)
 
-        //增加封面
-        /*ImageView imageView = new ImageView(getContext());
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.xxx1);
-        videoPlayer.setThumbImageView(imageView);*/
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(true)
+        videoPlayer.dismissControlTime=4000
     }
 
 
@@ -40,11 +36,4 @@ class FloatPlayerView @JvmOverloads constructor(
         LogUtils.i("--setCurrentResource-------------------------$currentPositionWhenPlaying.toLong()-----------")
     }
 
-    fun onPause() {
-        videoPlayer.currentPlayer.onVideoPause()
-    }
-
-    fun onResume() {
-        videoPlayer.currentPlayer.onVideoResume()
-    }
 }
