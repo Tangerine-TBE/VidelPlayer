@@ -3,6 +3,7 @@ package com.example.module_ad.advertisement;
 import android.app.Activity;
 import android.widget.FrameLayout;
 
+import com.example.module_ad.ad.ad_kind.tencent.TXSplashAd;
 import com.example.module_ad.base.IShowAdCallback;
 import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.utils.AdProbabilityUtil;
@@ -21,7 +22,7 @@ public class SplashHelper {
     private Class mClass;
     private int mAction;
     private TTSplashAd mTtSplashAd;
-    private TXSplashAd mTxSplashAd;
+    private com.example.module_ad.ad.ad_kind.tencent.TXSplashAd mTxSplashAd;
     private boolean mAddToutiaoAdError = false;
     private boolean mAddTengxunAdError = false;
 

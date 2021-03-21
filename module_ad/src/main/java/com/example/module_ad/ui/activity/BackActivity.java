@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.module_ad.R;
 import com.example.module_ad.advertisement.TTSplashAd;
-import com.example.module_ad.advertisement.TXSplashAd;
+import com.example.module_ad.ad.ad_kind.tencent.TXSplashAd;
 import com.example.module_ad.base.IShowAdCallback;
 import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.utils.AdProbabilityUtil;
