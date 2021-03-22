@@ -4,9 +4,7 @@ package com.example.module_video.ui.activity
 import android.net.Uri
 import android.view.KeyEvent
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -26,7 +24,7 @@ import com.example.module_video.ui.fragment.FileListFragment
 import com.example.module_video.ui.fragment.MediaFragment
 import com.example.module_video.ui.fragment.SetFragment
 import com.example.module_video.ui.widget.popup.RemindPopup
-import com.example.module_video.viewmode.MediaViewModel
+import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
 
 @Route(path = ModuleProvider.ROUTE_HOME_ACTIVITY)
@@ -54,13 +52,11 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     override fun getLayoutView(): Int = R.layout.activity_home
     override fun initView() {
+
         sp.putBoolean(Constants.IS_FIRST, false)
         binding.apply {
             data = viewModel
             showFragment(mMediaFragment)
-
-
-
             bottomNavigationView.apply {
                 layoutManager = GridLayoutManager(this@HomeActivity, 3)
                 mBottomAdapter.setList(DataProvider.homeBottomList)
@@ -75,8 +71,6 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
     private var mMediaList: MutableList<MediaInformation> = ArrayList()
 
     override fun observerData() {
-
-
         binding.apply {
             viewModel.apply {
                 val that = this@HomeActivity
@@ -108,7 +102,8 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                 //播放列表选择的item
                 selectItemList.observe(that, {
                     hasData = it.size > 0
-                    mMediaList = it
+                    mMediaList.clear()
+                    mMediaList.addAll(it)
                     bottomActionLayout.apply {
                         moveActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_remove_select else R.mipmap.icon_edit_remove_normal)
                         deleteActionIcon.setImageResource(if (it.size > 0) R.mipmap.icon_edit_delete_select else R.mipmap.icon_edit_delete_normal)
@@ -178,12 +173,10 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                 //确定
                 doSure {
                     mMediaList?.let { it ->
-                        val pathList = ArrayList<String>()
                         it.forEach {
-                            pathList.add(it.path)
-                            viewModel.deleteMediaFile(Uri.parse("${it.uri}"))
+                            viewModel.deleteMediaFile(Uri.parse("${it.uri}"),it.path)
                         }
-                        viewModel.deleteFile(pathList)
+                        viewModel.deleteItemList(it)
                         viewModel.setEditAction(false)
                     }
                 }

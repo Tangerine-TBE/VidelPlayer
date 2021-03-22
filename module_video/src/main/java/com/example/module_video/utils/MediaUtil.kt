@@ -16,6 +16,7 @@ import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.formatTime
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.domain.ValueMediaType
 import com.example.module_video.ui.activity.PlayVideoActivity
 import com.tamsiree.rxkit.RxTimeTool
 import com.umeng.analytics.pro.cr
@@ -55,7 +56,7 @@ object MediaUtil {
                 val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
              //   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
-                        "${RxTimeTool.date2String(Date(date), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
+                        "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
                         ?: "", path, uri.toString(), bitmap,MediaState.VIDEO))
             }
             close()
@@ -64,20 +65,67 @@ object MediaUtil {
     }
 
     /**
-     * 获取音频文件
+     * 获取视频文件
      * @return MutableList<MediaInformation>
      */
-    fun getAllAudio(): MutableList<MediaInformation> {
+    fun getVideo(block:(ValueMediaType)->Unit) {
         val videoList = ArrayList<MediaInformation>()
-        contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc")?.apply {
+        val audioList = ArrayList<MediaInformation>()
 
+        contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc")?.apply {
+            LogUtils.i("---Audio----------${videoList.size}----------------------------")
             while (moveToNext()) {
                 val id = getLong(getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
                 val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
                 val duration = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)) // 时长
                 val name = getString(getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))//名字
                 val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
-                val date = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED))//添加时间
+                val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
+                //   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
+                audioList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
+                        "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,MediaState.AUDIO))
+            }
+            close()
+        }
+
+
+        contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc")?.apply {
+            while (moveToNext()) {
+                val id = getLong(getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                val uri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+                val duration = getLong(getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)) // 时长
+                val name = getString(getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME))//名字
+                val size = getLong(getColumnIndexOrThrow(MediaStore.Video.Media.SIZE))//大小
+                val date = getLong(getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN))//添加时间
+                val path = getString(getColumnIndexOrThrow(MediaStore.Video.Media.DATA)) // 路径
+                val resolution = getString(getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)) // 分辨率
+                val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
+                //   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
+                videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
+                        "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
+                        ?: "", path, uri.toString(), bitmap,MediaState.VIDEO))
+                block(ValueMediaType(videoList,audioList))
+            }
+            close()
+        }
+
+
+    }
+
+
+    /**
+     * 获取音频文件
+     * @return MutableList<MediaInformation>
+     */
+    fun getAllAudio(): MutableList<MediaInformation> {
+        val videoList = ArrayList<MediaInformation>()
+        contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc")?.apply {
+            while (moveToNext()) {
+                val id = getLong(getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
+                val duration = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)) // 时长
+                val name = getString(getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))//名字
+                val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
                 val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
              //   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",

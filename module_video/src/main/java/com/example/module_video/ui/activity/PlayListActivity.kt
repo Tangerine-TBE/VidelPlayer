@@ -15,8 +15,7 @@ import com.example.module_video.domain.PlayListMsgBean
 import com.example.module_video.livedata.PlayListLiveData
 import com.example.module_video.ui.adapter.recycleview.FileListAdapter
 import com.example.module_video.ui.widget.popup.InputPopup
-import com.example.module_video.viewmode.MediaViewModel
-import com.example.module_video.viewmode.SelectFileViewModel
+import com.example.module_video.viewmodel.SelectFileViewModel
 import com.google.gson.Gson
 import com.tamsiree.rxkit.RxKeyboardTool
 import com.tamsiree.rxkit.view.RxToast

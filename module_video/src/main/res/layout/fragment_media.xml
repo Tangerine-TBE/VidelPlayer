@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
         <variable
             name="data"
-            type="com.example.module_video.viewmode.MediaViewModel" />
+            type="com.example.module_video.viewmodel.MediaViewModel" />
 
     </data>
 
@@ -24,8 +26,8 @@
         <net.lucode.hackware.magicindicator.MagicIndicator
             android:id="@+id/homeIndicator"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,10 +36,10 @@
             android:id="@+id/search_include"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:paddingLeft="13dp"
             android:layout_marginRight="8dp"
-            android:visibility="@{data.searchAction?View.VISIBLE:View.GONE}"
             android:background="@drawable/shape_home_top_bg"
+            android:paddingLeft="13dp"
+            android:visibility="@{data.searchAction?View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/editAction"
             app:layout_constraintEnd_toEndOf="@+id/searchAction"
             app:layout_constraintStart_toEndOf="@+id/homeIndicator"
@@ -48,7 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -61,13 +64,12 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginRight="12dp"
-                android:visibility="gone"
                 android:src="@mipmap/icon_small_delete"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         <ImageView
@@ -86,20 +88,20 @@
             android:layout_width="42dp"
             android:layout_height="37dp"
             android:layout_marginRight="16dp"
-            android:textColor="@color/theme_color"
+            android:background="@drawable/shape_home_top_bg"
             android:gravity="center"
             android:text="@{data.editAction?`完成`:`编辑`}"
-            android:background="@drawable/shape_home_top_bg"
+            android:textColor="@color/theme_color"
             app:layout_constraintBottom_toBottomOf="@+id/homeIndicator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/homeIndicator" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="没有储存权限，无法获取音视频信息"
             android:textColor="@color/white"
             android:visibility="@{data.permissionState?View.GONE:View.VISIBLE}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,16 +112,13 @@
             android:id="@+id/media_all"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:visibility="@{data.permissionState?View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

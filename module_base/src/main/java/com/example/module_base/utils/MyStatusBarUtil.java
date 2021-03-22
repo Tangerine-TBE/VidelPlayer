@@ -136,6 +136,9 @@ public class MyStatusBarUtil {
         }
     }
 
+
+
+
     public static void fullScreenWindow(boolean hasFocus,Activity activity) {
         if (hasFocus && Build.VERSION.SDK_INT >= 21) {
             if (Build.VERSION.SDK_INT >= 28) {

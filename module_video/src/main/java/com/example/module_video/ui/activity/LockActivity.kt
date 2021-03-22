@@ -1,23 +1,18 @@
 package com.example.module_video.ui.activity
 
-import android.app.ActivityManager
-import android.content.Context
-import android.util.Log
 import android.view.KeyEvent
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.module_ad.utils.Contents
 import com.example.module_base.base.BaseVmViewActivity
-import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyActivityManager
 import com.example.module_base.utils.toOtherActivity
-import com.example.module_base.utils.toolbarEvent
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityLockBinding
 import com.example.module_video.domain.ItemBean
 import com.example.module_video.ui.adapter.recycleview.InputPwdAdapter
 import com.example.module_video.ui.adapter.recycleview.PwdAdapter
 import com.example.module_video.utils.*
-import com.example.module_video.viewmode.LockViewModel
+import com.example.module_video.viewmodel.LockViewModel
 
 
 

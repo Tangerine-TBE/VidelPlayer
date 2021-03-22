@@ -19,11 +19,8 @@ import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.Constants
 import com.example.module_video.utils.FileUtil
-import com.example.module_video.viewmode.PlayListMsgViewModel
+import com.example.module_video.viewmodel.PlayListMsgViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 
 class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayListMsgViewModel>() {

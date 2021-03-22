@@ -29,6 +29,7 @@
         <activity android:name=".utils.floatUtil.FloatActivity" android:launchMode="singleTop" android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.PlayVideoActivity"
+            android:theme="@style/StartingWindowTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
@@ -57,6 +58,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/my_file_paths" />
         </provider>
+
+
+
+
     </application>
 
 </manifest>

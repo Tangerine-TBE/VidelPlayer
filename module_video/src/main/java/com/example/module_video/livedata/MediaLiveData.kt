@@ -13,6 +13,7 @@ import com.example.module_video.utils.MediaUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @name VidelPlayer
@@ -32,18 +33,13 @@ object MediaLiveData : BaseLiveData<ValueMediaType>(){
         AudioObserver()
     }
 
-    fun getMediaResource() {
-        mScope.launch(Dispatchers.IO) {
-            val video = async {
-                MediaUtil.getAllVideo()
+    fun getMedia(){
+        mScope.launch(Dispatchers.IO){
+            MediaUtil.getVideo{
+                postValue(it)
             }
-            val audio = async {
-                MediaUtil.getAllAudio()
-            }
-            postValue(ValueMediaType(video.await(),audio.await()))
         }
     }
-
 
     override fun onActive() {
         super.onActive()
@@ -52,19 +48,16 @@ object MediaLiveData : BaseLiveData<ValueMediaType>(){
     }
 
 
-
-
     class VideoObserver:ContentObserver(BaseApplication.mHandler){
         override fun onChange(selfChange: Boolean, uri: Uri?) {
-            getMediaResource()
-            LogUtils.i("--VideoObserver--------onChange---------------------")
+         //  getMedia()
         }
     }
 
     class AudioObserver:ContentObserver(BaseApplication.mHandler){
+
         override fun onChange(selfChange: Boolean, uri: Uri?) {
-            getMediaResource()
-            LogUtils.i("--AudioObserver--------onChange---------------------")
+          //  getMedia()
         }
     }
 

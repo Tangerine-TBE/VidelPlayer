@@ -8,7 +8,7 @@
 
         <variable
             name="data"
-            type="com.example.module_video.viewmode.PlayListMsgViewModel" />
+            type="com.example.module_video.viewmodel.PlayListMsgViewModel" />
 
     </data>
 

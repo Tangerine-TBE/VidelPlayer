@@ -1,17 +1,10 @@
 package com.example.module_video.ui.fragment
 
-import android.content.Intent
-import android.os.Build
-import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentContentsBinding
-import com.example.module_video.ui.activity.PlayVideoActivity
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
-import com.example.module_video.viewmode.ContentsViewModel
+import com.example.module_video.viewmodel.ContentsViewModel
 
 /**
  * @name VidelPlayer

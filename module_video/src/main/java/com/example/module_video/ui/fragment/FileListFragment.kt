@@ -7,7 +7,6 @@ import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentListBinding
 import com.example.module_video.domain.*
-import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.livedata.PlayListLiveData
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.activity.PlayListMsgActivity
@@ -16,7 +15,7 @@ import com.example.module_video.ui.widget.popup.InputPopup
 import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.Constants
-import com.example.module_video.viewmode.MediaViewModel
+import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
 import com.tamsiree.rxkit.view.RxToast
 import java.util.*

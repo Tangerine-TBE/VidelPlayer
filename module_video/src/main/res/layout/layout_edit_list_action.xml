@@ -4,7 +4,7 @@
         <import type="android.view.View"/>
         <variable
             name="actionListData"
-            type="com.example.module_video.viewmode.MediaViewModel" />
+            type="com.example.module_video.viewmodel.MediaViewModel" />
     </data>
 
     <LinearLayout

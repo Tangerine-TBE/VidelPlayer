@@ -4,7 +4,7 @@ import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -12,10 +12,13 @@ import android.transition.Transition
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
@@ -32,8 +35,8 @@ import com.example.module_video.ui.widget.FloatPlayerView
 import com.example.module_video.ui.widget.FloatingVideo
 import com.example.module_video.ui.widget.ScaleImage
 import com.example.module_video.ui.widget.popup.PlayErrorPopup
-import com.example.module_video.utils.floatUtil.FloatWindow
-import com.example.module_video.viewmode.PlayVideoViewModel
+import com.example.module_video.utils.WindowUtil
+import com.example.module_video.viewmodel.PlayVideoViewModel
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
 import com.lzf.easyfloat.anim.DefaultAnimator
@@ -47,8 +50,6 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.tamsiree.rxkit.RxDeviceTool
-import java.lang.Float.min
-import kotlin.math.max
 
 
 class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideoViewModel>() {
@@ -63,6 +64,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         PlayErrorPopup(this)
     }
 
+
     companion object {
         const val IMG_TRANSITION = "IMG_TRANSITION"
         const val TRANSITION = "TRANSITION"
@@ -71,7 +73,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         const val FROM_CHANNEL = "FROM_CHANNEL"
         const val PROGRESS = "PROGRESS"
 
-         fun toPlayVideo(activity: FragmentActivity?, view: View, msg: String, position: Int,channel:Int=0){
+         fun toPlayVideo(activity: FragmentActivity?, view: View, msg: String, position: Int, channel: Int = 0){
              activity?.let {
                  val intent = Intent(activity, PlayVideoActivity::class.java)
                  intent.putExtra(TRANSITION, true)
@@ -93,10 +95,26 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         }
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun setFullScreenWindow() {
+            if (WindowUtil.hasNotch(this) || WindowUtil.hasNotchAtHuawei(this) || WindowUtil.hasNotchInOppo(this) || WindowUtil.hasNotchInScreenAtVoio(this)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val lp = window.attributes
+                    lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
+                    window.attributes = lp
+                }
+            } else {
+                MyStatusBarUtil.fullStateWindow(true, this)
+        }
+    }
+
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        MyStatusBarUtil.fullStateWindow(hasFocus, this)
     }
+
+
     override fun getLayoutView(): Int = R.layout.activity_play_video
     override fun getViewModelClass(): Class<PlayVideoViewModel> {
         return PlayVideoViewModel::class.java
@@ -121,7 +139,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 path?.let {
                     val index = it.lastIndexOf("/")
                     val name = it.substring(index + 1)
-                   videoPlayer.setUp(arrayListOf(MediaInformation(uri=this.toString(), name = name)), 0, true, name)
+                   videoPlayer.setUp(arrayListOf(MediaInformation(uri = this.toString(), name = name)), 0, true, name)
                 }
             }
         }
@@ -204,7 +222,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
 
                 setGSYStateUiListener {
                     when(it){
-                        GSYVideoView.CURRENT_STATE_ERROR->{
+                        GSYVideoView.CURRENT_STATE_ERROR -> {
                             mPlayErrorPopup.showPopupView(this)
                         }
                     }
@@ -352,21 +370,21 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                             val screenWidth = RxDeviceTool.getScreenWidth(BaseApplication.application)
                             val screenHeight = RxDeviceTool.getScreenHeight(BaseApplication.application)
                             var scaleWith = params.width + x.toInt()
-                            var scaleHeight =params.height + y.toInt()
+                            var scaleHeight = params.height + y.toInt()
 
-                            if (scaleWith<screenWidth/3){
-                                scaleWith=screenWidth/3
+                            if (scaleWith < screenWidth / 3) {
+                                scaleWith = screenWidth / 3
                             }
-                            if (screenHeight<screenHeight/5){
-                                scaleHeight=screenHeight/5
+                            if (screenHeight < screenHeight / 5) {
+                                scaleHeight = screenHeight / 5
                             }
                             params.width = scaleWith.coerceAtMost(screenWidth)
                             params.height = scaleHeight.coerceAtMost(screenHeight)
                             content.layoutParams = params
-                            LogUtils.i("---OnScaledListener-----${  params.width}--------------${    params.height}------------------")
+                            LogUtils.i("---OnScaledListener-----${params.width}--------------${params.height}------------------")
                         }
                     })
-                    smallVideoPlayer.videoPlayer.showScaleIcon {state->
+                    smallVideoPlayer.videoPlayer.showScaleIcon { state->
                         scaleImage.visibility=if (state) View.VISIBLE else View.GONE
                     }
                 }

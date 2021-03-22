@@ -12,6 +12,7 @@ import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemMediaFileContianerBinding
 import com.example.module_video.domain.MediaInformation
+import java.util.HashSet
 
 /**
  * @name VidelPlayer
@@ -24,7 +25,7 @@ import com.example.module_video.domain.MediaInformation
 class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     private var mEditAction = false
-    private var mSelectItemList = ArrayList<MediaInformation>()
+    private var mSelectItemList = HashSet<MediaInformation>()
     private val mList = ArrayList<MediaInformation>()
     private var mSelectAllState=false
 
@@ -73,6 +74,7 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
     }
 
     override fun getItemCount(): Int = mList.size
+
     fun setList(list: MutableList<MediaInformation>) {
         mList.clear()
         mList.addAll(list)

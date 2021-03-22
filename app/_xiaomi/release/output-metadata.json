@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.example.videlplayer",
+  "variantName": "process_xiaomiReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 10000,
+      "versionName": "1.0",
+      "outputFile": "app-_xiaomi-release.apk"
+    }
+  ]
+}

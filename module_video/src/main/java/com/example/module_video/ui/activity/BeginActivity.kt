@@ -11,7 +11,7 @@ import com.example.module_video.R
 import com.example.module_video.databinding.ActivityBeginBinding
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.ui.widget.popup.AgreementPopup
-import com.example.module_video.viewmode.BeginViewModel
+import com.example.module_video.viewmodel.BeginViewModel
 
 
 class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>() {
@@ -33,9 +33,8 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     override fun initView() {
         sp.putBoolean(Contents.NO_BACK, true)
         viewModel.loadAdMsg()
-
         if (lacksPermissions()) {
-            MediaLiveData.getMediaResource()
+            MediaLiveData.getMedia()
         }
     }
 
@@ -64,7 +63,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                     askAllPermissionLis, {
                         if (AdMsgUtil.getADKey() != null) {
                             mSplashHelper.showAd()
-                            MediaLiveData.getMediaResource()
+                            MediaLiveData.getMedia()
                         } else {
                             goHome()
                         }

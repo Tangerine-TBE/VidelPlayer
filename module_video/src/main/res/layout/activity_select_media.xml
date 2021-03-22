@@ -6,7 +6,7 @@
     <data>
         <variable
             name="data"
-            type="com.example.module_video.viewmode.SelectFileViewModel" />
+            type="com.example.module_video.viewmodel.SelectFileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

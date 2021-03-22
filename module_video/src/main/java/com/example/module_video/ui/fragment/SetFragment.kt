@@ -6,7 +6,6 @@ import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
 import com.example.module_ad.utils.Contents
 import com.example.module_base.activity.AboutActivity
 import com.example.module_base.activity.DealViewActivity
-import com.example.module_base.base.BasePopup
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.*
 import com.example.module_base.utils.Constants.SET_DEAL1
@@ -23,7 +22,7 @@ import com.example.module_video.ui.adapter.recycleview.SetAdapter
 import com.example.module_video.ui.widget.popup.FunctionSelectPopup
 import com.example.module_video.ui.widget.popup.UserRemindPopup
 import com.example.module_video.utils.Constants
-import com.example.module_video.viewmode.SetViewModel
+import com.example.module_video.viewmodel.SetViewModel
 import tv.danmaku.ijk.media.exo2.IjkExo2MediaPlayer
 
 /**
