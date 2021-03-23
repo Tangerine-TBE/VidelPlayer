@@ -1,6 +1,7 @@
 package com.example.module_ad.advertisement;
 
 public enum AdType {
+    START_PAGE,
     SEE_DETAIL,
     CLEAN_FINISHED,
     COOLING_PAGE,

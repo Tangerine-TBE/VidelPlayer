@@ -31,8 +31,6 @@ public class BannerHelper {
     }
 
 
-
-
     public void showAd(AdType type) {
         AdBean.DataBean dataBean = AdMsgUtil.getAdState();
         Map<String, String> adKey = AdMsgUtil.getADKey();

@@ -212,7 +212,7 @@ public class AdBean {
             this.Advertisement = Advertisement;
         }
 
-        public static class StartPageBean {
+        public static class StartPageBean  {
             /**
              * spread_screen : {"status":true,"ad_origin":"gdt_toutiao","times":0,"change_times":300,"ad_percent":"0_100"}
              */

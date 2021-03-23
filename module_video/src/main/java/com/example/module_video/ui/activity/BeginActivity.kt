@@ -1,6 +1,8 @@
 package com.example.module_video.ui.activity
 
 import android.view.KeyEvent
+import com.example.module_ad.ad.ad_help.AdController
+import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.advertisement.SplashHelper
 import com.example.module_ad.utils.AdMsgUtil
 import com.example.module_ad.utils.Contents
@@ -21,6 +23,23 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
         SplashHelper(this, binding.mAdContainer,
             if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) LockActivity::class.java else HomeActivity::class.java,1)
     }
+
+    private val mAdController by lazy {
+        AdController.Builder(this)
+            .setPage(AdType.START_PAGE)
+            .setContainer(hashMapOf(AdController.ContainerType.TYPE_SPLASH to  binding.mAdContainer))
+            .create()
+            .setSplashAction {
+                if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) {
+                    toOtherActivity<LockActivity>(this,true) { putExtra(Contents.KEY_ACTION,1) }
+                } else {
+                    toOtherActivity<HomeActivity>(this,true){}
+                }
+            }
+    }
+
+
+
     private val mAgreementPopup by lazy {
         AgreementPopup(this)
     }
@@ -48,7 +67,8 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                         mAgreementPopup?.showPopupView(binding.mAdContainer)
                         showCount++
                     } else {
-                        mSplashHelper.showAd()
+                       // mSplashHelper.showAd()
+                        mAdController.show()
                     }
                 }
             }
@@ -62,7 +82,8 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                 checkAppPermission(
                     askAllPermissionLis, {
                         if (AdMsgUtil.getADKey() != null) {
-                            mSplashHelper.showAd()
+                           // mSplashHelper.showAd()
+                            mAdController.show()
                             MediaLiveData.getMedia()
                         } else {
                             goHome()

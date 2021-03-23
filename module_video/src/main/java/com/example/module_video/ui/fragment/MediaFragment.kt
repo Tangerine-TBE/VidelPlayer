@@ -25,6 +25,7 @@ import com.example.module_video.utils.FileUtil
 import com.example.module_video.utils.GeneralState
 import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
+import com.scwang.smart.refresh.header.MaterialHeader
 import com.tamsiree.rxkit.RxKeyboardTool
 import com.tamsiree.rxkit.view.RxToast
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -99,6 +100,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 val that = this@MediaFragment
                 //音视频资源
                 MediaLiveData.observe(that, {
+                    mSmartRefreshLayout.finishRefresh()
                     videoSize=it.videoList.size
                     audioSize=it.audioList.size
 
@@ -111,6 +113,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 })
                 //编辑动作
                 editAction.observe(that, {
+                    mSmartRefreshLayout.setEnableRefresh(!it)
                     mMediaAdapter.setEditAction(it)
                     viewModel.setSelectItemList(mMediaAdapter.getSelectList())
                 })
@@ -279,6 +282,10 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     }
             }
 
+            //下拉刷新
+            mSmartRefreshLayout.setOnRefreshListener {
+                MediaLiveData.getMedia()
+            }
         }
 
     }
@@ -308,8 +315,12 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             }
 
     private fun FragmentMediaBinding.initRecycleViewType() {
-        mediaAll.layoutManager = LinearLayoutManager(activity)
-        mediaAll.adapter = mMediaAdapter
+        mediaAll.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = mMediaAdapter
+        }
+        //设置下拉刷新的头
+        mSmartRefreshLayout.setRefreshHeader(MaterialHeader(activity))
     }
 
     private fun FragmentMediaBinding.initIndicator() {

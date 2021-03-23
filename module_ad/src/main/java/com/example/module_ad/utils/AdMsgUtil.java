@@ -108,10 +108,10 @@ public class AdMsgUtil {
             return dataBean.getExit_page();
         } else if (type == AdType.SETTING_PAGE) {
             return dataBean.getSetting_page();
-        }
-        else if (type == AdType.SOFTWARE_MANAGEMENT_PAGE) {
+        } else if (type == AdType.SOFTWARE_MANAGEMENT_PAGE) {
             return dataBean.getSoftware_management_page();
         }
+
         return dataBean.getSetting_page();
     }
 

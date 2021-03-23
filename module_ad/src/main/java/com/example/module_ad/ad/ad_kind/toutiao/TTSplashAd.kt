@@ -36,7 +36,7 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
 
             @MainThread
             override fun onTimeout() {
-                mAdShowStateListener?.showError()
+                mAdShowStateListener?.showSuccess()
                 LogUtils.i("onTimeout-------------------------->")
             }
 

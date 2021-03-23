@@ -108,8 +108,8 @@
             app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
 
         <!--全部资源-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/media_all"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/mSmartRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="16dp"
@@ -118,7 +118,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
+            app:layout_constraintTop_toBottomOf="@+id/homeIndicator">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/media_all"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
