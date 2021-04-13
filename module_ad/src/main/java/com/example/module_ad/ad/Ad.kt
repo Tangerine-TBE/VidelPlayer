@@ -27,6 +27,7 @@ abstract class Ad(val activity: Activity,val container: FrameLayout) {
     protected var mKgdtMobSDKBannerKey: String? = null
     protected  var mKgdtMobSDKNativeKey: String? = null
     protected var mKgdtMobSDKJiLiKey: String? = null
+    protected var mKgdtMobSDKJSmallNativeKey: String? = null
     protected  var mAdShowStateListener:AdShowStateListener?=null
 
     init {
@@ -44,6 +45,7 @@ abstract class Ad(val activity: Activity,val container: FrameLayout) {
             mKgdtMobSDKBannerKey = adKey[Contents.KGDT_MOBSDK_BANNERKEY]
             mKgdtMobSDKNativeKey = adKey[Contents.KGDT_MOBSDK_NATIVEKEY]
             mKgdtMobSDKJiLiKey = adKey[Contents.KGDT_MOBSDK_JILIKEY]
+            mKgdtMobSDKJSmallNativeKey = adKey[Contents.KGDT_MOBSDK_SMALLNATIVEKEY]
             GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey)
         }
 

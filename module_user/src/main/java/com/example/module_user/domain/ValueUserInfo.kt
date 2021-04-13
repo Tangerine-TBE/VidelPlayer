@@ -10,4 +10,6 @@ import com.example.module_user.domain.login.LoginBean
  * @time 2021/1/29 15:12:16
  * @class describe
  */
-data class ValueUserInfo(val loginState:Boolean,val userInfo: LoginBean?=null)
+data class ValueUserInfo(val loginState:Boolean,val userInfo: LoginBean?=null,val loginInfo:LoginInfo?=null)
+
+data class LoginInfo(val loginType:String="",val phone:String="",val pwd:String="")

@@ -14,6 +14,7 @@ import com.example.module_base.activity.DealViewActivity
 import com.example.module_base.base.BasePopup
 import com.example.module_base.utils.Constants
 import com.example.module_base.utils.PackageUtil
+import com.example.module_base.utils.showToast
 import com.example.module_base.utils.toOtherActivity
 import com.example.module_video.R
 import com.example.module_video.databinding.PopupAgreementWindowBinding
@@ -75,7 +76,7 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
                     dismiss()
                     mListener?.sure()
                 } else {
-                    RxToast.warning("请确保您已同意本应用的隐私政策和用户协议")
+                    showToast("请确保您已同意本应用的隐私政策和用户协议")
                 }
             }
 
@@ -85,7 +86,7 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
 
     inner class TextViewSpan1 : ClickableSpan() {
         override fun updateDrawState(ds: TextPaint) {
-            ds.color =ContextCompat.getColor(mView.root.context,R.color.theme_color)
+            ds.color =ContextCompat.getColor(mView.root.context,R.color.theme_bg_color)
         }
 
         override fun onClick(widget: View) {
@@ -98,7 +99,7 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
 
     inner  class TextViewSpan2 : ClickableSpan() {
         override fun updateDrawState(ds: TextPaint) {
-            ds.color =ContextCompat.getColor(mView.root.context,R.color.theme_color)
+            ds.color =ContextCompat.getColor(mView.root.context,R.color.theme_bg_color)
         }
 
         override fun onClick(widget: View) {

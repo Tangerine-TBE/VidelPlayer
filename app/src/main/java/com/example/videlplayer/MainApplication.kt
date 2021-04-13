@@ -1,6 +1,9 @@
 package com.example.videlplayer
 
+import android.app.Activity
+import android.os.Bundle
 import com.example.module_ad.advertisement.TTAdManagerHolder
+import com.example.module_ad.utils.BaseBackstage
 import com.example.module_base.base.BaseApplication
 import com.example.module_base.utils.SPUtil
 import com.example.module_video.utils.Constants
@@ -25,6 +28,49 @@ class MainApplication : BaseApplication() {
           1-> PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
           2-> PlayerFactory.setPlayManager(SystemPlayerManager::class.java)
        }
+
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            private var activityStartCount = 0
+
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+                activityStartCount++;
+                //数值从0 变到 1 说明是从后台切到前台
+                if (activityStartCount == 1) {
+                    //从后台切到前台
+                   BaseBackstage.setBackstage(this@MainApplication)
+
+                }
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+                activityStartCount--;
+                //数值从1到0说明是从前台切到后台
+                if (activityStartCount == 0) {
+                    //从前台切到后台
+                    BaseBackstage.setStop(this@MainApplication)
+                }
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+
+            }
+        })
 
     }
 }

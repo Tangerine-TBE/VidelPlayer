@@ -31,7 +31,7 @@ public class Contents {
 
 
     //穿山甲
-    public static final String  CSJ_APPID= "5143358";
+    public static final String  CSJ_APPID= "5156601";
 
 
     //广告key
@@ -49,6 +49,7 @@ public class Contents {
     public static final String KGDT_MOBSDK_KAIPINGKEY = "kGDTMobSDKKaiPingKey";
     public static final String KGDT_MOBSDK_BANNERKEY = "kGDTMobSDKBannerKey";
     public static final String KGDT_MOBSDK_NATIVEKEY = "kGDTMobSDKNativeKey";
+    public static final String KGDT_MOBSDK_SMALLNATIVEKEY = "KGDTMOBSDKSMALLNATIVEKEY";
     public static final String KGDT_MOBSDK_JILIKEY = "kGDTMobSDKJiLiKey";
 
     //广告接口

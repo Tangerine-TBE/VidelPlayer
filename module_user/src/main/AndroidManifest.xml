@@ -6,5 +6,9 @@
         <activity android:name=".ui.activity.RegisterPwdActivity" android:screenOrientation="portrait" android:launchMode="singleTop"></activity>
         <activity android:name=".ui.activity.LoginActivity" android:screenOrientation="portrait" android:launchMode="singleTop" />
     </application>
-
+    <queries>
+        <package android:name="com.tencent.mm" />
+        <package android:name="com.eg.android.AlipayGphone" />
+        <package android:name="com.tencent.mobileqq" />
+    </queries>
 </manifest>

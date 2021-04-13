@@ -2,13 +2,15 @@ package com.example.module_video.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.example.module_base.base.BaseViewModel
+import com.example.module_base.utils.LogUtils
+import com.example.module_base.utils.getCurrentThreadName
+import com.example.module_user.domain.LoginInfo
 import com.example.module_user.domain.ValueResult
 import com.example.module_user.domain.ValueUserInfo
+import com.example.module_user.domain.login.LoginBean
 import com.example.module_user.livedata.UserInfoLiveData
 import com.example.module_user.repository.UserRepository
-import com.example.module_user.utils.Constants
-import com.example.module_user.utils.NetState
-import com.example.module_user.utils.UserInfoHelper
+import com.example.module_user.utils.*
 
 /**
  * @name VidelPlayer
@@ -21,6 +23,10 @@ import com.example.module_user.utils.UserInfoHelper
 class SetViewModel:BaseViewModel(){
 
     val logOutState by lazy {
+        MutableLiveData<ValueResult>()
+    }
+
+    val loginState by lazy {
         MutableLiveData<ValueResult>()
     }
 
@@ -40,5 +46,27 @@ class SetViewModel:BaseViewModel(){
         })
     }
 
+
+
+    //登录
+    fun toLocalLogin(number: String, pwd: String) {
+        loginState.postValue(ValueResult(NetState.LOADING,""))
+        val md5Pwd = ApiMapUtil.md5(pwd)
+        doRequest({
+            UserRepository.userLogin(UserInfoHelper.userEvent(Constants.LOGIN,
+                mapOf(Constants.MOBILE to number, Constants.PASSWORD to md5Pwd)))?.string()?.let { it ->
+                GsonUtil.setUserResult<LoginBean>(it, {
+                    UserInfoLiveData.setUserInfo(ValueUserInfo(true,it, LoginInfo(Constants.LOCAL_TYPE,number,pwd)))
+                    loginState.postValue(ValueResult(NetState.SUCCESS,"登录成功！"))
+                    LogUtils.i("-----toLocalLogin-111- ${getCurrentThreadName()}-----${it.msg}------------------")
+                }, {
+                    LogUtils.i("-----toLocalLogin-111- ${getCurrentThreadName()}-----${it.msg}------------------")
+                    loginState.postValue(ValueResult(NetState.ERROR,it.msg))
+                })
+            }
+        }) {
+            loginState.postValue(ValueResult(NetState.ERROR, NET_ERROR))
+        }
+    }
 
 }

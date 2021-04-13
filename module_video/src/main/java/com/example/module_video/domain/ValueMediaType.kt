@@ -8,4 +8,4 @@ package com.example.module_video.domain
  * @time 2021/3/5 14:27:50
  * @class describe
  */
-data class ValueMediaType(val videoList:MutableList<MediaInformation>,val audioList:MutableList<MediaInformation>)
+data class ValueMediaType(val videoList:MutableList<MediaInformation>,val audioList:MutableList<MediaInformation>,val finish:Boolean)

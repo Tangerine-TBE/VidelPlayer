@@ -10,6 +10,7 @@ import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.ui.activity.BackActivity;
 import com.example.module_base.utils.LogUtils;
 import com.example.module_base.utils.SPUtil;
+import com.example.module_user.utils.UserInfoUtil;
 import com.tamsiree.rxkit.RxNetTool;
 
 import java.util.List;
@@ -72,12 +73,12 @@ public class BaseBackstage {
                     if (adState.getStart_page()!=null) {
                         if (adState.getStart_page().getSpread_screen().isStatus()) {
                             if (isShow) {
-                                if (!isExit) {
+                                if (UserInfoUtil.isVIP()) {
+                                    return;
+                                }
                                     Intent intent = new Intent(context, BackActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     context.startActivity(intent);
-                                }
-
                             }
                             if (mStart != null) {
                                 mStart.cancel();

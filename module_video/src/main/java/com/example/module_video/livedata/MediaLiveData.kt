@@ -48,6 +48,11 @@ object MediaLiveData : BaseLiveData<ValueMediaType>(){
     }
 
 
+    override fun onInactive() {
+        super.onInactive()
+        mJob.cancel()
+    }
+
     class VideoObserver:ContentObserver(BaseApplication.mHandler){
         override fun onChange(selfChange: Boolean, uri: Uri?) {
          //  getMedia()

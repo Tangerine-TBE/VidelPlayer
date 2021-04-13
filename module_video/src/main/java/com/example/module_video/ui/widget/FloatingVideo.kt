@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.example.module_base.utils.LogUtils
+import com.example.module_base.utils.showToast
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.domain.PlayListBean
@@ -63,8 +64,10 @@ class FloatingVideo : StandardGSYVideoPlayer {
         if (isInEditMode) return
         mScreenWidth = activityContext.resources.displayMetrics.widthPixels
         mScreenHeight = activityContext.resources.displayMetrics.heightPixels
-        mAudioManager =
-            activityContext.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        try {
+            mAudioManager = activityContext.applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        }catch (e:Exception){
+        }
         mStartButton = findViewById(R.id.start)
         mBottomContainer = findViewById(R.id.layout_bottom)
 
@@ -103,12 +106,15 @@ class FloatingVideo : StandardGSYVideoPlayer {
         }
         //全屏
         mFull.setOnClickListener {
-            context.startActivity(Intent(context,PlayVideoActivity::class.java).apply {
-                putExtra(PlayVideoActivity.VIDEO_MSG,  Gson().toJson(PlayListBean(mUrlList.toMutableList())))
-                putExtra(PlayVideoActivity.PLAY_POSITION,mSourcePosition)
-                putExtra(PlayVideoActivity.FROM_CHANNEL, 1)
-                putExtra(PlayVideoActivity.PROGRESS, currentPositionWhenPlaying)
-            })
+            try {
+                context.startActivity(Intent(context,PlayVideoActivity::class.java)?.apply {
+                    putExtra(PlayVideoActivity.PLAY_POSITION,mSourcePosition)
+                    putExtra(PlayVideoActivity.FROM_CHANNEL, 1)
+                    putExtra(PlayVideoActivity.PROGRESS, currentPositionWhenPlaying)
+                })
+            }catch (e:Exception){
+                showToast("请重试")
+            }
         }
     }
 

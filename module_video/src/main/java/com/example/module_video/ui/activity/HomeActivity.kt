@@ -2,6 +2,7 @@ package com.example.module_video.ui.activity
 
 
 import android.net.Uri
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
@@ -23,12 +24,15 @@ import com.example.module_video.ui.adapter.recycleview.BottomAdapter
 import com.example.module_video.ui.fragment.FileListFragment
 import com.example.module_video.ui.fragment.MediaFragment
 import com.example.module_video.ui.fragment.SetFragment
+import com.example.module_video.ui.widget.popup.ExitPoPupWindow
 import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
 
 @Route(path = ModuleProvider.ROUTE_HOME_ACTIVITY)
 class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
+
+    private val mExitPoPupWindow by lazy { ExitPoPupWindow(this) }
 
     private val mBottomAnimationShow by lazy {
         AnimationUtils.loadAnimation(this, R.anim.anim_bottom_show)
@@ -52,7 +56,6 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
 
     override fun getLayoutView(): Int = R.layout.activity_home
     override fun initView() {
-
         sp.putBoolean(Constants.IS_FIRST, false)
         binding.apply {
             data = viewModel
@@ -62,6 +65,9 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                 mBottomAdapter.setList(DataProvider.homeBottomList)
                 adapter = mBottomAdapter
             }
+        }
+        if (lacksPermissions()) {
+            MediaLiveData.getMedia()
         }
     }
 
@@ -245,6 +251,9 @@ class HomeActivity : BaseVmViewActivity<ActivityHomeBinding, MediaViewModel>() {
                 if (getEditAction_() || getListEditAction_()) {
                     setEditAction(false)
                     setListEditAction(false)
+                    return true
+                } else {
+                    mExitPoPupWindow.showPopupView(binding.homeFragment, Gravity.BOTTOM)
                     return true
                 }
             }

@@ -8,6 +8,7 @@ import com.example.module_ad.ad.ad_kind.toutiao.TTSplashAd
 import com.example.module_ad.base.AdTypeBean
 import com.example.module_ad.utils.AdMsgUtil
 import com.example.module_ad.utils.AdProbabilityUtil
+import com.example.module_base.utils.showToast
 import com.example.module_user.utils.UserInfoUtil
 
 /**
@@ -45,6 +46,8 @@ class SplashHelper(activity: Activity, container: FrameLayout):AdHelper(activity
                 } else {
                     showTxAd()
                 }
+            } else {
+                mSplashAction()
             }
         }
     }
@@ -55,6 +58,7 @@ class SplashHelper(activity: Activity, container: FrameLayout):AdHelper(activity
             setAdShowStateListener(object : AdShowStateListener {
                 override fun showSuccess() {
                     mSplashAction()
+
                 }
 
                 override fun showError() {
@@ -73,7 +77,6 @@ class SplashHelper(activity: Activity, container: FrameLayout):AdHelper(activity
             showAd()
             setAdShowStateListener(object : AdShowStateListener {
                 override fun showSuccess() {
-
                     mSplashAction()
                 }
 

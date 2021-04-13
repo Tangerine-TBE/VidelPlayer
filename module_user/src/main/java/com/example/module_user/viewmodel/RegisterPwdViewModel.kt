@@ -5,6 +5,7 @@ import com.example.module_base.base.BaseApplication
 import com.example.module_base.base.BaseViewModel
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.PackageUtil
+import com.example.module_user.domain.LoginInfo
 import com.example.module_user.domain.ValueResult
 import com.example.module_user.domain.ValueUserInfo
 import com.example.module_user.domain.login.LoginBean
@@ -74,9 +75,7 @@ class RegisterPwdViewModel : BaseViewModel() {
                 )
             )?.string()?.let { it ->
                 GsonUtil.setUserResult<LoginBean>(it, {
-                    //  UserInfoUtil.saveUserInfo(it,  UserInfoUtil.saveUserType(Constants.LOCAL_TYPE, number, md5Pwd, ""))
-                    UserInfoUtil.saveUserMsg(it)
-                    UserInfoLiveData.setUserInfo(ValueUserInfo(true, it))
+                    UserInfoLiveData.setUserInfo(ValueUserInfo(true, it, LoginInfo(Constants.LOCAL_TYPE, number,pwd)))
                     loginState.postValue(ValueResult(NetState.SUCCESS, "注册成功！"))
 
                 }, {

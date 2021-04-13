@@ -6,8 +6,11 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.module_ad.ad.ad_help.AdController
+import com.example.module_ad.advertisement.AdType
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.*
+import com.example.module_user.livedata.RemoveAdLiveData
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentMediaBinding
 import com.example.module_video.domain.*
@@ -21,8 +24,8 @@ import com.example.module_video.ui.adapter.viewpager.HomePagerAdapter
 import com.example.module_video.ui.widget.popup.InputPopup
 import com.example.module_video.ui.widget.popup.ItemSelectPopup
 import com.example.module_video.ui.widget.popup.RemindPopup
+import com.example.module_video.utils.Constants
 import com.example.module_video.utils.FileUtil
-import com.example.module_video.utils.GeneralState
 import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
 import com.scwang.smart.refresh.header.MaterialHeader
@@ -52,11 +55,9 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
     private val mMediaAdapter by lazy {
         MediaFileAdapter()
     }
-
     private val mItemSelectPopup by lazy {
         ItemSelectPopup(activity)
     }
-
     private val mRenamePopup by lazy {
         InputPopup(activity).apply {
             setTitle("重命名")
@@ -65,14 +66,20 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
     private val mDeletePopup by lazy {
         RemindPopup(activity)
     }
-
-
     override fun getViewModelClass(): Class<MediaViewModel> {
         return MediaViewModel::class.java
     }
-
     override fun getChildLayout(): Int = R.layout.fragment_media
 
+    private val mAdController by lazy {
+        AdController.Builder(requireActivity())
+            .setPage(AdType.HOME_PAGE)
+            .setContainer(hashMapOf(AdController.ContainerType.TYPE_FEED to  binding.mAdContainer))
+            .create()
+    }
+
+
+    private var mFinishAction=false
 
     override fun initView() {
         binding.apply {
@@ -81,6 +88,8 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             initIndicator()
             //设置不同类型列表
             initRecycleViewType()
+
+            mAdController.show()
         }
     }
 
@@ -101,6 +110,9 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 //音视频资源
                 MediaLiveData.observe(that, {
                     mSmartRefreshLayout.finishRefresh()
+
+                    mFinishAction=it.finish
+
                     videoSize=it.videoList.size
                     audioSize=it.audioList.size
 
@@ -109,7 +121,10 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                         addAll(it.videoList)
                         addAll(it.audioList)
                     }
+
+                    mMediaAdapter.setGo(it.finish)
                     mMediaAdapter.setList(setPositionData(mAllMediaList))
+
                 })
                 //编辑动作
                 editAction.observe(that, {
@@ -142,8 +157,17 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     }
                 })
 
+                RemoveAdLiveData.observe(that,{
+                    if (it) goneView(mAdContainer) else showView(mAdContainer)
+                })
+
             }
+
+
         }
+
+
+
     }
 
 
@@ -161,7 +185,14 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
             searchInput.doOnTextChanged { text, start, before, count ->
                 if (text?.length ?: 0 > 0) {
                     showView(searchDelete)
-                    viewModel.getSearchList(text.toString().trim(), setPositionData(mAllMediaList))
+                    if (mFinishAction) {
+                        viewModel.getSearchList(
+                            text.toString().trim(),
+                            setPositionData(mAllMediaList)
+                        )
+                    } else {
+                        showToast("未完成资源搜索")
+                    }
                 } else {
                     goneView(searchDelete)
                     setMediaListData()
@@ -172,10 +203,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                     //先隐藏键盘
                     RxKeyboardTool.hideSoftInput(searchInput)
-                 /*   //自己需要的操作
-                    mMediaResource?.let {
-                        viewModel.getSearchList(searchInput.text.toString().trim(), setPositionData(it))
-                    }*/
+
                 }
                 //记得返回false
                 false
@@ -191,7 +219,11 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
             //编辑
             editAction.setOnClickListener {
-                viewModel.setEditAction(!viewModel.getEditAction_())
+                if (mFinishAction) {
+                    viewModel.setEditAction(!viewModel.getEditAction_())
+                } else {
+                    showToast("未完成资源搜索")
+                }
 
             }
 
@@ -208,7 +240,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     if (viewModel.getEditAction_()) {
                         viewModel.setSelectItemList(mMediaAdapter.getSelectList())
                     } else {
-                        PlayVideoActivity.toPlayVideo(activity,itemView,Gson().toJson(PlayListBean(mMediaAdapter.getData())),position)
+                        PlayVideoActivity.toPlayVideo(activity,Gson().toJson(PlayListBean(mMediaAdapter.getData())),position)
                     }
                 }
 
@@ -284,11 +316,18 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
 
             //下拉刷新
             mSmartRefreshLayout.setOnRefreshListener {
-                MediaLiveData.getMedia()
+                if (mFinishAction) {
+                    MediaLiveData.getMedia()
+                } else {
+                    it.finishRefresh()
+                }
             }
         }
 
     }
+
+
+
 
     private fun setMediaListData() {
         mMediaAdapter.setList(setPositionData(mAllMediaList))
@@ -306,11 +345,11 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     it
                 }
                 1 -> {
-                    it.subList(0,videoSize)
+                    if (it.size >=videoSize) it.subList(0,videoSize) else it
                 }
-                2 -> {
-                    it.subList(videoSize,it.size)
-                }
+               2 -> {
+                   if (it.size >=videoSize) it.subList(videoSize, it.size) else it
+               }
                else->it
             }
 
@@ -337,6 +376,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
         mRenamePopup?.dismiss()
         mDeletePopup?.dismiss()
         mLoadingDialog.dismiss()
+        mAdController.release()
     }
 
 }

@@ -22,11 +22,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.module_ad.utils.Contents
 import com.example.module_base.base.BaseApplication
 import com.example.module_base.base.BaseVmViewActivity
-import com.example.module_base.utils.LogUtils
-import com.example.module_base.utils.MyStatusBarUtil
-import com.example.module_base.utils.gsonHelper
+import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayVideoBinding
 import com.example.module_video.domain.MediaInformation
@@ -35,8 +34,10 @@ import com.example.module_video.ui.widget.FloatPlayerView
 import com.example.module_video.ui.widget.FloatingVideo
 import com.example.module_video.ui.widget.ScaleImage
 import com.example.module_video.ui.widget.popup.PlayErrorPopup
+import com.example.module_video.utils.Constants
 import com.example.module_video.utils.WindowUtil
 import com.example.module_video.viewmodel.PlayVideoViewModel
+import com.google.gson.Gson
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.anim.AppFloatDefaultAnimator
 import com.lzf.easyfloat.anim.DefaultAnimator
@@ -46,10 +47,14 @@ import com.lzf.easyfloat.permission.PermissionUtils
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
+import com.shuyu.gsyvideoplayer.player.PlayerFactory
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.tamsiree.rxkit.RxDeviceTool
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 
 class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideoViewModel>() {
@@ -73,25 +78,13 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         const val FROM_CHANNEL = "FROM_CHANNEL"
         const val PROGRESS = "PROGRESS"
 
-         fun toPlayVideo(activity: FragmentActivity?, view: View, msg: String, position: Int, channel: Int = 0){
-             activity?.let {
-                 val intent = Intent(activity, PlayVideoActivity::class.java)
-                 intent.putExtra(TRANSITION, true)
-                 intent.putExtra(VIDEO_MSG, msg)
-                 intent.putExtra(PLAY_POSITION, position)
-                 intent.putExtra(FROM_CHANNEL, channel)
-                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                     val pair: Pair<View, String> = Pair<View, String>(view, IMG_TRANSITION)
-                     val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                             it, pair
-                     )
-                     ActivityCompat.startActivity(it, intent, activityOptions.toBundle())
-                 } else {
-                    it.startActivity(intent)
-                     it.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
-                 }
-             }
-
+        fun toPlayVideo(activity: FragmentActivity?,msg: String, position: Int, channel: Int = 0) {
+            SPUtil.getInstance().putString(Constants.SP_PLAY_LIST, msg)
+            toOtherActivity<PlayVideoActivity>(activity){
+                putExtra(TRANSITION, true)
+                putExtra(PLAY_POSITION, position)
+                putExtra(FROM_CHANNEL, channel)
+            }
         }
     }
 
@@ -105,14 +98,12 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                     window.attributes = lp
                 }
             } else {
+                MyStatusBarUtil.setColor(this,Color.TRANSPARENT)
                 MyStatusBarUtil.fullStateWindow(true, this)
         }
     }
 
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-    }
 
 
     override fun getLayoutView(): Int = R.layout.activity_play_video
@@ -121,6 +112,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     }
 
     override fun initView() {
+        sp.putBoolean(Contents.NO_BACK, true)
         if (EasyFloat.appFloatIsShow(FloatingVideo.SMALL_TAG)) {
             EasyFloat.dismissAppFloat(FloatingVideo.SMALL_TAG)
         }
@@ -128,8 +120,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
             initVideoPlayer()
             //第三方打开
             byOtherApp()
-            //过渡动画
-            initTransition()
+
+            videoPlayer.startPlayLogic()
         }
     }
 
@@ -150,7 +142,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         //设置旋转
         orientationUtils = OrientationUtils(this@PlayVideoActivity, videoPlayer)
         orientationUtils.isEnable=false
-        val videoMsg = intent.getStringExtra(VIDEO_MSG)
         playPosition=intent.getIntExtra(PLAY_POSITION, 0)
         isTransition = intent.getBooleanExtra(TRANSITION, false)
         mChannel = intent.getIntExtra(FROM_CHANNEL, 0)
@@ -182,6 +173,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 }
                 .build(videoPlayer)
 
+        val videoMsg = sp.getString(Constants.SP_PLAY_LIST)
         gsonHelper<PlayListBean>(videoMsg)?.apply {
             if (list.size>playPosition){
                 if (mChannel == 1) {
@@ -223,7 +215,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 setGSYStateUiListener {
                     when(it){
                         GSYVideoView.CURRENT_STATE_ERROR -> {
-                            mPlayErrorPopup.showPopupView(this)
+                            errorSelectCore()
                         }
                     }
                 }
@@ -237,6 +229,41 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
             }
 
         }
+    }
+
+    private var errorCount=0
+    private fun errorSelectCore(){
+        sp.apply {
+           val type = when (getInt(Constants.SP_CORE_TYPE)) {
+               0 -> {
+                   PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
+                   1
+               }
+               1 -> {
+                   PlayerFactory.setPlayManager(SystemPlayerManager::class.java)
+                   2
+               }
+               2 -> {
+                   PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+                   0
+               }
+               else->{
+                   PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+                   0
+               }
+           }
+            putInt(Constants.SP_CORE_TYPE,type)
+            errorCount++
+           // showToast("播放失败，尝试切换内核")
+            errorCount = if (errorCount > 2) {
+                mPlayErrorPopup.showPopupView(binding.videoPlayer)
+                0
+            } else {
+                binding.videoPlayer.startPlayLogic()
+                0
+            }
+        }
+
     }
 
 
@@ -275,6 +302,7 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     }
 
     override fun release() {
+        sp.putBoolean(Contents.NO_BACK, false)
         if (isPlay) {
             getCurPlay().release()
         }
@@ -295,61 +323,14 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         }
         //释放所有
         binding.videoPlayer.setVideoAllCallBack(null)
-
-
          GSYVideoManager.releaseAllVideos()
-
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onBackPressed()
         } else {
-            Handler(Looper.getMainLooper()).postDelayed({
                 finish()
-                overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
-            }, 500)
         }
     }
 
-
-    private fun initTransition() {
-        if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            postponeEnterTransition()
-            ViewCompat.setTransitionName(
-                    binding.videoPlayer,
-                    IMG_TRANSITION
-            )
-            addTransitionListener()
-            startPostponedEnterTransition()
-        } else {
-            binding.videoPlayer.startPlayLogic()
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun addTransitionListener(): Boolean {
-        val transition = window.sharedElementEnterTransition
-        if (transition != null) {
-            transition.addListener(object : Transition.TransitionListener {
-                override fun onTransitionStart(transition: Transition?) {
-                }
-
-                override fun onTransitionEnd(transition: Transition?) {
-                    binding.videoPlayer.startPlayLogic()
-                    transition?.removeListener(this)
-                }
-
-                override fun onTransitionCancel(transition: Transition?) {
-                }
-
-                override fun onTransitionPause(transition: Transition?) {
-                }
-
-                override fun onTransitionResume(transition: Transition?) {
-                }
-            })
-            return true
-        }
-        return false
-    }
 
 
    private fun  showSmallWindow(){

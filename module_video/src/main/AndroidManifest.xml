@@ -8,8 +8,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+
     <application android:requestLegacyExternalStorage="true">
-        <activity android:name=".ui.activity.BeginActivity"></activity>
         <activity android:name=".ui.activity.LockActivity" android:launchMode="singleTop" android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SelectFileActivity"
@@ -29,7 +29,6 @@
         <activity android:name=".utils.floatUtil.FloatActivity" android:launchMode="singleTop" android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.PlayVideoActivity"
-            android:theme="@style/StartingWindowTheme"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">

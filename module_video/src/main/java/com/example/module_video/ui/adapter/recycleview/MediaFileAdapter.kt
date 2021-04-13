@@ -1,5 +1,6 @@
 package com.example.module_video.ui.adapter.recycleview
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.example.module_base.utils.LogUtils
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemMediaFileContianerBinding
 import com.example.module_video.domain.MediaInformation
+import com.example.module_video.utils.MediaState
 import java.util.HashSet
 
 /**
@@ -28,8 +30,12 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
     private var mSelectItemList = HashSet<MediaInformation>()
     private val mList = ArrayList<MediaInformation>()
     private var mSelectAllState=false
+    private var mGo=false
 
 
+    fun setGo(state:Boolean){
+        mGo=state
+    }
 
     fun getData()=mList;
 
@@ -49,7 +55,6 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     }
 
-
     fun getSelectList() = mSelectItemList
 
     fun clearAllItems(){
@@ -57,6 +62,8 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
         mSelectAllState=false
         notifyDataSetChanged()
     }
+
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -75,6 +82,8 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
     override fun getItemCount(): Int = mList.size
 
+
+
     fun setList(list: MutableList<MediaInformation>) {
         mList.clear()
         mList.addAll(list)
@@ -88,14 +97,15 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
             binding.apply {
                 Glide.with(itemView.context).load(media.bitmap)
                             .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
-                            .error(R.mipmap.icon_audio_logo).into(mediaPic)
+                            .error(if (media.type==MediaState.VIDEO) R.mipmap.icon_video_logo else R.mipmap.icon_audio_logo).into(mediaPic)
                 mediaName.text = media.name
+                mediaName.isSelected=mGo
+
                 mediaDuration.text = "时长：${media.duration}"
                 mediaResolution.text = media.resolution
                 mediaDate.text = "${media.date}    ${media.size}"
 
                 mediaSelect.visibility = if (mEditAction) View.VISIBLE else View.GONE
-
 
 
                 if (mSelectItemList.contains(media)) {

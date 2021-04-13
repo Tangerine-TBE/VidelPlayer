@@ -7,6 +7,7 @@ import com.example.module_base.provider.ModuleProvider
 import com.example.module_base.utils.*
 import com.example.module_user.R
 import com.example.module_user.databinding.ActivityRegisterAvtivityBinding
+import com.example.module_user.livedata.BuyVipLiveData
 import com.example.module_user.utils.Constants
 import com.example.module_user.utils.NetState
 import com.example.module_user.viewmodel.RegisterPwdViewModel
@@ -16,6 +17,8 @@ import com.tamsiree.rxkit.view.RxToast.warning
 class RegisterPwdActivity :
         BaseVmViewActivity<ActivityRegisterAvtivityBinding, RegisterPwdViewModel>() {
     private var action = LoginActivity.REGISTER
+    private var buyAction = false
+
     override fun getViewModelClass(): Class<RegisterPwdViewModel> {
         return RegisterPwdViewModel::class.java
     }
@@ -26,6 +29,8 @@ class RegisterPwdActivity :
         binding.apply {
             setStatusBar(this@RegisterPwdActivity, binding.registerToolbar, LayoutType.CONSTRAINTLAYOUT)
             action = intent.getIntExtra(Constants.USER_ACTION, LoginActivity.REGISTER)
+            buyAction= intent.getBooleanExtra(Constants.KEY_BUY_VIP,false)
+
             titleHint.text=("${if (action == LoginActivity.REGISTER) getString(R.string.login_register_hint) else getString(
                             R.string.find_pwd)}")
             registerView.setLoginBtText("${if (action == LoginActivity.REGISTER) getString(R.string.register_hint) else getString(
@@ -64,6 +69,9 @@ class RegisterPwdActivity :
                         NetState.SUCCESS -> {
                             dismiss()
                             showToast(it.msg)
+                            if (buyAction) {
+                                BuyVipLiveData.setBuyState(true)
+                            }
                             ARouter.getInstance().build(ModuleProvider.ROUTE_HOME_ACTIVITY).withInt(ModuleProvider.FRAGMENT_ID, 3).navigation()
                         }
                         NetState.ERROR -> {

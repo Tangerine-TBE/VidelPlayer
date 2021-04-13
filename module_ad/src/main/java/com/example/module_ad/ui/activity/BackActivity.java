@@ -54,6 +54,7 @@ public class BackActivity extends AppCompatActivity {
 
 
     protected void intView() {
+
         SPUtil.getInstance().putBoolean(Contents.NO_BACK,true);
         mAdContainer.setVisibility(View.VISIBLE);
         AdBean.DataBean adState = AdMsgUtil.getAdState();
@@ -65,7 +66,6 @@ public class BackActivity extends AppCompatActivity {
             if (spread_screen.isStatus()) {
                 double random = Math.random();
                 if (random > probability) {
-
                     showBackTTAd();
 
                 } else {

@@ -5,6 +5,7 @@ import com.example.module_base.base.BaseApplication
 import com.example.module_base.base.BaseViewModel
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.getCurrentThreadName
+import com.example.module_user.domain.LoginInfo
 import com.example.module_user.domain.ValueResult
 import com.example.module_user.domain.ValueUserInfo
 import com.example.module_user.domain.login.LoginBean
@@ -34,8 +35,7 @@ class LoginViewModel : BaseViewModel() {
             UserRepository.userLogin(UserInfoHelper.userEvent(Constants.LOGIN,
                     mapOf(Constants.MOBILE to number, Constants.PASSWORD to md5Pwd)))?.string()?.let { it ->
                 GsonUtil.setUserResult<LoginBean>(it, {
-                    UserInfoUtil.saveUserMsg(it)
-                    UserInfoLiveData.setUserInfo(ValueUserInfo(true,it))
+                    UserInfoLiveData.setUserInfo(ValueUserInfo(true,it, LoginInfo(Constants.LOCAL_TYPE,number,pwd)))
                     loginState.postValue(ValueResult(NetState.SUCCESS,"登录成功！"))
                     LogUtils.i("-----toLocalLogin-111- ${getCurrentThreadName()}-----${it.msg}------------------")
                 }, {

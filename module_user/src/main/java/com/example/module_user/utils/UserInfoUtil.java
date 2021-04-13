@@ -6,9 +6,12 @@ import android.text.method.PasswordTransformationMethod;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import com.example.module_base.utils.LogUtils;
 import com.example.module_base.utils.SPUtil;
 import com.example.module_user.R;
+import com.example.module_user.domain.ValueUserInfo;
+import com.example.module_user.domain.login.Data;
 import com.example.module_user.domain.login.LoginBean;
 import com.google.gson.Gson;
 import com.tamsiree.rxkit.RxTimeTool;
@@ -19,8 +22,8 @@ import java.util.Map;
 
 public class UserInfoUtil {
 
-    public static void removeAdView(boolean hidden,FrameLayout frameLayout){
-        if (SPUtil.getInstance().getInt(Constants.USER_VIP_LEVEL)>0) {
+    public static void removeAdView(boolean hidden, FrameLayout frameLayout) {
+        if (SPUtil.getInstance().getInt(Constants.USER_VIP_LEVEL) > 0) {
             if (!hidden) frameLayout.removeAllViews();
         }
     }
@@ -49,15 +52,13 @@ public class UserInfoUtil {
     }
 
 
-    public static void saveUserMsg(LoginBean loginBean){
-        SPUtil.getInstance().putString(Constants.USER_INFO,new Gson().toJson(loginBean));
+    public static void saveUserMsg(ValueUserInfo loginBean) {
+        SPUtil.getInstance().putString(Constants.USER_INFO, new Gson().toJson(loginBean));
     }
 
-    public static void deleteUserMsg(){
-        SPUtil.getInstance().putString(Constants.USER_INFO,"");
+    public static void deleteUserMsg() {
+        SPUtil.getInstance().putString(Constants.USER_INFO, "");
     }
-
-
 
 
     public static void deleteUserInfo() {
@@ -73,17 +74,18 @@ public class UserInfoUtil {
 
 
     private static final int sLoginTime = 1;
+
     public static boolean loginTimeOut() {
         String vipTime = SPUtil.getInstance().getString(Constants.USER_VIP_TIME);
         boolean isLogin = SPUtil.getInstance().getBoolean(Constants.USER_IS_LOGIN, false);
-        if (isLogin &!TextUtils.isEmpty(vipTime)) {
-            long endTime= RxTimeTool.string2Milliseconds(vipTime);
+        if (isLogin & !TextUtils.isEmpty(vipTime)) {
+            long endTime = RxTimeTool.string2Milliseconds(vipTime);
             Date startDate = new Date(endTime);
             Date stopDate = new Date(System.currentTimeMillis());
             // 这样得到的差值是微秒级别
             long diff = stopDate.getTime() - startDate.getTime();
             long days = diff / (1000 * 60 * 60 * 24);
-            LogUtils.i( "----------------loginTimeOut-------------------->"+days);
+            LogUtils.i("----------------loginTimeOut-------------------->" + days);
             if (days > sLoginTime) {
                 deleteUserInfo();
                 return true;
@@ -92,11 +94,20 @@ public class UserInfoUtil {
         return false;
     }
 
-    public static boolean  isVIP() {
-        return SPUtil.getInstance().getInt(Constants.USER_VIP_LEVEL,0) > 0 ? true : false;
-
+    public static boolean isVIP() {
+        String info = SPUtil.getInstance().getString(Constants.USER_INFO);
+        if (!TextUtils.isEmpty(info)) {
+            ValueUserInfo valueUserInfo = new Gson().fromJson(info, ValueUserInfo.class);
+            if (valueUserInfo != null & valueUserInfo.getUserInfo()!=null) {
+                Data data = valueUserInfo.getUserInfo().getData();
+                if (data != null) {
+                    return data.getVip() > 0;
+                }
+            }
+        } else {
+            return false;
+        }
+        return false;
     }
-
-
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
+import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyStatusBarUtil
 
 /**
@@ -23,6 +24,7 @@ abstract class BaseViewActivity<T:ViewDataBinding>:BaseActivity() {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView<T>(this,getLayoutView())
         setContentView(binding.root)
+
         initView()
         initEvent()
     }

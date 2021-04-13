@@ -52,9 +52,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     override fun initView() {
         sp.putBoolean(Contents.NO_BACK, true)
         viewModel.loadAdMsg()
-        if (lacksPermissions()) {
-            MediaLiveData.getMedia()
-        }
+
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

@@ -185,7 +185,6 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                 } else {
                     PlayVideoActivity.toPlayVideo(
                         this@PlayListMsgActivity,
-                        it,
                         Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),0
                     )
                 }
@@ -219,7 +218,6 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                         } else {
                             PlayVideoActivity.toPlayVideo(
                                     this@PlayListMsgActivity,
-                                    view,
                                     Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),position
                             )
                         }

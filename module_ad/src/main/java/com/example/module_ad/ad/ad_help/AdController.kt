@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.FrameLayout
 import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.utils.AdMsgUtil.*
+import com.example.module_base.utils.showToast
 import com.tamsiree.rxkit.RxNetTool
 
 /**
@@ -40,15 +41,18 @@ class AdController(val activity: Activity) {
 
 
     fun show() {
+
         getAdState()?.let {
             val type = switchAdType(page, it)
             val random = Math.random()
+
             //开屏
             container?.get(ContainerType.TYPE_SPLASH)?.apply {
                 if (RxNetTool.isNetworkAvailable(activity)) {
                     SplashHelper(activity, this).apply {
                         setSplashAction(mSplashAction)
                         showAd(null, random)
+
                     }
                 } else {
                     mSplashAction()

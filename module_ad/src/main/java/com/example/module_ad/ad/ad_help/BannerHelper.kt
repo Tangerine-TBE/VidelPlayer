@@ -7,6 +7,7 @@ import com.example.module_ad.ad.ad_kind.tencent.TXBannerAd
 import com.example.module_ad.ad.ad_kind.toutiao.TTBannerAd
 import com.example.module_ad.base.AdTypeBean
 import com.example.module_ad.utils.AdProbabilityUtil
+import com.example.module_user.utils.UserInfoUtil
 
 /**
  * @name VidelPlayer
@@ -22,6 +23,9 @@ class BannerHelper(activity: Activity, container: FrameLayout):AdHelper(activity
     private var mTTBannerAd: TTBannerAd? = null
     private var mTXBannerAd: TXBannerAd? = null
     override fun showAd(type: AdTypeBean?, random: Double) {
+        if (UserInfoUtil.isVIP()) {
+            return
+        }
         type?.let {
             val config = type.baseBanner_screen
             if (config.isBaseStatus) {

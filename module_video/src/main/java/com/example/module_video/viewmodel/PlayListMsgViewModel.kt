@@ -4,6 +4,7 @@ import androidx.core.content.contentValuesOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.module_base.base.BaseViewModel
+import com.example.module_base.utils.SizeUtils
 import com.example.module_base.utils.gsonHelper
 import com.example.module_video.domain.MediaDataBean
 import com.example.module_video.domain.MediaInformation
@@ -62,7 +63,12 @@ class PlayListMsgViewModel : BaseViewModel() {
 
     fun getPlayListMsg(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            playListMsg.postValue( DbHelper.queryListFile<PlayListMsgBean>("name=?", name)[0])
+            val queryListFile = DbHelper.queryListFile<PlayListMsgBean>("name=?", name)
+            queryListFile?.let {
+               if (it.size>0){
+                   playListMsg.postValue(it[0])
+               }
+            }
         }
     }
 

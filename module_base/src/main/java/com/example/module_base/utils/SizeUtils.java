@@ -72,7 +72,7 @@ public class SizeUtils {
 
 
     public static float fitFeedHeight(int height) {
-        float feedHeight=0;
+        float feedHeight;
         if (height>=2000) {
             feedHeight = height / 8f;
             return feedHeight;
@@ -83,6 +83,12 @@ public class SizeUtils {
         }
         return    height / 8f;
     }
+
+
+    public static final float expressHeight(int height){
+        return  height/18f;
+    }
+
 
 
     public static int getPhoneHeightPixels(Context context) {

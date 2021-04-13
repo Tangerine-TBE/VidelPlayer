@@ -25,14 +25,12 @@ class TXFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
     private var nativeExpressADView: NativeExpressADView? = null
 
     override fun showAd() {
-       val nativeExpressAD = NativeExpressAD(activity, ADSize(ADSize.FULL_WIDTH, ADSize.AUTO_HEIGHT), mKgdtMobSDKNativeKey, object : NativeExpressADListener {
+       val nativeExpressAD = NativeExpressAD(activity, ADSize(ADSize.FULL_WIDTH, ADSize.AUTO_HEIGHT), mKgdtMobSDKJSmallNativeKey, object : NativeExpressADListener {
            override fun onADLoaded(adList: List<NativeExpressADView>) {
                // 释放前一个 NativeExpressADView 的资源
-               if (nativeExpressADView != null) {
-                   nativeExpressADView?.destroy()
-               }
+               nativeExpressADView?.destroy()
                // 3.返回数据后，SDK 会返回可以用于展示 NativeExpressADView 列表
-               nativeExpressADView = adList[0].apply {
+                adList[0]?.apply {
                    if (boundData.adPatternType == AdPatternType.NATIVE_VIDEO) {
                        setMediaListener(mediaListener)
                    }
@@ -41,7 +39,7 @@ class TXFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
                     }*/LogUtils.i("onADLoaded ----------------->")
                    // 需要保证 View 被绘制的时候是可见的，否则将无法产生曝光和收益。
                    container.removeAllViews()
-                   container.addView(nativeExpressADView)
+                   container.addView(this)
                }
            }
 

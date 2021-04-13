@@ -30,10 +30,13 @@ class FloatPlayerView @JvmOverloads constructor(
 
 
     fun setCurrentResource(list:List<MediaInformation>,position:Int,currentPositionWhenPlaying:Int){
-        videoPlayer.setUp(list, position,false, list[position].name)
-        videoPlayer.seekOnStart=currentPositionWhenPlaying.toLong()
-        videoPlayer.startPlayLogic()
-        LogUtils.i("--setCurrentResource-------------------------$currentPositionWhenPlaying.toLong()-----------")
+        if (list.isNotEmpty()){
+            videoPlayer.setUp(list, position,false, list[position].name)
+            videoPlayer.seekOnStart=currentPositionWhenPlaying.toLong()
+            videoPlayer.startPlayLogic()
+            LogUtils.i("--setCurrentResource-------------------------$currentPositionWhenPlaying.toLong()-----------")
+        }
+
     }
 
 }

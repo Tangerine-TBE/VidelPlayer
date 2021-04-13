@@ -137,11 +137,16 @@ class MediaViewModel:BaseViewModel() {
 
 
     fun deleteMediaFile(uri: Uri,path:String){
-        viewModelScope.launch(Dispatchers.IO) {
-            val deleteMedia = MediaUtil.deleteMedia(uri)
-            val deleteFile = FileUtil.deleteFile(File(path))
-            LogUtils.i("------deleteMedia--------$deleteMedia----------------------")
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                val deleteMedia = MediaUtil.deleteMedia(uri)
+                val deleteFile = FileUtil.deleteFile(File(path))
+                LogUtils.i("------deleteMedia--------$deleteMedia----------------------")
+            }
+        }catch (e:Exception){
+
         }
+
     }
 
 

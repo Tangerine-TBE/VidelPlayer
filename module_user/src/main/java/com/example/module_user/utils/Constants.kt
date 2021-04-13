@@ -6,6 +6,10 @@ package com.example.module_user.utils
  * @description：
  */
 object Constants {
+
+    const val KEY_BUY_VIP="KEY_BUY_VIP"
+
+
     const val PLATFORM_KEY = "CHANNEL" //平台
     const val APP_NAME = "APP_NAME" //app名字
 
@@ -54,10 +58,13 @@ object Constants {
     const val VIP3 = "VIP3"
     const val VIP1 = "VIP1"
 
-    const val VIP_title_13 = "永久卡"
+    const val VIP_TITLE_13 = "永久卡"
     const val VIP_title_12 = "一年"
     const val VIP_title_3 = "三个月"
     const val VIP_title_1 = "一个月"
+
+
+    const val VIP_PRICE=8
 
 
     /*--------------/注册接口-----------*/ //微信
@@ -111,11 +118,7 @@ object Constants {
     const val GET_PHONE = "passport.getMobile"
 
 
-    //测试
-    /*    public static final double VIP_price_13 = 0.01;
-    public static final double VIP_price_12 = 0.01;
-    public static final double VIP_price_3 =0.01;
-    public static final double VIP_price_1 = 0.01;*/
+
 
     //储存用户信息
     const val LOCAL_TYPE = "2" //本地登陆

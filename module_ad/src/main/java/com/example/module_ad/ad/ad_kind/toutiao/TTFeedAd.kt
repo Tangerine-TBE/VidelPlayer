@@ -30,7 +30,8 @@ class TTFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
         container.removeAllViews()
         val mExpressViewWidth = getScreenWidth(activity).toFloat()
         val screenHeight = getScreenHeight(activity)
-        val expressViewHeight = SizeUtils.fitFeedHeight(screenHeight)
+        //val expressViewHeight = SizeUtils.fitFeedHeight(screenHeight)
+        val expressViewHeight =SizeUtils.expressHeight(screenHeight)
         LogUtils.i("高-------------->$screenHeight")
         LogUtils.i("宽-------------->$mExpressViewWidth")
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
@@ -79,7 +80,8 @@ class TTFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
 
             override fun onRenderSuccess(view: View, width: Float, height: Float) {
                 //返回view的宽高 单位 dp
-                LogUtils.i("宽：--$width-----------onRenderSuccess------------->高：--$height")
+                LogUtils.i("宽：--$width-----------onRenderSuccess------------->高：--$height-----------${view.height}---${view.width}------")
+              //  container.layoutParams.height=height.toInt()
                 container.removeAllViews()
                 container.addView(view)
             }

@@ -56,6 +56,7 @@ public class AdMsgUtil {
                 String kgdtMobSDKBannerKey = advertisement.getKGDTMobSDKBannerKey();
                 String kgdtMobSDKNativeKey = advertisement.getKGDTMobSDKNativeKey();
                 String kgdtMobSDKJiLiKey = advertisement.getKGDTMobSDKJiLiKey();
+                String kgdtMobSDKSmallNativeKey = advertisement.getKGDTMobSDKSmallNativeKey();
 
                 map.put(Contents.KGDT_MOBSDK_APPKEY, kgdtMobSDKAppKey);
                 map.put(Contents.KGDT_MOBSDK_CHAPINGKEY, kgdtMobSDKChaPingKey);
@@ -63,6 +64,7 @@ public class AdMsgUtil {
                 map.put(Contents.KGDT_MOBSDK_BANNERKEY, kgdtMobSDKBannerKey);
                 map.put(Contents.KGDT_MOBSDK_NATIVEKEY, kgdtMobSDKNativeKey);
                 map.put(Contents.KGDT_MOBSDK_JILIKEY, kgdtMobSDKJiLiKey);
+                map.put(Contents.KGDT_MOBSDK_SMALLNATIVEKEY, kgdtMobSDKSmallNativeKey);
 
                 return map;
             }
@@ -82,34 +84,14 @@ public class AdMsgUtil {
 
 
     public static AdTypeBean switchAdType(AdType type, AdBean.DataBean dataBean) {
-        if (type == AdType.SEE_DETAIL) {
-            return dataBean.getSee_detail();
-        } else if (type == AdType.CLEAN_FINISHED) {
-            return dataBean.getClean_finished();
-        } else if (type == AdType.COOLING_PAGE) {
-            return dataBean.getCooling_page();
-        } else if (type == AdType.COOLING_FINISHED) {
-            return dataBean.getCooling_finished();
-        } else if (type == AdType.BATTERY_PAGE) {
-            return dataBean.getBattery_page();
-        } else if (type == AdType.POWERSAVING_PAGE) {
-            return dataBean.getPowersaving_page();
-        } else if (type == AdType.CHARGE_PAGE) {
-            return dataBean.getCharge_page();
-        } else if (type == AdType.COMMONLY_USED_PAGE_SECOND_LEVEL) {
-            return dataBean.getCommonly_used_page_second_level();
-        } else if (type == AdType.VIDEO_MANAGEMENT) {
-            return dataBean.getVideo_management();
-        } else if (type == AdType.WX_QQ_SHORTVIDEO_PACKAGE_PICTURE_PAGE) {
-            return dataBean.getWx_qq_shortvideo_package_picture_page();
-        } else if (type == AdType.ALBUM_VIDEO_MUSIC_FILE_PACKAGE_PAGE) {
-            return dataBean.getAlbum_video_music_file_package_page();
+        if (type == AdType.SETTING_PAGE) {
+            return dataBean.getStart_page();
         } else if (type == AdType.EXIT_PAGE) {
             return dataBean.getExit_page();
         } else if (type == AdType.SETTING_PAGE) {
             return dataBean.getSetting_page();
-        } else if (type == AdType.SOFTWARE_MANAGEMENT_PAGE) {
-            return dataBean.getSoftware_management_page();
+        } else if (type == AdType.HOME_PAGE) {
+            return dataBean.getHome_page();
         }
 
         return dataBean.getSetting_page();

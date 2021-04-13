@@ -7,6 +7,7 @@ import com.example.module_ad.ad.ad_kind.tencent.TXFeedAd
 import com.example.module_ad.ad.ad_kind.toutiao.TTFeedAd
 import com.example.module_ad.base.AdTypeBean
 import com.example.module_ad.utils.AdProbabilityUtil
+import com.example.module_user.utils.UserInfoUtil
 
 /**
  * @name VidelPlayer
@@ -24,6 +25,10 @@ class FeedHelper(activity: Activity, container: FrameLayout):AdHelper(activity, 
     private var mAddTengxunAdError = false
 
     override fun showAd(type: AdTypeBean?, random: Double) {
+
+        if (UserInfoUtil.isVIP()) {
+            return
+        }
         type?.let {
         val config = it.baseNative_screen
         if (config.isBaseStatus) {

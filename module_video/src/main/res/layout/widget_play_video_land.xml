@@ -242,6 +242,7 @@
             android:drawablePadding="10dp"
             android:gravity="center"
             android:text="音轨选择"
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="@+id/start"

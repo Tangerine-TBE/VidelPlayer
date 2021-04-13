@@ -124,7 +124,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
            />
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+        <FrameLayout
+            android:id="@+id/mAdContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

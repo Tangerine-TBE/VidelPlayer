@@ -28,11 +28,10 @@ class FunctionSelectPopup(activity: FragmentActivity?):BasePopup<PopupFunctionWi
     ViewGroup.LayoutParams.MATCH_PARENT
 ) {
 
+
+
     override fun initEvent() {
         mView.apply {
-            val radioButton = coreGroup.getChildAt(sp.getInt(Constants.SP_CORE_TYPE)) as? RadioButton
-            radioButton?.isChecked=true
-
             coreGroup.setOnCheckedChangeListener { group, checkedId ->
                  val type = when (checkedId) {
                      R.id.ijkCore -> {
@@ -56,4 +55,12 @@ class FunctionSelectPopup(activity: FragmentActivity?):BasePopup<PopupFunctionWi
             }
         }
     }
+
+    fun setSelectType(){
+        mView.apply {
+            val radioButton = coreGroup.getChildAt(sp.getInt(Constants.SP_CORE_TYPE)) as? RadioButton
+            radioButton?.isChecked=true
+        }
+    }
+
 }

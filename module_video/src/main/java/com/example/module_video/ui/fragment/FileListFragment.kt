@@ -1,9 +1,13 @@
 package com.example.module_video.ui.fragment
 
 import android.text.TextUtils
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.module_ad.ad.ad_help.AdController
+import com.example.module_ad.advertisement.AdType
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.*
+import com.example.module_user.livedata.RemoveAdLiveData
 import com.example.module_video.R
 import com.example.module_video.databinding.FragmentListBinding
 import com.example.module_video.domain.*
@@ -53,6 +57,15 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         ItemSelectPopup(activity)
     }
 
+    private val mAdController by lazy {
+        AdController.Builder(requireActivity())
+                .setPage(AdType.HOME_PAGE)
+                .setContainer(hashMapOf(AdController.ContainerType.TYPE_FEED to  binding.mAdContainer))
+                .create()
+    }
+
+
+
     companion object{
         const val MODEL_CHECK=0
         const val MODEL_NEW=1
@@ -65,10 +78,10 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
     override fun getChildLayout(): Int = R.layout.fragment_list
 
     override fun initView() {
-
+        mAdController.show()
         binding.apply {
             data=viewModel
-            setStatusBar(context, listBar, LayoutType.LINEARLAYOUT)
+            setStatusBar(context, listBar, LayoutType.CONSTRAINTLAYOUT)
 
             fileListContainer.apply {
                 layoutManager=LinearLayoutManager(activity)
@@ -88,14 +101,20 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         binding.apply {
             viewModel.apply {
                 val that=this@FileListFragment
-                PlayListLiveData.observe(that,{
+                PlayListLiveData.observe(that, {
                     mFileListAdapter.setList(it)
+                    noListHint.visibility=if (it.size>0) View.GONE else View.VISIBLE
                 })
 
 
                 listEditAction.observe(that,{
                     mFileListAdapter.setEditAction(it)
                     viewModel.setSelectItems(mFileListAdapter.getSelectList())
+                })
+
+
+                RemoveAdLiveData.observe(that,{
+                    if (it) goneView(mAdContainer) else showView(mAdContainer)
                 })
 
             }
@@ -204,5 +223,6 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
         mCreateListPopup.dismiss()
         mRenamePopup.dismiss()
         mDeletePopup.dismiss()
+        mAdController.release()
     }
 }

@@ -7,6 +7,7 @@ import android.os.PersistableBundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.MyActivityManager
 import com.example.module_base.utils.MyStatusBarUtil
 import com.example.module_base.utils.SPUtil
@@ -38,7 +39,7 @@ open class BaseActivity:FragmentActivity() {
         setFullScreenWindow()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         MyActivityManager.addActivity(this)
-
+        LogUtils.i("------BaseActivity------------${javaClass.simpleName}------------")
     }
 
     open fun setFullScreenWindow(){

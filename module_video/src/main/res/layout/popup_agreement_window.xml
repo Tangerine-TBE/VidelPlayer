@@ -70,7 +70,7 @@
                 android:layout_width="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_height="20dp"
-                app:color_checked="@color/theme_color"
+                app:color_checked="@color/theme_bg_color"
                 android:layout_marginLeft="26dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/descriptions" />

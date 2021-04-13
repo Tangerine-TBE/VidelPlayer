@@ -82,7 +82,7 @@ object MediaUtil {
                 val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
                 val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
                 //   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
-                audioList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
+                audioList.add(MediaInformation(id, name?:"", "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,MediaState.AUDIO))
             }
             close()
@@ -101,15 +101,14 @@ object MediaUtil {
                 val resolution = getString(getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)) // 分辨率
                 val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
                 //   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
-                videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
+                videoList.add(MediaInformation(id, name?:"", "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
                         ?: "", path, uri.toString(), bitmap,MediaState.VIDEO))
-                block(ValueMediaType(videoList,audioList))
+                block(ValueMediaType(videoList,audioList,false))
             }
             close()
         }
-
-
+        block(ValueMediaType(videoList,audioList,true))
     }
 
 

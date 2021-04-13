@@ -1,5 +1,6 @@
 package com.example.module_user.ui.activity
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -9,6 +10,7 @@ import com.example.module_base.provider.ModuleProvider
 import com.example.module_base.utils.*
 import com.example.module_user.R
 import com.example.module_user.databinding.ActivityLoginBinding
+import com.example.module_user.livedata.BuyVipLiveData
 import com.example.module_user.utils.Constants
 import com.example.module_user.utils.NetState
 import com.example.module_user.viewmodel.LoginViewModel
@@ -21,6 +23,10 @@ class LoginActivity : BaseVmViewActivity<ActivityLoginBinding, LoginViewModel>()
         const val REGISTER = 1  //注册
         const val FIND_PWD = 2 //找回密码
 
+        const val KEY_LOGIN_STATE="KEY_LOGIN_STATE"
+        const val KEY_REQUEST_CODE=200
+
+
     }
 
     override fun getViewModelClass(): Class<LoginViewModel> {
@@ -30,10 +36,12 @@ class LoginActivity : BaseVmViewActivity<ActivityLoginBinding, LoginViewModel>()
 
     override fun getLayoutView(): Int = R.layout.activity_login
 
+    private var buyAction=false
 
     override fun initView() {
         binding.apply {
             setStatusBar(this@LoginActivity, binding.loginToolbar, LayoutType.CONSTRAINTLAYOUT)
+            buyAction= intent.getBooleanExtra(Constants.KEY_BUY_VIP,false)
         }
 
     }
@@ -48,6 +56,7 @@ class LoginActivity : BaseVmViewActivity<ActivityLoginBinding, LoginViewModel>()
             toRegister.setOnClickListener {
                 toOtherActivity<RegisterPwdActivity>(this@LoginActivity) {
                     putExtra(Constants.USER_ACTION, REGISTER)
+                    putExtra(Constants.KEY_BUY_VIP,buyAction)
                 }
             }
 
@@ -84,6 +93,10 @@ class LoginActivity : BaseVmViewActivity<ActivityLoginBinding, LoginViewModel>()
                         NetState.SUCCESS -> {
                             dismiss()
                             showToast(it.msg)
+                            if (buyAction) {
+                                BuyVipLiveData.setBuyState(true)
+                              //  setResult(KEY_REQUEST_CODE,Intent().putExtra(KEY_LOGIN_STATE,true))
+                            }
                             finish()
                         }
                         NetState.ERROR -> {

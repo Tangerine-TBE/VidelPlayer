@@ -9,12 +9,12 @@ ext {
     //版本号
     versions = [
 
-            applicationId    : "com.example.videlplayer",   //应用ID
-            applicationName  : "视频播放器",                  //应用名称
-            versionCode      : 10000,                    //版本号
-            versionName      : "1.0",              //版本名称
+            applicationId    : "com.twx.player",   //应用ID
+            applicationName  : "万能视频电影播放器",                  //应用名称
+            versionCode      : 10003,                    //版本号
+            versionName      : "1.3",              //版本名称
             compileSdkVersion: 30,
-            minSdkVersion    : 23,
+            minSdkVersion    : 24,
             targetSdkVersion : 29,
 
     ]
