@@ -5,11 +5,9 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.alibaba.android.arouter.launcher.ARouter
-import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
-import com.example.module_base.provider.ModuleProvider
-import com.example.module_base.utils.PackageUtil
+
 import com.example.module_base.utils.SPUtil
-import com.tamsiree.rxkit.RxTool
+
 import com.umeng.commonsdk.UMConfigure
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,13 +40,12 @@ open class BaseApplication : Application() {
         mPackName = packageName
         SPUtil.init(this@BaseApplication)
         GlobalScope.launch {
-            RxTool.init(this@BaseApplication)
             LitePal.initialize(this@BaseApplication)
             LitePal.getDatabase()
             ARouter.openDebug()
             ARouter.openLog()
             ARouter.init(this@BaseApplication)
-            //用户反馈
+           /* //用户反馈
             FeedbackAPI.init(this@BaseApplication, "25822454", "7a8bb94331a5141dcea61ecb1056bbbd")
             val jsonObject = JSONObject()
             try {
@@ -63,7 +60,7 @@ open class BaseApplication : Application() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            FeedbackAPI.setAppExtInfo(jsonObject)
+            FeedbackAPI.setAppExtInfo(jsonObject)*/
 
         }
         //友盟 605b0b9cb8c8d45c13ae24a4

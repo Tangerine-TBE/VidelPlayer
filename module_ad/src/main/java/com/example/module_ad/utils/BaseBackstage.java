@@ -9,9 +9,10 @@ import android.os.CountDownTimer;
 import com.example.module_ad.bean.AdBean;
 import com.example.module_ad.ui.activity.BackActivity;
 import com.example.module_base.utils.LogUtils;
+import com.example.module_base.utils.RxNetTool;
 import com.example.module_base.utils.SPUtil;
 import com.example.module_user.utils.UserInfoUtil;
-import com.tamsiree.rxkit.RxNetTool;
+
 
 import java.util.List;
 public class BaseBackstage {

@@ -12,7 +12,8 @@ import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd.ExpressAdInteractionListener
 import com.example.module_ad.ad.Ad
 import com.example.module_base.utils.LogUtils
-import com.tamsiree.rxkit.RxDeviceTool.getScreenWidth
+import com.example.module_base.utils.SizeUtils.getScreenWidth
+
 
 class TTBannerAd(activity: Activity, container: FrameLayout):Ad(activity, container){
     private var mTtBannerAd: TTNativeExpressAd? = null
@@ -134,6 +135,10 @@ class TTBannerAd(activity: Activity, container: FrameLayout):Ad(activity, contai
 
         //使用默认模板中默认dislike弹出样式
         ad.setDislikeCallback(activity, object : DislikeInteractionCallback {
+            override fun onShow() {
+
+            }
+
             override fun onSelected(position: Int, value: String) {
                 //用户选择不喜欢原因后，移除广告展示
                 container.removeAllViews()

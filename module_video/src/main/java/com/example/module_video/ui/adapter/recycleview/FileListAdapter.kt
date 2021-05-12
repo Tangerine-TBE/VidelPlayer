@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.module_base.utils.RxTimeTool
 import com.example.module_base.utils.gsonHelper
 import com.example.module_video.R
 import com.example.module_video.databinding.ItemFileListContainerBinding
 import com.example.module_video.domain.MediaDataBean
 import com.example.module_video.domain.PlayListMsgBean
-import com.tamsiree.rxkit.RxTimeTool
+
 import java.text.SimpleDateFormat
 import java.util.*
 

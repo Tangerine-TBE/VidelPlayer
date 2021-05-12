@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.widget.FrameLayout;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
+import com.example.module_base.utils.RxNetTool;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
@@ -12,7 +13,7 @@ import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
-import com.tamsiree.rxkit.RxNetTool;
+
 
 import java.util.List;
 

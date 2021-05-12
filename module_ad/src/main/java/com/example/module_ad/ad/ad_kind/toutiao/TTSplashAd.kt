@@ -30,7 +30,7 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
         mTTAdNative.loadSplashAd(adSlot, object : SplashAdListener {
             @MainThread
             override fun onError(code: Int, message: String) {
-                LogUtils.i(code.toString() + "onError-------------------------->" + message)
+                LogUtils.i("onError-------${code}----------$message--------->" )
                 mAdShowStateListener?.showError()
             }
 

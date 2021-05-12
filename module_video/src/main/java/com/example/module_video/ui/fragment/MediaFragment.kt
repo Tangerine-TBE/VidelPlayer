@@ -29,8 +29,7 @@ import com.example.module_video.utils.FileUtil
 import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
 import com.scwang.smart.refresh.header.MaterialHeader
-import com.tamsiree.rxkit.RxKeyboardTool
-import com.tamsiree.rxkit.view.RxToast
+
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import java.io.File
@@ -240,7 +239,8 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     if (viewModel.getEditAction_()) {
                         viewModel.setSelectItemList(mMediaAdapter.getSelectList())
                     } else {
-                        PlayVideoActivity.toPlayVideo(activity,Gson().toJson(PlayListBean(mMediaAdapter.getData())),position)
+                        sp.putString(Constants.SP_PLAY_LIST,Gson().toJson(PlayListBean(mMediaAdapter.getData())))
+                        PlayVideoActivity.toPlayVideo(activity,position)
                     }
                 }
 
@@ -298,7 +298,7 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                         if (!TextUtils.isEmpty(name)) {
                             viewModel.reNameToMediaFile(name, it,updatePosition)
                         } else {
-                            RxToast.normal("文件名不能为空！")
+                            showToast("文件名不能为空！")
                         }
                     }
                 }

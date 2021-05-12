@@ -7,11 +7,12 @@ import android.widget.FrameLayout;
 import com.example.module_ad.utils.Contents;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
+import com.example.module_base.utils.RxNetTool;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
-import com.tamsiree.rxkit.RxNetTool;
+
 
 public class TXSplashAd extends AdWatcher{
 
@@ -38,7 +39,7 @@ public class TXSplashAd extends AdWatcher{
 
     @Override
     public void showAd() {
-        if (!RxNetTool.isConnected(BaseApplication.Companion.getApplication())) {
+        if (!RxNetTool.isNetworkAvailable(BaseApplication.Companion.getApplication())) {
             return;
         }
         mSplashAD = new SplashAD(mActivity, mKgdtMobSDKKaiPingKey, new SplashADListener() {

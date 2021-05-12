@@ -51,5 +51,15 @@
       <option name="name" value="maven2" />
       <option name="url" value="https://dl.bintray.com/yidian-android/open_android_sdk/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven5" />
+      <option name="name" value="maven5" />
+      <option name="url" value="https://repo1.maven.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven7" />
+      <option name="name" value="maven7" />
+      <option name="url" value="https://artifact.bytedance.com/repository/pangle" />
+    </remote-repository>
   </component>
 </project>

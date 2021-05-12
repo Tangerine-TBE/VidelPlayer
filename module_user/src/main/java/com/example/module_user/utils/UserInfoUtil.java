@@ -14,7 +14,7 @@ import com.example.module_user.domain.ValueUserInfo;
 import com.example.module_user.domain.login.Data;
 import com.example.module_user.domain.login.LoginBean;
 import com.google.gson.Gson;
-import com.tamsiree.rxkit.RxTimeTool;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class UserInfoUtil {
 
     private static final int sLoginTime = 1;
 
-    public static boolean loginTimeOut() {
+/*    public static boolean loginTimeOut() {
         String vipTime = SPUtil.getInstance().getString(Constants.USER_VIP_TIME);
         boolean isLogin = SPUtil.getInstance().getBoolean(Constants.USER_IS_LOGIN, false);
         if (isLogin & !TextUtils.isEmpty(vipTime)) {
@@ -92,7 +92,7 @@ public class UserInfoUtil {
             }
         }
         return false;
-    }
+    }*/
 
     public static boolean isVIP() {
         String info = SPUtil.getInstance().getString(Constants.USER_INFO);

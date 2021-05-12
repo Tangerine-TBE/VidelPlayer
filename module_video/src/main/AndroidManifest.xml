@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.module_video">
 
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
     <application android:requestLegacyExternalStorage="true">
@@ -35,8 +31,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="video/*" />
-                <data android:mimeType="audio/*" />
+                <data android:mimeType="video/*"  />
+                <data android:mimeType="audio/*"   />
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
             </intent-filter>
         </activity>
 

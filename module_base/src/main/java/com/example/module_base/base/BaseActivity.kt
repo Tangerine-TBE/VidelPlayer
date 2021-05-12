@@ -65,6 +65,8 @@ open class BaseActivity:FragmentActivity() {
 
     }
 
+
+
     override fun onDestroy() {
         super.onDestroy()
         MyActivityManager.removeActivity(this)

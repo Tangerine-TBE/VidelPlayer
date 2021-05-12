@@ -183,9 +183,10 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                             viewModel.setSelectAllState(getSelectState())
                     }
                 } else {
+                   sp.putString(Constants.SP_PLAY_LIST,  Gson().toJson(PlayListBean(mMediaFileAdapter.getData())))
                     PlayVideoActivity.toPlayVideo(
                         this@PlayListMsgActivity,
-                        Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),0
+                       0
                     )
                 }
             }
@@ -216,9 +217,10 @@ class PlayListMsgActivity : BaseVmViewActivity<ActivityPlayListMsgBinding, PlayL
                             viewModel.setSelectAllState(getSelectState())
 
                         } else {
+                            sp.putString(Constants.SP_PLAY_LIST,  Gson().toJson(PlayListBean(mMediaFileAdapter.getData())))
                             PlayVideoActivity.toPlayVideo(
                                     this@PlayListMsgActivity,
-                                    Gson().toJson(PlayListBean(mMediaFileAdapter.getData())),position
+                                   position
                             )
                         }
                     }

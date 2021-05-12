@@ -25,14 +25,6 @@ import kotlinx.coroutines.withContext
  */
 object MediaLiveData : BaseLiveData<ValueMediaType>(){
 
-    private val mVideoObserver by lazy {
-        VideoObserver()
-    }
-
-    private val mAudioObserver by lazy {
-        AudioObserver()
-    }
-
     fun getMedia(){
         mScope.launch(Dispatchers.IO){
             MediaUtil.getVideo{
@@ -41,29 +33,13 @@ object MediaLiveData : BaseLiveData<ValueMediaType>(){
         }
     }
 
-    override fun onActive() {
-        super.onActive()
-        BaseApplication.application.contentResolver.registerContentObserver(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,true,mVideoObserver)
-        BaseApplication.application.contentResolver.registerContentObserver(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,true,mAudioObserver)
-    }
-
 
     override fun onInactive() {
         super.onInactive()
-        mJob.cancel()
+     //  mJob.cancel()
     }
 
-    class VideoObserver:ContentObserver(BaseApplication.mHandler){
-        override fun onChange(selfChange: Boolean, uri: Uri?) {
-         //  getMedia()
-        }
-    }
 
-    class AudioObserver:ContentObserver(BaseApplication.mHandler){
 
-        override fun onChange(selfChange: Boolean, uri: Uri?) {
-          //  getMedia()
-        }
-    }
 
 }

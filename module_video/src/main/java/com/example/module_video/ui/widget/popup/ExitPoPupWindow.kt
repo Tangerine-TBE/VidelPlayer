@@ -55,8 +55,7 @@ class ExitPoPupWindow(mActivity: FragmentActivity) : BasePopup<DiyExitPopupWindo
     }
 
     override fun showPopupView(view: View, gravity: Int, x: Int, y: Int) {
-        popupShowAd()
         super.showPopupView(view, gravity, x, y)
-
+        popupShowAd()
     }
 }

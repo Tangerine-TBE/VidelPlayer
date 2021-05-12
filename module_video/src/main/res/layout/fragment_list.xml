@@ -81,6 +81,7 @@
 
         <FrameLayout
             android:id="@+id/mAdContainer"
+            android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"

@@ -12,7 +12,7 @@ import com.example.module_user.utils.Constants
 import com.example.module_user.utils.NetState
 import com.example.module_user.viewmodel.RegisterPwdViewModel
 import com.example.module_user.widget.LoginView
-import com.tamsiree.rxkit.view.RxToast.warning
+
 
 class RegisterPwdActivity :
         BaseVmViewActivity<ActivityRegisterAvtivityBinding, RegisterPwdViewModel>() {
@@ -112,7 +112,7 @@ class RegisterPwdActivity :
                     if (!TextUtils.isEmpty(number)) {
                         viewModel.getVerCode(number)
                     } else {
-                        warning(getString(R.string.login_phone_hint))
+                        showToast(getString(R.string.login_phone_hint))
                     }
                 }
 

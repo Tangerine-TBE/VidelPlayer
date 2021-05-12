@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alibaba.sdk.android.feedback.impl.FeedbackAPI
 import com.example.module_ad.ad.ad_help.AdController
 import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.utils.Contents
@@ -301,18 +300,17 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
 
             mUsSetAdapter.setOnItemClickListener { adapter, view, position ->
                 when (position) {
-                    0 -> FeedbackAPI.openFeedbackActivity()
-                    1 -> {
+                    0 -> {
                         copyContent(context, "2681706890@qq.com")
                     }
-                    2 -> toOtherActivity<AboutActivity>(activity) {}
-                    3 -> toOtherActivity<DealViewActivity>(activity) {
+                    1 -> toOtherActivity<AboutActivity>(activity) {}
+                    2 -> toOtherActivity<DealViewActivity>(activity) {
                         putExtra(SET_DEAL1, 2)
                     }
-                    4 -> toOtherActivity<DealViewActivity>(activity) {
+                    3 -> toOtherActivity<DealViewActivity>(activity) {
                         putExtra(SET_DEAL1, 1)
                     }
-                    5 -> PermissionUtil.gotoPermission(activity)
+                    4 -> PermissionUtil.gotoPermission(activity)
                 }
             }
             mBuyVipPopup.doSure {

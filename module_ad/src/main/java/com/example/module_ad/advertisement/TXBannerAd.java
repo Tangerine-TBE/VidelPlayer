@@ -6,11 +6,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
+import com.example.module_base.utils.RxNetTool;
 import com.qq.e.ads.banner2.UnifiedBannerADListener;
 import com.qq.e.ads.banner2.UnifiedBannerView;
 import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
-import com.tamsiree.rxkit.RxNetTool;
+
 
 
 public class TXBannerAd  extends AdWatcher{

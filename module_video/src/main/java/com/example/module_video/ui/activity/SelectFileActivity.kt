@@ -5,8 +5,7 @@ import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmViewActivity
-import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.setStatusBar
+import com.example.module_base.utils.*
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivitySelectMediaBinding
 import com.example.module_video.domain.MediaInformation
@@ -14,8 +13,7 @@ import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.ui.adapter.recycleview.MediaFileAdapter
 import com.example.module_video.utils.Constants
 import com.example.module_video.viewmodel.SelectFileViewModel
-import com.tamsiree.rxkit.RxKeyboardTool
-import com.tamsiree.rxkit.view.RxToast
+
 
 class SelectFileActivity : BaseVmViewActivity<ActivitySelectMediaBinding, SelectFileViewModel>() {
 
@@ -63,7 +61,7 @@ class SelectFileActivity : BaseVmViewActivity<ActivitySelectMediaBinding, Select
                 })
 
                 addListState.observe(that, {
-                    if (it) finish() else RxToast.normal("添加失败！")
+                    if (it) finish() else showToast("添加失败！")
                 })
             }
 

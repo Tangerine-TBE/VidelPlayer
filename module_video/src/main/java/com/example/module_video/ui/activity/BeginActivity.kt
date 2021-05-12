@@ -82,7 +82,6 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                         if (AdMsgUtil.getADKey() != null) {
                            // mSplashHelper.showAd()
                             mAdController.show()
-                            MediaLiveData.getMedia()
                         } else {
                             goHome()
                         }

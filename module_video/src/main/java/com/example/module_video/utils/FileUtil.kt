@@ -14,7 +14,7 @@ import com.example.module_base.base.BaseApplication
 import com.example.module_base.utils.Constants
 import com.example.module_base.utils.LogUtils
 import com.example.module_video.domain.FileBean
-import com.tamsiree.rxkit.RxTimeTool
+
 import io.zhuliang.appchooser.AppChooser
 import java.io.File
 import java.text.SimpleDateFormat

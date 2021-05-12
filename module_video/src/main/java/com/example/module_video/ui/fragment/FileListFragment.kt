@@ -21,7 +21,7 @@ import com.example.module_video.ui.widget.popup.RemindPopup
 import com.example.module_video.utils.Constants
 import com.example.module_video.viewmodel.MediaViewModel
 import com.google.gson.Gson
-import com.tamsiree.rxkit.view.RxToast
+
 import java.util.*
 
 /**
@@ -146,7 +146,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
                         }
                         viewModel.addNewPlayList(PlayListMsgBean(name,Gson().toJson(MediaDataBean(null)),System.currentTimeMillis()))
                     } else {
-                        RxToast.normal("文件名不能为空！")
+                        showToast("文件名不能为空！")
                     }
                 }
             }
@@ -201,7 +201,7 @@ class FileListFragment  : BaseVmFragment<FragmentListBinding, MediaViewModel>() 
                         if (!TextUtils.isEmpty(name)) {
                            viewModel.reNamePlayList(it.name,name)
                         } else {
-                            RxToast.normal("文件名不能为空！")
+                          showToast("文件名不能为空！")
                         }
                     }
                 }

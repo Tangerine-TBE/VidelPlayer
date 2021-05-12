@@ -71,7 +71,13 @@ class FloatingVideo : StandardGSYVideoPlayer {
         mStartButton = findViewById(R.id.start)
         mBottomContainer = findViewById(R.id.layout_bottom)
 
-        mStartButton.setOnClickListener { clickStartIcon() }
+        mStartButton.setOnClickListener {
+            try {
+                clickStartIcon()
+            }catch (e:Exception){
+
+            }
+        }
 
         mPre = findViewById(R.id.small_pre)
         mNext= findViewById(R.id.small_next)

@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
 import com.example.module_base.base.BasePopup
+import com.example.module_base.utils.RxKeyboardTool
 import com.example.module_video.R
 import com.example.module_video.databinding.PopupInputWindowBinding
-import com.tamsiree.rxkit.RxKeyboardTool
+
 
 /**
  * @name VidelPlayer

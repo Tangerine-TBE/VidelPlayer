@@ -12,9 +12,9 @@ import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
+import com.example.module_base.utils.RxNetTool;
 import com.example.module_base.utils.SizeUtils;
-import com.tamsiree.rxkit.RxDeviceTool;
-import com.tamsiree.rxkit.RxNetTool;
+
 
 import java.util.List;
 
@@ -42,8 +42,8 @@ public class TTFeedAd extends AdWatcher {
             return;
         }
         mFeedAdContainer.removeAllViews();
-        mExpressViewWidth = RxDeviceTool.getScreenWidth(mActivity);
-        int screenHeight = RxDeviceTool.getScreenHeight(mActivity);
+        mExpressViewWidth = SizeUtils.getScreenWidth(mActivity);
+        int screenHeight = SizeUtils.getScreenHeight(mActivity);
         float expressViewHeight = SizeUtils.fitFeedHeight(screenHeight);
         LogUtils.i("高-------------->"+screenHeight);
         LogUtils.i("宽-------------->"+ mExpressViewWidth);
@@ -159,6 +159,11 @@ public class TTFeedAd extends AdWatcher {
     private void bindDislike(TTNativeExpressAd ad, boolean customStyle) {
         //使用默认模板中默认dislike弹出样式
         ad.setDislikeCallback(mActivity, new TTAdDislike.DislikeInteractionCallback() {
+            @Override
+            public void onShow() {
+
+            }
+
             @Override
             public void onSelected(int position, String value) {
                 //用户选择不喜欢原因后，移除广告展示

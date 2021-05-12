@@ -41,7 +41,7 @@ class SetAdapter:BaseQuickAdapter<ItemBean,BaseDataBindingHolder<ItemSetContaine
         holder.dataBinding?.apply {
             setTitle.text = "${item.title}"
             if (hasContact) {
-                if (holder.adapterPosition == 1) {
+                if (holder.adapterPosition == 0) {
                     hintText.text =item.hint
                 }
             }

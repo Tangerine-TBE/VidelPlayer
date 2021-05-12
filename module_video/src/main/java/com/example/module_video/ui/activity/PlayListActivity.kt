@@ -4,9 +4,7 @@ import android.text.TextUtils
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.module_base.base.BaseVmViewActivity
-import com.example.module_base.utils.LayoutType
-import com.example.module_base.utils.gsonHelper
-import com.example.module_base.utils.setStatusBar
+import com.example.module_base.utils.*
 import com.example.module_base.widget.MyToolbar
 import com.example.module_video.R
 import com.example.module_video.databinding.ActivityPlayListBinding
@@ -17,8 +15,7 @@ import com.example.module_video.ui.adapter.recycleview.FileListAdapter
 import com.example.module_video.ui.widget.popup.InputPopup
 import com.example.module_video.viewmodel.SelectFileViewModel
 import com.google.gson.Gson
-import com.tamsiree.rxkit.RxKeyboardTool
-import com.tamsiree.rxkit.view.RxToast
+
 
 class PlayListActivity : BaseVmViewActivity<ActivityPlayListBinding, SelectFileViewModel>() {
 
@@ -121,7 +118,7 @@ class PlayListActivity : BaseVmViewActivity<ActivityPlayListBinding, SelectFileV
                     if (!TextUtils.isEmpty(name)) {
                         viewModel.addNewPlayList(PlayListMsgBean(name, Gson().toJson(MediaDataBean(null)),System.currentTimeMillis()))
                     } else {
-                        RxToast.normal("文件名不能为空！")
+                       showToast("文件名不能为空！")
                     }
                 }
             }

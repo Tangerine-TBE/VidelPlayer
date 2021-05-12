@@ -11,10 +11,11 @@ import com.bytedance.sdk.openadsdk.TTAppDownloadListener
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd.ExpressAdInteractionListener
 import com.example.module_ad.ad.Ad
+import com.example.module_ad.utils.DeviceUtils.getScreenHeight
+import com.example.module_ad.utils.DeviceUtils.getScreenWidth
 import com.example.module_base.utils.LogUtils
 import com.example.module_base.utils.SizeUtils
-import com.tamsiree.rxkit.RxDeviceTool.getScreenHeight
-import com.tamsiree.rxkit.RxDeviceTool.getScreenWidth
+
 
 /**
  * @name VidelPlayer
@@ -130,6 +131,10 @@ class TTFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
     private fun bindDislike(ad: TTNativeExpressAd, customStyle: Boolean) {
         //使用默认模板中默认dislike弹出样式
         ad.setDislikeCallback(activity, object : DislikeInteractionCallback {
+            override fun onShow() {
+
+            }
+
             override fun onSelected(position: Int, value: String) {
                 //用户选择不喜欢原因后，移除广告展示
                 container.removeAllViews()

@@ -103,7 +103,7 @@ android {
         _vivo {
 
             manifestPlaceholders = [
-                    app_name_channel:  "视频影音播放器",
+                    app_name_channel:  "天王星万能视频播放器",
                     CHANNEL_VALUE:"_vivo"]
         }
         _360 {
@@ -151,7 +151,7 @@ android {
 
             manifestPlaceholders = [
                     app_name_channel:  rootProject.ext.versions.applicationName,
-                    CHANNEL_VALUE:"_alibaba"]
+                    CHANNEL_VALUE:"_ali"]
         }
         _google {
 

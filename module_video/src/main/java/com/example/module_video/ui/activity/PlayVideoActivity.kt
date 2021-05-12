@@ -53,7 +53,7 @@ import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.tamsiree.rxkit.RxDeviceTool
+
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 
 
@@ -78,8 +78,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         const val FROM_CHANNEL = "FROM_CHANNEL"
         const val PROGRESS = "PROGRESS"
 
-        fun toPlayVideo(activity: FragmentActivity?,msg: String, position: Int, channel: Int = 0) {
-            SPUtil.getInstance().putString(Constants.SP_PLAY_LIST, msg)
+        fun toPlayVideo(activity: FragmentActivity?, position: Int, channel: Int = 0) {
+
             toOtherActivity<PlayVideoActivity>(activity){
                 putExtra(TRANSITION, true)
                 putExtra(PLAY_POSITION, position)
@@ -131,7 +131,13 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 path?.let {
                     val index = it.lastIndexOf("/")
                     val name = it.substring(index + 1)
-                   videoPlayer.setUp(arrayListOf(MediaInformation(uri = this.toString(), name = name)), 0, true, name)
+                    try {
+                        videoPlayer.setUp(arrayListOf(MediaInformation(uri = this.toString(), name = name)), 0, true, name)
+                    }catch (e:Exception){
+                        showToast("打开视频异常")
+                        finish()
+                    }
+
                 }
             }
         }
@@ -176,10 +182,15 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
         val videoMsg = sp.getString(Constants.SP_PLAY_LIST)
         gsonHelper<PlayListBean>(videoMsg)?.apply {
             if (list.size>playPosition){
-                if (mChannel == 1) {
-                    videoPlayer.seekOnStart=intent.getIntExtra(PROGRESS, 0).toLong()
+                try {
+                    if (mChannel == 1) {
+                        videoPlayer.seekOnStart=intent.getIntExtra(PROGRESS, 0).toLong()
+                    }
+                    videoPlayer.setUp(list, playPosition, true, list[playPosition].name)
+                }catch (e:Exception){
+                    showToast("打开视频异常")
+                    finish()
                 }
-                videoPlayer.setUp(list, playPosition, true, list[playPosition].name)
             }
         }
     }
@@ -263,7 +274,6 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                 0
             }
         }
-
     }
 
 
@@ -348,8 +358,8 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
                     val scaleImage = it.findViewById<ScaleImage>(R.id.ivScale)
                     scaleImage.setOnScaledListener(object : ScaleImage.OnScaledListener {
                         override fun onScaled(x: Float, y: Float, event: MotionEvent) {
-                            val screenWidth = RxDeviceTool.getScreenWidth(BaseApplication.application)
-                            val screenHeight = RxDeviceTool.getScreenHeight(BaseApplication.application)
+                            val screenWidth = SizeUtils.getScreenWidth(BaseApplication.application)
+                            val screenHeight = SizeUtils.getScreenHeight(BaseApplication.application)
                             var scaleWith = params.width + x.toInt()
                             var scaleHeight = params.height + y.toInt()
 

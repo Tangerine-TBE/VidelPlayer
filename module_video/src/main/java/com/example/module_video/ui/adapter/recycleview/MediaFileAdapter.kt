@@ -52,7 +52,6 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
         mSelectItemList.addAll(mList.toSet())
         mSelectAllState=true
         notifyDataSetChanged()
-
     }
 
     fun getSelectList() = mSelectItemList
@@ -157,4 +156,5 @@ class MediaFileAdapter : RecyclerView.Adapter<MediaFileAdapter.MyHolder>() {
 
         fun onItemSubClick(item: MediaInformation, position: Int)
     }
+
 }

@@ -7,10 +7,11 @@ import android.widget.FrameLayout
 import com.example.module_ad.ad.Ad
 import com.example.module_base.base.BaseApplication.Companion.application
 import com.example.module_base.utils.LogUtils
+import com.example.module_base.utils.RxNetTool.isNetworkAvailable
 import com.qq.e.ads.banner2.UnifiedBannerADListener
 import com.qq.e.ads.banner2.UnifiedBannerView
 import com.qq.e.comm.util.AdError
-import com.tamsiree.rxkit.RxNetTool.isNetworkAvailable
+
 import kotlin.math.roundToInt
 
 /**

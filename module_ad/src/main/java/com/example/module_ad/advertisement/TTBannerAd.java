@@ -12,8 +12,9 @@ import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
-import com.tamsiree.rxkit.RxDeviceTool;
-import com.tamsiree.rxkit.RxNetTool;
+import com.example.module_base.utils.RxNetTool;
+import com.example.module_base.utils.SizeUtils;
+
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class TTBannerAd extends AdWatcher {
                 .setCodeId(mKTouTiaoBannerKey)
                 .setSupportDeepLink(true)
                 .setAdCount(3)
-                .setExpressViewAcceptedSize(RxDeviceTool.getScreenWidth(mActivity),80) //期望模板广告view的size,单位dp
+                .setExpressViewAcceptedSize(SizeUtils.getScreenWidth(mActivity),80) //期望模板广告view的size,单位dp
                 .build();
 
 
@@ -164,6 +165,11 @@ public class TTBannerAd extends AdWatcher {
 
         //使用默认模板中默认dislike弹出样式
         ad.setDislikeCallback(mActivity, new TTAdDislike.DislikeInteractionCallback() {
+            @Override
+            public void onShow() {
+
+            }
+
             @Override
             public void onSelected(int position, String value) {
                 //用户选择不喜欢原因后，移除广告展示

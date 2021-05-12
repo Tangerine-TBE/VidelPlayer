@@ -206,10 +206,13 @@ class PlayVideoView : StandardGSYVideoPlayer {
     }
 
     private fun startPlayVideo() {
-        setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
-        startPlayLogic()
-        mPlayListPopup.setListPosition(mSourcePosition)
-        IjkMediaPlayer().trackInfo
+      if ( mUrlList.size>mSourcePosition){
+          setUp(mUrlList, mSourcePosition, true, mUrlList[mSourcePosition].name)
+          startPlayLogic()
+          mPlayListPopup.setListPosition(mSourcePosition)
+      }
+
+
     }
 
     override fun onAutoCompletion() {

@@ -20,7 +20,7 @@ import com.example.module_video.R
 import com.example.module_video.databinding.PopupAgreementWindowBinding
 import com.example.module_video.repository.DataProvider
 import com.example.module_video.ui.adapter.recycleview.PermissionAdapter
-import com.tamsiree.rxkit.view.RxToast
+
 
 /**
  * @name Wifi_Manager
@@ -32,6 +32,9 @@ import com.tamsiree.rxkit.view.RxToast
  */
 class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowBinding>(activity, R.layout.popup_agreement_window,ViewGroup.LayoutParams.MATCH_PARENT) {
 
+
+    private val mAppName=PackageUtil.getAppMetaData(activity,Constants.APP_NAME)
+
     private val mPermissionAdapter by lazy {
         PermissionAdapter()
     }
@@ -41,7 +44,7 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
         isOutsideTouchable =false
 
         mView.apply {
-            welcomeTitle.text="欢迎使用${PackageUtil.getAppMetaData(activity,Constants.APP_NAME)}"
+            welcomeTitle.text="欢迎使用${mAppName}"
             permissionContainer.layoutManager = LinearLayoutManager(activity)
             permissionContainer.adapter = mPermissionAdapter
             mPermissionAdapter.setList(DataProvider.permissionList)
@@ -65,19 +68,13 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
 
     override fun initEvent() {
         mView.apply {
-            ivCancel?.setOnClickListener {
-                dismiss()
-                mListener?.cancel()
-
+            btCancel?.setOnClickListener {
+                showToast("您需要同意后才能继续使${mAppName}提供的服务")
             }
 
             btSure?.setOnClickListener {
-                if (scbAgreement.isChecked) {
                     dismiss()
                     mListener?.sure()
-                } else {
-                    showToast("请确保您已同意本应用的隐私政策和用户协议")
-                }
             }
 
         }

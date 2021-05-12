@@ -4,8 +4,9 @@ import android.app.Activity
 import android.widget.FrameLayout
 import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.utils.AdMsgUtil.*
-import com.example.module_base.utils.showToast
-import com.tamsiree.rxkit.RxNetTool
+import com.example.module_base.utils.RxNetTool
+
+
 
 /**
  * @name VidelPlayer

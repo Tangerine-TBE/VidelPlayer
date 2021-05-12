@@ -10,8 +10,7 @@ import com.example.module_video.databinding.PopupInputWindowBinding
 import com.example.module_video.databinding.PopupRemindWindowBinding
 import com.example.module_video.domain.ItemBean
 import com.example.module_video.ui.adapter.recycleview.PopupSelectItemAdapter
-import com.tamsiree.rxkit.RxDeviceTool
-import com.tamsiree.rxkit.RxKeyboardTool
+
 
 /**
  * @name VidelPlayer

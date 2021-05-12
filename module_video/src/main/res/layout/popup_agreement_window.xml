@@ -20,15 +20,7 @@
             android:layout_height="match_parent">
 
 
-            <ImageView
-                android:id="@+id/ivCancel"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="12dp"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:src="@mipmap/icon_no_agreement"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/welcomeTitle"
@@ -36,9 +28,11 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivCancel" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
 
             <TextView
@@ -65,26 +59,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
-            <com.example.module_base.widget.SmoothCheckBox
-                android:id="@+id/scbAgreement"
-                android:layout_width="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_height="20dp"
-                app:color_checked="@color/theme_bg_color"
-                android:layout_marginLeft="26dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/descriptions" />
+
 
             <TextView
                 android:id="@+id/descriptions"
-                android:layout_marginLeft="5dp"
                 android:layout_width="0dp"
+                android:layout_marginLeft="26dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="26dp"
                 android:textSize="13sp"
                 android:text="请您在使用前仔细阅读《用户服务协议》和《隐私政策》。开始使用代表您已阅读并同意"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/scbAgreement"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/permissionContainer" />
 
 
@@ -93,8 +79,10 @@
                 android:layout_width="0dp"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginLeft="26dp"
                 android:layout_height="wrap_content"
-                android:text="立即开启"
+                android:text="同意"
                 android:background="@drawable/shape_agreement_popup_bg"
                 android:gravity="center"
                 android:layout_marginTop="16dp"
@@ -103,6 +91,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/descriptions" />
+
+            <TextView
+                android:id="@+id/btCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不同意"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSure" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

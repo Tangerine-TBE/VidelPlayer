@@ -5,11 +5,12 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.module_base.utils.SizeUtils
 import com.example.module_video.R
 import com.example.module_video.domain.MediaInformation
 import com.example.module_video.ui.adapter.recycleview.PopupPlayListAdapter
 import com.example.module_video.utils.GridItemDecoration
-import com.tamsiree.rxkit.RxDeviceTool
+
 import razerdp.basepopup.BasePopupWindow
 
 /**
@@ -80,9 +81,9 @@ class PlayListPopup(context: Context) : BasePopupWindow(context) {
             addItemDecoration(divider)
             layoutManager=LinearLayoutManager(context).apply {
                 if (mIfCurrentIsFullscreen) {
-                    layoutParams.height=RxDeviceTool.getScreenHeight(context)/2
+                    layoutParams.height=SizeUtils.getScreenHeight(context)/2
                 } else {
-                    layoutParams.height=RxDeviceTool.getScreenHeight(context)/4
+                    layoutParams.height=SizeUtils.getScreenHeight(context)/4
                 }
             }
             mAdapter.setList(list)

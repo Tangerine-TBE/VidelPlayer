@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.tamsiree.rxkit.view.RxToast;
 
 /**
  * @author wujinming QQ:1245074510
@@ -31,7 +30,7 @@ public class PermissionUtil {
                 context.startActivity(PermissionUtil.getAppDetailSettingIntent(context));
             }
         }catch (Exception e){
-            RxToast.warning("打开权限页面失败，请重新打开");
+            RxToast.showToast("打开权限页面失败，请重新打开");
         }
     }
 
@@ -106,7 +105,7 @@ public class PermissionUtil {
             }
             context.startActivity(localIntent);
         }catch (Exception e){
-            RxToast.warning("打开权限页面失败，请重新打开");
+            RxToast.showToast("打开权限页面失败，请重新打开");
         }
         return localIntent;
     }
