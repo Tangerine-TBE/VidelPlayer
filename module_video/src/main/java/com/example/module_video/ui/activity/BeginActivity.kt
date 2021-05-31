@@ -19,10 +19,8 @@ import com.example.module_video.viewmodel.BeginViewModel
 class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>() {
 
     private var showCount = 0
-    private val mSplashHelper by lazy {
-        SplashHelper(this, binding.mAdContainer,
-            if (sp.getBoolean(com.example.module_video.utils.Constants.SP_SET_PWD_STATE)) LockActivity::class.java else HomeActivity::class.java,1)
-    }
+
+
 
     private val mAdController by lazy {
         AdController.Builder(this)
@@ -65,7 +63,6 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                         mAgreementPopup?.showPopupView(binding.mAdContainer)
                         showCount++
                     } else {
-                       // mSplashHelper.showAd()
                         mAdController.show()
                     }
                 }
