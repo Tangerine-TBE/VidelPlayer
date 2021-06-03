@@ -41,9 +41,9 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
             }
 
             @MainThread
-            override fun onSplashAdLoad(ad: TTSplashAd) {
+            override fun onSplashAdLoad(ad: TTSplashAd?) {
                 //获取SplashView
-                val view = ad.splashView
+                val view = ad?.splashView
                 if (view != null && !activity.isFinishing) {
                     container.apply {
                         removeAllViews()
@@ -58,7 +58,7 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
                     LogUtils.i("onSplashAdLoad-------------------------->")
                 }
                 //设置SplashView的交互监听器
-                ad.setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
+                ad?.setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
                     override fun onAdClicked(view: View, type: Int) {
                         LogUtils.i("开屏广告点击-------------------------->")
                     }
@@ -77,7 +77,7 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
                         mAdShowStateListener?.showSuccess()
                     }
                 })
-                if (ad.interactionType == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
+                if (ad?.interactionType == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
                     ad.setDownloadListener(object : TTAppDownloadListener {
                         var hasShow = false
                         override fun onIdle() {}

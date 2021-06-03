@@ -112,7 +112,7 @@ class TTFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
                 LogUtils.i("下载失败，点击重新下载------------------------>")
             }
 
-            override fun onInstalled(fileName: String, appName: String) {
+            override fun onInstalled(fileName: String?, appName: String) {
                 LogUtils.i("安装完成，点击图片打开------------------------>")
             }
 

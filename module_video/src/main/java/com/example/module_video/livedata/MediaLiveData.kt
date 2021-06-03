@@ -26,10 +26,14 @@ import kotlinx.coroutines.withContext
 object MediaLiveData : BaseLiveData<ValueMediaType>(){
 
     fun getMedia(){
-        mScope.launch(Dispatchers.IO){
-            MediaUtil.getVideo{
-                postValue(it)
+        try {
+            mScope.launch(Dispatchers.IO){
+                MediaUtil.getVideo{
+                    postValue(it)
+                }
             }
+        }catch (e:Exception){
+
         }
     }
 

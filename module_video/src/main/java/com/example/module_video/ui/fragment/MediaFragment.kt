@@ -239,7 +239,11 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     if (viewModel.getEditAction_()) {
                         viewModel.setSelectItemList(mMediaAdapter.getSelectList())
                     } else {
-                        sp.putString(Constants.SP_PLAY_LIST,Gson().toJson(PlayListBean(mMediaAdapter.getData())))
+                        try {
+                            sp.putString(Constants.SP_PLAY_LIST,Gson().toJson(PlayListBean(mMediaAdapter.getData())))
+                        }catch (e:Exception){
+
+                        }
                         PlayVideoActivity.toPlayVideo(activity,position)
                     }
                 }

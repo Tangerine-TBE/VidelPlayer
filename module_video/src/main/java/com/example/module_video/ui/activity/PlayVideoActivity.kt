@@ -126,20 +126,19 @@ class PlayVideoActivity : BaseVmViewActivity<ActivityPlayVideoBinding, PlayVideo
     }
 
     private fun ActivityPlayVideoBinding.byOtherApp() {
-        if (intent.action == Intent.ACTION_VIEW) {
-            intent.data?.apply {
-                path?.let {
-                    val index = it.lastIndexOf("/")
-                    val name = it.substring(index + 1)
-                    try {
+        try {
+            if (intent.action == Intent.ACTION_VIEW) {
+                intent.data?.apply {
+                    path?.let {
+                        val index = it.lastIndexOf("/")
+                        val name = it.substring(index + 1)
                         videoPlayer.setUp(arrayListOf(MediaInformation(uri = this.toString(), name = name)), 0, true, name)
-                    }catch (e:Exception){
-                        showToast("打开视频异常")
-                        finish()
                     }
-
                 }
             }
+        }catch (e:Exception){
+            showToast("打开视频异常")
+            finish()
         }
     }
 
