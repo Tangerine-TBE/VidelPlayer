@@ -61,6 +61,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -74,14 +75,14 @@ android {
     }
 
     //    只在打包提测时改apk文件名，开发时记得注释掉
-    applicationVariants.all { variant ->
-        variant.getPackageApplication().outputDirectory = new File("F:/万能视频电影播放器")
-        variant.outputs.all {
-            outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
-                    "_${variant.productFlavors[0].name}" +
-                    "_${variant.versionName}.apk"
-        }
-    }
+//    applicationVariants.all { variant ->
+//        variant.getPackageApplication().outputDirectory = new File("F:/安装包/视频播放器/天王星/1.6")
+//        variant.outputs.all {
+//            outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
+//                    "_${variant.productFlavors[0].name}" +
+//                    "_${variant.versionName}.apk"
+//        }
+//    }
 
     productFlavors {
         _anzhi {
@@ -103,7 +104,7 @@ android {
         _vivo {
 
             manifestPlaceholders = [
-                    app_name_channel:  "天王星万能视频播放器",
+                    app_name_channel:  "万能影视高清播放器",
                     CHANNEL_VALUE:"_vivo"]
         }
         _360 {

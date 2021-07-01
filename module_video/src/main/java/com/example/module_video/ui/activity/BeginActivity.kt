@@ -4,8 +4,10 @@ import android.view.KeyEvent
 import com.example.module_ad.ad.ad_help.AdController
 import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.advertisement.SplashHelper
+import com.example.module_ad.advertisement.TTAdManagerHolder
 import com.example.module_ad.utils.AdMsgUtil
 import com.example.module_ad.utils.Contents
+import com.example.module_base.base.BaseApplication
 import com.example.module_base.base.BasePopup
 import com.example.module_base.base.BaseVmViewActivity
 import com.example.module_base.utils.*
@@ -14,6 +16,7 @@ import com.example.module_video.databinding.ActivityBeginBinding
 import com.example.module_video.livedata.MediaLiveData
 import com.example.module_video.ui.widget.popup.AgreementPopup
 import com.example.module_video.viewmodel.BeginViewModel
+import com.umeng.commonsdk.UMConfigure
 
 
 class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>() {
@@ -63,6 +66,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
                         mAgreementPopup?.showPopupView(binding.mAdContainer)
                         showCount++
                     } else {
+                        initSdk()
                         mAdController.show()
                     }
                 }
@@ -74,6 +78,7 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     override fun initEvent() {
         mAgreementPopup.setOnActionClickListener(object : BasePopup.OnActionClickListener {
             override fun sure() {
+                initSdk()
                 checkAppPermission(
                     askAllPermissionLis, {
                         if (AdMsgUtil.getADKey() != null) {
@@ -115,6 +120,17 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
     override fun release() {
         sp.putBoolean(Contents.NO_BACK, false)
         mAgreementPopup.dismiss()
+    }
+
+    private fun initSdk(){
+        //友盟 605b0b9cb8c8d45c13ae24a4
+        UMConfigure.init(
+            BaseApplication.application,
+            UMConfigure.DEVICE_TYPE_PHONE,
+            "605b0b9cb8c8d45c13ae24a4"
+        )
+        UMConfigure.setLogEnabled(true)
+        TTAdManagerHolder.init(BaseApplication.application)
     }
 
 }

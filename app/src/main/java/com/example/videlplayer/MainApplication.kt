@@ -22,7 +22,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
  */
 class MainApplication : BaseApplication() {
     override fun initData() {
-        TTAdManagerHolder.init(applicationContext)
+
        when(SPUtil.getInstance().getInt(Constants.SP_CORE_TYPE)){
           0-> PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
           1-> PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
