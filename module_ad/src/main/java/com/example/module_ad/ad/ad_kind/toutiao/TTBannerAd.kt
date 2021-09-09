@@ -139,14 +139,13 @@ class TTBannerAd(activity: Activity, container: FrameLayout):Ad(activity, contai
 
             }
 
-            override fun onSelected(position: Int, value: String) {
+            override fun onSelected(position: Int, value: String?, p2: Boolean) {
                 //用户选择不喜欢原因后，移除广告展示
                 container.removeAllViews()
                 container.visibility = View.GONE
             }
 
             override fun onCancel() {}
-            override fun onRefuse() {}
         })
     }
 

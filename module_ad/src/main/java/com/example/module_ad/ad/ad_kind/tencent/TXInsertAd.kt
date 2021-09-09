@@ -95,6 +95,14 @@ class TXInsertAd(activity: Activity, container: FrameLayout): Ad(activity, conta
 
     }
 
+    override fun onRenderSuccess() {
+
+    }
+
+    override fun onRenderFail() {
+
+    }
+
     override fun onVideoInit() {
 
     }

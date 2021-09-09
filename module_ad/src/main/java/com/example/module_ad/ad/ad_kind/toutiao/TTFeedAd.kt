@@ -135,13 +135,12 @@ class TTFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
 
             }
 
-            override fun onSelected(position: Int, value: String) {
+            override fun onSelected(position: Int, value: String?, p2: Boolean) {
                 //用户选择不喜欢原因后，移除广告展示
                 container.removeAllViews()
             }
 
             override fun onCancel() {}
-            override fun onRefuse() {}
         })
     }
 
