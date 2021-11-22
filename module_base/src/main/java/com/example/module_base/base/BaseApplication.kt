@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import com.alibaba.android.arouter.launcher.ARouter
+import com.example.module_base.utils.PackageUtil
 
 import com.example.module_base.utils.SPUtil
 
@@ -61,7 +62,8 @@ open class BaseApplication : Application() {
                 e.printStackTrace()
             }
             FeedbackAPI.setAppExtInfo(jsonObject)*/
-
+            UMConfigure.preInit(application,"605b0b9cb8c8d45c13ae24a4",PackageUtil.getAppMetaData(
+                application,"UMENG_CHANNEL"))
         }
 
         initData()

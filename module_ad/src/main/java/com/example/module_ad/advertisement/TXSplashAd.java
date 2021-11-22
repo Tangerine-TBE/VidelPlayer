@@ -11,6 +11,7 @@ import com.example.module_base.utils.RxNetTool;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.managers.GDTADManager;
+import com.qq.e.comm.managers.GDTAdSdk;
 import com.qq.e.comm.util.AdError;
 
 
@@ -33,7 +34,7 @@ public class TXSplashAd extends AdWatcher{
         this.mIsClose=isClose;
         this.mClass=aClass;
         mAction=action;
-        GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey);
+        GDTAdSdk.init(activity,mKgdtMobSDKAppKey);
     }
 
 
