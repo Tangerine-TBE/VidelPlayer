@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.example.module_ad.ad.ad_kind.tencent.GDTDownloadConfirmListener;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
 import com.example.module_base.utils.RxNetTool;
@@ -93,6 +95,7 @@ public class TXBannerAd  extends AdWatcher{
 
         // 不需要传递tags使用下面构造函数
         // this.bv = new UnifiedBannerView(this, Constants.APPID, posId, this);
+        bv.setDownloadConfirmListener(GDTDownloadConfirmListener.INSTANCE.getDOWNLOAD_CONFIRM_LISTENER());
         mBannerContainer.addView(bv, getUnifiedBannerLayoutParams());
         mBannerContainer.setVisibility(View.VISIBLE);
         return this.bv;

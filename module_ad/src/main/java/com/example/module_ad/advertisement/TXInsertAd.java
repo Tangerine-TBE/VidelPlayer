@@ -1,6 +1,8 @@
 package com.example.module_ad.advertisement;
 
 import android.app.Activity;
+
+import com.example.module_ad.ad.ad_kind.tencent.GDTDownloadConfirmListener;
 import com.example.module_base.utils.LogUtils;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
@@ -45,6 +47,7 @@ public class TXInsertAd extends AdWatcher implements UnifiedInterstitialADListen
     public void showAd() {
         mAd = new UnifiedInterstitialAD(mActivity,mKgdtMobSDKChaPingKey, this);
     //    setVideoOption();
+        mAd.setDownloadConfirmListener(GDTDownloadConfirmListener.INSTANCE.getDOWNLOAD_CONFIRM_LISTENER());
         mAd.loadAD();
 
     }

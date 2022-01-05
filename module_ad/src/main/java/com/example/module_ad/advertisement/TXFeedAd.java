@@ -2,6 +2,8 @@ package com.example.module_ad.advertisement;
 
 import android.app.Activity;
 import android.widget.FrameLayout;
+
+import com.example.module_ad.ad.ad_kind.tencent.GDTDownloadConfirmListener;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
 import com.example.module_base.utils.RxNetTool;
@@ -53,6 +55,7 @@ public class TXFeedAd extends AdWatcher {
                 if (nativeExpressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                     nativeExpressADView.setMediaListener(mediaListener);
                 }
+                nativeExpressADView.setDownloadConfirmListener(GDTDownloadConfirmListener.INSTANCE.getDOWNLOAD_CONFIRM_LISTENER());
                 nativeExpressADView.render();
                /* if (mFeedContainer.getChildCount() > 0) {
 

@@ -243,8 +243,8 @@ fun checkAppPermission(
                 scope.showRequestReasonDialog(deniedList, msg, "开启", "取消")
             }
             .onForwardToSettings { scope, deniedList ->
-                val msg = "您需要去应用程序设置当中手动开启权限"
-                scope.showForwardToSettingsDialog(deniedList, msg, "开启", "取消")
+//                val msg = "您需要去应用程序设置当中手动开启权限"
+//                scope.showForwardToSettingsDialog(deniedList, msg, "开启", "取消")
             }
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {

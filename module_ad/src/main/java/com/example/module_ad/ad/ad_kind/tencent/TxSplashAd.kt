@@ -42,6 +42,7 @@ class TxSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
             }
 
         },AD_TIME_OUT)
+        splashAD.setDownloadConfirmListener(GDTDownloadConfirmListener.DOWNLOAD_CONFIRM_LISTENER)
         splashAD.fetchAndShowIn(container)
     }
 

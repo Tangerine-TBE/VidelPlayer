@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.FrameLayout;
 
+import com.example.module_ad.ad.ad_kind.tencent.GDTDownloadConfirmListener;
 import com.example.module_ad.utils.Contents;
 import com.example.module_base.base.BaseApplication;
 import com.example.module_base.utils.LogUtils;
@@ -85,7 +86,7 @@ public class TXSplashAd extends AdWatcher{
 
             }
         }, outTime);
-
+        mSplashAD.setDownloadConfirmListener(GDTDownloadConfirmListener.INSTANCE.getDOWNLOAD_CONFIRM_LISTENER());
         mSplashAD.fetchAndShowIn(mSplashContainer);
     }
 

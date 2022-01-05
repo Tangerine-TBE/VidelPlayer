@@ -24,6 +24,7 @@ class TTSplashAd( activity: Activity,container:FrameLayout):Ad(activity,containe
         val  adSlot = AdSlot.Builder()
             .setCodeId(mKTouTiaoKaiPing)
             .setSupportDeepLink(true)
+            .setDownloadType(TTAdConstant.DOWNLOAD_TYPE_POPUP)
             .setImageAcceptedSize(screenWidth, screenHeight)
             .build()
         //step4:请求广告，调用开屏广告异步请求接口，对请求回调的广告作渲染处理

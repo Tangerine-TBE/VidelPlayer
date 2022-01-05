@@ -38,6 +38,7 @@ class TXFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
                    /* if (mFeedContainer.getChildCount() > 0) {
                     }*/LogUtils.i("onADLoaded ----------------->")
                    // 需要保证 View 被绘制的时候是可见的，否则将无法产生曝光和收益。
+                    this.setDownloadConfirmListener(GDTDownloadConfirmListener.DOWNLOAD_CONFIRM_LISTENER)
                    container.removeAllViews()
                    container.addView(this)
                }

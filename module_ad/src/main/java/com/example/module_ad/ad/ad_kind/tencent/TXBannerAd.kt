@@ -77,6 +77,7 @@ class TXBannerAd(activity: Activity, container: FrameLayout): Ad(activity, conta
 
             // 不需要传递tags使用下面构造函数
             // this.bv = new UnifiedBannerView(this, Constants.APPID, posId, this);
+            bv?.setDownloadConfirmListener(GDTDownloadConfirmListener.DOWNLOAD_CONFIRM_LISTENER)
             container.addView(bv, getUnifiedBannerLayoutParams())
             container.visibility = View.VISIBLE
             return this.bv
