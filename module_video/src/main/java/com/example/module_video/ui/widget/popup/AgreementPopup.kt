@@ -69,7 +69,9 @@ class AgreementPopup(activity: FragmentActivity):BasePopup<PopupAgreementWindowB
     override fun initEvent() {
         mView.apply {
             btCancel?.setOnClickListener {
-                showToast("您需要同意后才能继续使${mAppName}提供的服务")
+//                showToast("您需要同意后才能继续使${mAppName}提供的服务")
+                dismiss()
+                mListener?.cancel()
             }
 
             btSure?.setOnClickListener {
