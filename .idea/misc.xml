@@ -5,6 +5,15 @@
       <map>
         <entry key="..\:/Git_Project/video-player/module_ad/src/main/res/drawable/download_confirm_background_confirm.xml" value="0.21041666666666667" />
         <entry key="..\:/Git_Project/video-player/module_ad/src/main/res/layout/download_confirm_dialog.xml" value="0.19427083333333334" />
+        <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/black_back_24.xml" value="0.23072916666666668" />
+        <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/blark_back_24.xml" value="0.23072916666666668" />
+        <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/white_back_24.xml" value="0.23072916666666668" />
+        <entry key="..\:/Git_Project/video-player/module_user/src/main/res/layout/activity_login.xml" value="0.18072916666666666" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_feedback_bg.xml" value="0.23072916666666668" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_feedback.xml" value="0.2" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_home.xml" value="0.21458333333333332" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_set.xml" value="0.25" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_set_container.xml" value="0.21458333333333332" />
       </map>
     </option>
   </component>

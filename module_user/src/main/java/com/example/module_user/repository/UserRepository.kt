@@ -1,6 +1,5 @@
 package com.example.module_user.repository
 import com.example.module_user.utils.RetrofitClient
-import kotlinx.coroutines.Dispatchers
 
 /**
  * @author: 铭少
@@ -24,4 +23,12 @@ object UserRepository {
     suspend fun userLogOut(params: Map<String, Any>)
             =RetrofitClient.createUserService().toLogout(params)
 
+    suspend fun doCheckRegister(params: Map<String, Any>)
+            =RetrofitClient.createUserService().doCheckRegister(params)
+
+    suspend fun doThirdRegister(params: Map<String, Any>)
+            =RetrofitClient.createUserService().doThirdRegister(params)
+
+    suspend fun doThirdLogin(params: Map<String, Any>)
+            =RetrofitClient.createUserService().doThirdLogin(params)
 }

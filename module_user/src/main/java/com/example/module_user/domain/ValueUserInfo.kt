@@ -12,4 +12,4 @@ import com.example.module_user.domain.login.LoginBean
  */
 data class ValueUserInfo(val loginState:Boolean,val userInfo: LoginBean?=null,val loginInfo:LoginInfo?=null)
 
-data class LoginInfo(val loginType:String="",val phone:String="",val pwd:String="")
+data class LoginInfo(val loginType:String="",val phone:String="",val pwd:String="",val openId: String = "")

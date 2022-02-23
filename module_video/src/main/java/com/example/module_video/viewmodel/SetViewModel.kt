@@ -69,4 +69,22 @@ class SetViewModel:BaseViewModel(){
         }
     }
 
+    fun doThirdLogin(mOpenId: String,type: String){
+        doRequest(success = {
+            UserRepository.doThirdLogin(UserInfoHelper.userEvent(Constants.LOGIN_THIRD,
+                mapOf(Constants.OPENID to mOpenId,Constants.TYPE to type)))?.string().let {
+                GsonUtil.setUserResult<LoginBean>(it, {
+                    UserInfoLiveData.setUserInfo(ValueUserInfo(true,it, LoginInfo(type,"","",mOpenId)))
+                    loginState.postValue(ValueResult(NetState.SUCCESS,"登录成功！"))
+                    LogUtils.i("-----toLocalLogin-111- ${getCurrentThreadName()}-----${it.msg}------------------")
+                }, {
+                    LogUtils.i("-----toLocalLogin-111- ${getCurrentThreadName()}-----${it.msg}------------------")
+                    loginState.postValue(ValueResult(NetState.ERROR,it.msg))
+                })
+            }
+        }, error = {
+            loginState.postValue(ValueResult(NetState.ERROR, NET_ERROR))
+        })
+    }
+
 }

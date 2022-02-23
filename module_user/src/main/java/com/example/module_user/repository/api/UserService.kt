@@ -33,4 +33,13 @@ interface UserService {
     @POST("/api.php")
     suspend  fun toLogout(@QueryMap params: Map<String,@JvmSuppressWildcards Any>): RegisterBean
 
+    @POST("/api.php")
+    suspend fun doCheckRegister(@QueryMap params: Map<String,@JvmSuppressWildcards Any>): ResponseBody
+
+    @POST("/api.php")
+    suspend fun doThirdRegister(@QueryMap params: Map<String,@JvmSuppressWildcards Any>): ResponseBody
+
+    @POST("/api.php")
+    suspend fun doThirdLogin(@QueryMap params: Map<String,@JvmSuppressWildcards Any>): ResponseBody
+
 }

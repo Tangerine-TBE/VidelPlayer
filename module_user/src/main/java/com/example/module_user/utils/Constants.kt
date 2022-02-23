@@ -42,6 +42,11 @@ object Constants {
 
     const val PASSWORD = "password" //密码
 
+    const val QQ_ID = "1111584683"
+
+    const val WX_APP_ID = "wxa22515206a13601c"
+
+    const val WX_SECRET = "48bd8c4e7d77feda423b5ba310bfb0cf"
 
     //支付参数
     const val TRADE = "trade" //订单号

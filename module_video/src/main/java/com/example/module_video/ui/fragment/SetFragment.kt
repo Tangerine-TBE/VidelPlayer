@@ -14,6 +14,7 @@ import com.example.module_base.base.BasePopup
 import com.example.module_base.base.BaseVmFragment
 import com.example.module_base.utils.*
 import com.example.module_base.utils.Constants.SET_DEAL1
+import com.example.module_base.utils.Constants.USER_ID
 import com.example.module_user.domain.ValueUserInfo
 import com.example.module_user.livedata.BuyVipLiveData
 import com.example.module_user.livedata.RemoveAdLiveData
@@ -36,6 +37,7 @@ import com.example.module_video.R
 import com.example.module_video.databinding.FragmentSetBinding
 import com.example.module_video.domain.ItemBean
 import com.example.module_video.repository.DataProvider
+import com.example.module_video.ui.activity.FeedbackActivity
 import com.example.module_video.ui.activity.LockActivity
 import com.example.module_video.ui.adapter.recycleview.SetAdapter
 import com.example.module_video.ui.widget.popup.BuyVipPopup
@@ -119,6 +121,12 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
                     com.example.module_user.utils.Constants.LOCAL_TYPE -> {
                       if ( it.phone!="" && it.pwd!="" )
                         viewModel.toLocalLogin(it.phone, it.pwd)
+                    }
+                    com.example.module_user.utils.Constants.QQ_TYPE -> {
+                        viewModel.doThirdLogin(it.openId,it.loginType)
+                    }
+                    com.example.module_user.utils.Constants.WECHAT_TYPE -> {
+                        viewModel.doThirdLogin(it.openId,it.loginType)
                     }
                 }
             }
@@ -303,14 +311,21 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
                     0 -> {
                         copyContent(context, "2681706890@qq.com")
                     }
-                    1 -> toOtherActivity<AboutActivity>(activity) {}
-                    2 -> toOtherActivity<DealViewActivity>(activity) {
+                    1 -> toOtherActivity<FeedbackActivity>(activity){
+                        LogUtils.e("--------------------------------${userId}")
+                        if (userId.isNullOrEmpty()||userId == "null")
+                            putExtra(USER_ID, "111")
+                        else
+                            putExtra(USER_ID,userId)
+                    }
+                    2 -> toOtherActivity<AboutActivity>(activity) {}
+                    3 -> toOtherActivity<DealViewActivity>(activity) {
                         putExtra(SET_DEAL1, 2)
                     }
-                    3 -> toOtherActivity<DealViewActivity>(activity) {
+                    4 -> toOtherActivity<DealViewActivity>(activity) {
                         putExtra(SET_DEAL1, 1)
                     }
-                    4 -> PermissionUtil.gotoPermission(activity)
+                    5 -> PermissionUtil.gotoPermission(activity)
                 }
             }
             mBuyVipPopup.doSure {
@@ -353,7 +368,7 @@ class SetFragment : BaseVmFragment<FragmentSetBinding, SetViewModel>(),
         if (str == "360") {
             str = "SLL"
         }
-        str = str.toUpperCase()
+        str = str.uppercase(Locale.getDefault())
         return VIP13 + "_" + userId + "_" + str + "_" + payType + "_" + Random().nextInt(100000)
     }
 

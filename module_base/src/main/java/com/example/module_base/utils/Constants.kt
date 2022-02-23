@@ -28,6 +28,8 @@ object Constants {
 
     const val APP_NAME="APP_NAME"
 
+    const val USER_ID="user_id"
+
 
      val MIME_MapTable = arrayOf(arrayOf(".3gp", "video/3gpp"),
             arrayOf(".apk", "application/vnd.android.package-archive"),

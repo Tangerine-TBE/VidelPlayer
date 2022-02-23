@@ -76,14 +76,13 @@ android {
 
     //    只在打包提测时改apk文件名，开发时记得注释掉
 //    applicationVariants.all { variant ->
-//        variant.getPackageApplication().outputDirectory = new File("F:/安装包/视频播放器/天王星/1.9")
+//        variant.getPackageApplication().outputDirectory = new File("F:/安装包2/天王星/视频播放器/2.1")
 //        variant.outputs.all {
 //            outputFileName = "${variant.productFlavors[0].manifestPlaceholders.get("app_name_channel")}" +
 //                    "_${variant.productFlavors[0].name}" +
 //                    "_${variant.versionName}.apk"
 //        }
 //    }
-
     productFlavors {
         _anzhi {
             manifestPlaceholders = [

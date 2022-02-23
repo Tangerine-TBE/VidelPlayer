@@ -38,8 +38,8 @@ object RetrofitClient {
                 .loggable(BuildConfig.DEBUG)
                 .setLevel(Level.BASIC)
                 .log(Platform.INFO)
-                .request("请求")
-                .response("响应")
+                .request("LoggingInterceptor请求")
+                .response("LoggingInterceptor响应")
                 .build()
             httpClientBuilder.addInterceptor(httpLoggingInterceptor)
         }

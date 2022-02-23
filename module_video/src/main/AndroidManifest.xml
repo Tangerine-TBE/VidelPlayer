@@ -3,26 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.module_video">
 
-
-
     <application android:requestLegacyExternalStorage="true">
-        <activity android:name=".ui.activity.LockActivity" android:launchMode="singleTop" android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.FeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.LockActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SelectFileActivity"
-            android:launchMode="singleTop"
-
-            />
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.activity.PlayListMsgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PlayListActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".utils.floatUtil.FloatActivity" android:launchMode="singleTop" android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".utils.floatUtil.FloatActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PlayVideoActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -30,16 +33,15 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="video/*"  />
-                <data android:mimeType="audio/*"   />
-                <data android:scheme="file"/>
-                <data android:scheme="content"/>
+
+                <data android:mimeType="video/*" />
+                <data android:mimeType="audio/*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".ui.activity.HomeActivity"
             android:launchMode="singleTask"
@@ -55,10 +57,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/my_file_paths" />
         </provider>
-
-
-
-
     </application>
 
 </manifest>
