@@ -6,9 +6,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.databinding.DataBindingUtil
 import com.example.module_base.R
 import com.example.module_base.utils.LogUtils
-import kotlinx.android.synthetic.main.layout_toolbar_new.view.*
+import com.example.module_base.databinding.LayoutToolbarNewBinding
+//import kotlinx.android.synthetic.main.layout_toolbar_new.view.*
 
 /**
  * @name WeatherOne
@@ -22,8 +24,24 @@ class MyToolbar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
+    private var mTitle: String = ""
+    private var mRightTitle: String? = null
+    private var mTitleColor: Int = Color.BLACK
+    private var mBarBgColor: Int = Color.WHITE
+    private var mLeftIcon: Int? = null
+    private var mRightIcon: Int? = null
+    private var mRightTwoIcon: Int? = null
+    private var isHaveAdd: Boolean? = null
+    private var isHaveBack: Boolean? = null
+    private var isHaveRightTwo: Boolean? = null
+    private var isHaveRight: Boolean? = null
+    private var mRightTitleColor: Int? = null
+
+    private val binding: LayoutToolbarNewBinding by lazy {
+        DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.layout_toolbar_new,this,true)
+    }
     init {
-        LayoutInflater.from(context).inflate(R.layout.layout_toolbar_new, this, true)
+        binding.root
         context.obtainStyledAttributes(attrs, R.styleable.MyToolbar).apply {
             mTitle = getString(R.styleable.MyToolbar_toolbarTitle) ?: "顶部栏"
             mRightTitle = getString(R.styleable.MyToolbar_rightTitle)
@@ -44,98 +62,87 @@ class MyToolbar @JvmOverloads constructor(
     }
 
 
-    private var mTitle: String = ""
-    private var mRightTitle: String? = null
-    private var mTitleColor: Int = Color.BLACK
-    private var mBarBgColor: Int = Color.WHITE
-    private var mLeftIcon: Int? = null
-    private var mRightIcon: Int? = null
-    private var mRightTwoIcon: Int? = null
-    private var isHaveAdd: Boolean? = null
-    private var isHaveBack: Boolean? = null
-    private var isHaveRightTwo: Boolean? = null
-    private var isHaveRight: Boolean? = null
-    private var mRightTitleColor: Int? = null
+
 
 
     private fun initView() {
         mTitle?.let {
-            tv_toolbarTitle?.text = it
+            binding.tvToolbarTitle?.text = it
         }
 
-        tv_toolbarTitle?.setTextColor(mTitleColor)
+        binding.tvToolbarTitle?.setTextColor(mTitleColor)
 
-        rl_bar?.setBackgroundColor(mBarBgColor)
+        binding.rlBar?.setBackgroundColor(mBarBgColor)
 
         mLeftIcon?.let {
             if (it != -1) {
-                iv_bar_back.setImageResource(it)
+                binding.ivBarBack.setImageResource(it)
             }
         }
 
         mRightIcon?.let {
             if (it != -1) {
-                iv_bar_add.setImageResource(it)
+                binding.ivBarAdd.setImageResource(it)
             }
         }
 
         mRightTwoIcon?.let {
             if (it != -1) {
-                iv_bar_right.setImageResource(it)
+                binding.ivBarRight.setImageResource(it)
             }
         }
 
 
 
         if (isHaveAdd!!) {
-            iv_bar_add.visibility = View.VISIBLE
+            binding.ivBarAdd.visibility = View.VISIBLE
         } else {
-            iv_bar_add.visibility = View.GONE
+            binding.ivBarAdd.visibility = View.GONE
         }
 
         if (isHaveRightTwo!!) {
-            iv_bar_right.visibility = View.VISIBLE
+            binding.ivBarRight.visibility = View.VISIBLE
         } else {
-            iv_bar_right.visibility = View.GONE
+            binding.ivBarRight.visibility = View.GONE
         }
 
 
         if (isHaveBack!!) {
-            iv_bar_back.visibility = View.VISIBLE
+            binding.ivBarBack.visibility = View.VISIBLE
         } else {
-            iv_bar_back.visibility = View.GONE
+            binding.ivBarBack.visibility = View.GONE
         }
 
         mRightTitle?.let {
-            tv_bar_right?.text = it
+            binding.tvBarRight?.text = it
         }
         mRightTitleColor?.let {
-            tv_bar_right.setTextColor(it)
+            binding.tvBarRight.setTextColor(it)
         }
 
         if (isHaveRight!!) {
-            tv_bar_right.visibility = View.VISIBLE
+            binding.tvBarRight.visibility = View.VISIBLE
         } else {
-            tv_bar_right.visibility = View.GONE
+            binding.tvBarRight.visibility = View.GONE
         }
 
 
     }
 
     private fun initEvent() {
-        iv_bar_back.setOnClickListener {
+        binding.ivBarBack.setOnClickListener {
             mOnBackClickListener?.onBack()
         }
 
-        iv_bar_add.setOnClickListener {
+        binding.ivBarAdd.setOnClickListener {
             mOnBackClickListener?.onRightTo()
         }
 
-        tv_bar_right.setOnClickListener {
+        binding.tvBarRight.setOnClickListener {
             mOnBackClickListener?.onRightTo()
         }
 
-        iv_bar_right.setOnClickListener {
+        binding.ivBarRight.setOnClickListener {
             mOnBackClickListener?.onRightTwoTo()
         }
 

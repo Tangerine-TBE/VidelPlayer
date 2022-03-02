@@ -11,8 +11,8 @@ ext {
 
             applicationId    : "com.twx.player",   //应用ID
             applicationName  : "万能视频电影播放器",                  //应用名称
-            versionCode      : 10011,                    //版本号
-            versionName      : "2.1",              //版本名称
+            versionCode      : 10012,                    //版本号
+            versionName      : "2.2",              //版本名称
             compileSdkVersion: 29,
             minSdkVersion    : 24,
             targetSdkVersion : 29,
