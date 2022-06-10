@@ -84,7 +84,7 @@ dependencies {
     //Gson
     api rootProject.ext.dependencies["Gson"]
     //permissionx
-    api rootProject.ext.dependencies["permissionx"]
+    api "com.guolindev.permissionx:permissionx:1.6.4"
     //阿里路由
     api rootProject.ext.dependencies["arouter_api"]
     //RxTool

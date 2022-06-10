@@ -79,19 +79,19 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
         mAgreementPopup.setOnActionClickListener(object : BasePopup.OnActionClickListener {
             override fun sure() {
                 initSdk()
-                checkAppPermission(
-                    askAllPermissionLis, {
+//                checkAppPermission(
+//                    askAllPermissionLis, {
                         if (AdMsgUtil.getADKey() != null) {
                            // mSplashHelper.showAd()
                             mAdController.show()
                         } else {
                             goHome()
                         }
-                    },
-                    {
-                        goHome()
-                    }, this@BeginActivity
-                )
+//                    },
+//                    {
+//                        goHome()
+//                    }, this@BeginActivity
+//                )
             }
 
             override fun cancel() {

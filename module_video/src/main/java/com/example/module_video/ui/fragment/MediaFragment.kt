@@ -179,6 +179,15 @@ class MediaFragment : BaseVmFragment<FragmentMediaBinding, MediaViewModel>() {
                     viewModel.setCurrentPosition(position)
                 }
             })
+            //开启权限
+            openPermission.setOnClickListener {
+                checkAppPermission(askAllPermissionLis,{
+                    viewModel.permissionState.postValue(true)
+                    MediaLiveData.getMedia()
+                },{
+
+                },null,this@MediaFragment)
+            }
 
             //搜索中
             searchInput.doOnTextChanged { text, start, before, count ->

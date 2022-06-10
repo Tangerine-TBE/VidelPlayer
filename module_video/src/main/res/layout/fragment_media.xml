@@ -97,6 +97,7 @@
             app:layout_constraintTop_toTopOf="@+id/homeIndicator" />
 
         <TextView
+            android:id="@+id/tv_no_permission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="没有储存权限，无法获取音视频信息"
@@ -106,6 +107,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/homeIndicator" />
+
+        <TextView
+            android:id="@+id/open_permission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="去开启权限"
+            android:textSize="16sp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:background="@color/theme_color"
+            android:textColor="@color/white"
+            android:visibility="@{data.permissionState?View.GONE:View.VISIBLE}"
+            app:layout_constraintStart_toStartOf="@id/tv_no_permission"
+            app:layout_constraintEnd_toEndOf="@id/tv_no_permission"
+            app:layout_constraintTop_toBottomOf="@id/tv_no_permission"
+            android:layout_marginTop="10dp"/>
 
         <!--全部资源-->
         <com.scwang.smart.refresh.layout.SmartRefreshLayout

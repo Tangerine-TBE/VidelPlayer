@@ -238,6 +238,7 @@ fun checkAppPermission(
                     Color.parseColor("#285FF5"),
                     Color.parseColor("#285FF5")
             )
+            .explainReasonBeforeRequest()
             .onExplainRequestReason { scope, deniedList, beforeRequest ->
                 val msg = "即将申请的权限是程序必须依赖的权限"
                 scope.showRequestReasonDialog(deniedList, msg, "开启", "取消")
