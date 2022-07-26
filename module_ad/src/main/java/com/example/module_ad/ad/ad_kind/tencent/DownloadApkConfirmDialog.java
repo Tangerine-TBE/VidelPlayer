@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.module_ad.R;
 import com.example.module_ad.utils.NetworkRequestAsyncTask;
 import com.example.module_ad.utils.PxUtils;
@@ -46,7 +47,7 @@ public class DownloadApkConfirmDialog extends Dialog implements View.OnClickList
   private int orientation;
   private DownloadConfirmCallBack callBack;
   private TextView textView;
-  private ImageView close;
+  private ImageView close,icon;
   private Button confirm;
 
   private ViewGroup contentHolder;
@@ -80,6 +81,7 @@ public class DownloadApkConfirmDialog extends Dialog implements View.OnClickList
     }
     close = findViewById(R.id.download_confirm_close);
     close.setOnClickListener(this);
+    icon = findViewById(R.id.icon);
     reloadButton = findViewById(R.id.download_confirm_reload_button);
     reloadButton.setOnClickListener(this);
     confirm = findViewById(R.id.download_confirm_confirm);
@@ -135,8 +137,9 @@ public class DownloadApkConfirmDialog extends Dialog implements View.OnClickList
         }
 
 
-        textView.append("icon链接:\n");
-        textView.append(apkInfo.iconUrl);
+//        textView.append("icon链接:\n");
+//        textView.append(apkInfo.iconUrl);
+        Glide.with(context).load(apkInfo).into(icon);
 
         textView.append("\n应用名:\n");
         textView.append("\t" + apkInfo.appName);

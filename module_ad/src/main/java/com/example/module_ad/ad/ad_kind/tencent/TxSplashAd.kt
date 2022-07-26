@@ -6,7 +6,6 @@ import android.widget.FrameLayout
 import com.example.module_ad.ad.Ad
 import com.qq.e.ads.splash.SplashAD
 import com.qq.e.ads.splash.SplashADListener
-import com.qq.e.comm.managers.GDTADManager
 import com.qq.e.comm.util.AdError
 
 class TxSplashAd( activity: Activity,container:FrameLayout):Ad(activity,container) {

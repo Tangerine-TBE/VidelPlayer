@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         >
         <TextView
-            android:text="Demo-APP详情"
+            android:text="APP详情"
             android:textSize="18sp"
             android:textColor="@android:color/black"
             android:textStyle="bold"
@@ -44,7 +44,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"/>
             <FrameLayout
                 android:id="@+id/download_confirm_holder"
                 android:layout_width="match_parent"

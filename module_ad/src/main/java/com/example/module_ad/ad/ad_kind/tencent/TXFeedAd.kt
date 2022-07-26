@@ -70,14 +70,6 @@ class TXFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
                LogUtils.i("因为广告点击等原因离开当前 app 时调用----------------->")
            }
 
-           override fun onADOpenOverlay(nativeExpressADView: NativeExpressADView) {
-               LogUtils.i("广告展开遮盖时调用----------------->")
-           }
-
-           override fun onADCloseOverlay(nativeExpressADView: NativeExpressADView) {
-               LogUtils.i("广告关闭遮盖时调用----------------->")
-           }
-
            override fun onNoAD(adError: AdError) {
                LogUtils.i("无广告填充    ----------------->")
            }
@@ -112,7 +104,6 @@ class TXFeedAd(activity: Activity, container: FrameLayout): Ad(activity, contain
          *
          * 如自动播放策略为AutoPlayPolicy.WIFI，但此时用户网络为4G环境，在用户看来就是手工播放的
          */
-        nativeExpressAD.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO) // 本次拉回的视频广告，从用户的角度看是自动播放的
 
         nativeExpressAD.loadAD(1)
     }

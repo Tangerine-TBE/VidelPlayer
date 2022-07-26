@@ -6,7 +6,7 @@ import com.bytedance.sdk.openadsdk.TTAdNative
 import com.example.module_ad.advertisement.TTAdManagerHolder
 import com.example.module_ad.utils.AdMsgUtil
 import com.example.module_ad.utils.Contents
-import com.qq.e.comm.managers.GDTADManager
+import com.qq.e.comm.managers.GDTAdSdk
 
 abstract class Ad(val activity: Activity,val container: FrameLayout) {
 
@@ -46,7 +46,8 @@ abstract class Ad(val activity: Activity,val container: FrameLayout) {
             mKgdtMobSDKNativeKey = adKey[Contents.KGDT_MOBSDK_NATIVEKEY]
             mKgdtMobSDKJiLiKey = adKey[Contents.KGDT_MOBSDK_JILIKEY]
             mKgdtMobSDKJSmallNativeKey = adKey[Contents.KGDT_MOBSDK_SMALLNATIVEKEY]
-            GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey)
+//            GDTADManager.getInstance().initWith(activity, mKgdtMobSDKAppKey)
+            GDTAdSdk.init(activity,mKgdtMobSDKAppKey)
         }
 
     }

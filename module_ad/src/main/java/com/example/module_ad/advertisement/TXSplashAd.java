@@ -11,7 +11,6 @@ import com.example.module_base.utils.LogUtils;
 import com.example.module_base.utils.RxNetTool;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
-import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.managers.GDTAdSdk;
 import com.qq.e.comm.util.AdError;
 

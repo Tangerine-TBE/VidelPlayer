@@ -65,14 +65,6 @@ class TXBannerAd(activity: Activity, container: FrameLayout): Ad(activity, conta
                 override fun onADLeftApplication() {
                     LogUtils.i("由于广告点击离开 APP 时调用----------------->")
                 }
-
-                override fun onADOpenOverlay() {
-                    LogUtils.i("onADOpenOverlay----------------->")
-                }
-
-                override fun onADCloseOverlay() {
-                    LogUtils.i("onADCloseOverlay----------------->")
-                }
             })
 
             // 不需要传递tags使用下面构造函数

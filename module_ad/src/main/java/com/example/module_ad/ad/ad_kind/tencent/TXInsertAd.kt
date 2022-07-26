@@ -46,7 +46,6 @@ class TXInsertAd(activity: Activity, container: FrameLayout): Ad(activity, conta
          * 如自动播放策略为AutoPlayPolicy.WIFI，但此时用户网络为4G环境，在用户看来就是手工播放的
          */
         mAd?.setDownloadConfirmListener(GDTDownloadConfirmListener.DOWNLOAD_CONFIRM_LISTENER)
-        mAd?.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO) // 本次拉回的视频广告，从用户的角度看是自动播放的
     }
 
 
