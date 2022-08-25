@@ -1,6 +1,7 @@
 package com.example.module_video.ui.activity
 
 import android.view.KeyEvent
+import com.bytedance.sdk.openadsdk.TTAdSdk
 import com.example.module_ad.ad.ad_help.AdController
 import com.example.module_ad.advertisement.AdType
 import com.example.module_ad.advertisement.SplashHelper
@@ -130,7 +131,16 @@ class BeginActivity : BaseVmViewActivity<ActivityBeginBinding, BeginViewModel>()
             "605b0b9cb8c8d45c13ae24a4"
         )
         UMConfigure.setLogEnabled(true)
-        TTAdManagerHolder.init(BaseApplication.application)
+        TTAdManagerHolder.init(BaseApplication.application,object : TTAdSdk.InitCallback{
+            override fun success() {
+
+            }
+
+            override fun fail(p0: Int, p1: String?) {
+                goHome()
+            }
+
+        })
     }
 
 }

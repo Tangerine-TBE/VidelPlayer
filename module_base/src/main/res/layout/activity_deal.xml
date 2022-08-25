@@ -39,7 +39,12 @@
                 android:layout_height="match_parent" />
 
         </androidx.core.widget.NestedScrollView>
-
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/privacy_toolbar"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </layout>

@@ -3,25 +3,92 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Git_Project/video-player/app/src/main/res/layout/activity_main.xml" value="0.15520833333333334" />
         <entry key="..\:/Git_Project/video-player/module_ad/src/main/res/drawable/download_confirm_background_confirm.xml" value="0.21041666666666667" />
         <entry key="..\:/Git_Project/video-player/module_ad/src/main/res/layout/download_confirm_dialog.xml" value="0.19427083333333334" />
         <entry key="..\:/Git_Project/video-player/module_base/src/main/res/layout/activity_about.xml" value="0.18072916666666666" />
+        <entry key="..\:/Git_Project/video-player/module_base/src/main/res/layout/activity_deal.xml" value="0.2586050724637681" />
         <entry key="..\:/Git_Project/video-player/module_base/src/main/res/layout/layout_toolbar_new.xml" value="0.18072916666666666" />
         <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/black_back_24.xml" value="0.23072916666666668" />
         <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/blark_back_24.xml" value="0.23072916666666668" />
         <entry key="..\:/Git_Project/video-player/module_user/src/main/res/drawable/white_back_24.xml" value="0.23072916666666668" />
         <entry key="..\:/Git_Project/video-player/module_user/src/main/res/layout/activity_login.xml" value="0.18072916666666666" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/divider.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/ic_feedback_image_add.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/ic_white_back_24.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/my_video_progress.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/my_video_volume_progress_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_agreement_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_agreement_popup_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_exit_popup_bottom.xml" value="0.1615" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_feedback_bg.xml" value="0.23072916666666668" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_home_top_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_item_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_popup_bt.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_popup_bt_normal.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_popup_general.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_popup_input_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_pwd_normal.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_pwd_select.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/shape_video_play_popup_bg.xml" value="0.1615" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/splash_bg.xml" value="0.225" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/drawable/video_seek_progress_bg.xml" value="0.1615" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_begin.xml" value="0.15520833333333334" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_feedback.xml" value="0.2" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_home.xml" value="0.21458333333333332" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_lock.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_play_empty_control.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_play_list.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_play_list_msg.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_play_video.xml" value="0.2586050724637681" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/activity_select_media.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/diy_exit_popup_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_contents.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_list.xml" value="0.15520833333333334" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_media.xml" value="0.23007246376811594" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_play_video.xml" value="0.15520833333333334" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/fragment_set.xml" value="0.25" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_bottom_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_file_list_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_function_popup_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_indicator_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_input_pwd_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_media_file_contianer.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_permission_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_popup_play_list_container.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_pwd_contianer.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_select_popup_container.xml" value="0.15520833333333334" />
         <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/item_set_container.xml" value="0.21458333333333332" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_edit_action.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_edit_list_action.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_float_video.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_floating_video.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_media_all.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_media_audio.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_media_search.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_media_video.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/layout_small_float.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/my_video_progress_dialog.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/my_video_volume_dialog.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_agreement_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_buy_vip__window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_function_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_input_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_item_select.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_pay_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_play_error_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_play_list_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_remind_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/popup_user_window.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/sample_video.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/sample_video_land.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/sample_video_normal.xml" value="0.15520833333333334" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/widget_play_video_land.xml" value="0.2586050724637681" />
+        <entry key="..\:/Git_Project/video-player/module_video/src/main/res/layout/widget_play_video_normal.xml" value="0.2586050724637681" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

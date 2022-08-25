@@ -13,9 +13,9 @@ ext {
             applicationName  : "万能视频电影播放器",                  //应用名称
             versionCode      : 10014,                    //版本号
             versionName      : "2.4",              //版本名称
-            compileSdkVersion: 29,
+            compileSdkVersion: 31,
             minSdkVersion    : 24,
-            targetSdkVersion : 29,
+            targetSdkVersion : 31,
 
     ]
     //依赖

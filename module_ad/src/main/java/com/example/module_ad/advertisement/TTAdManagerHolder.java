@@ -33,14 +33,14 @@ public class TTAdManagerHolder {
         return TTAdSdk.getAdManager();
     }
 
-    public static void init(Context context) {
-        doInit(context);
+    public static void init(Context context, TTAdSdk.InitCallback callback) {
+        doInit(context,callback);
     }
 
     //step1:接入网盟广告sdk的初始化操作，详情见接入文档和穿山甲平台说明
-    private static void doInit(Context context) {
+    private static void doInit(Context context, TTAdSdk.InitCallback callback) {
         if (!sInit) {
-            TTAdSdk.init(context, buildConfig(context),null);
+            TTAdSdk.init(context, buildConfig(context),callback);
             sInit = true;
         }
     }

@@ -68,12 +68,12 @@ dependencies {
 
 
 
-    api 'com.shuyu:GSYVideoPlayer:8.1.1'
+    api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.3.3-release-jitpack'
 //是否需要ExoPlayer模式
-    api 'com.shuyu:GSYVideoPlayer-exo2:8.1.1'
+    api 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.3-release-jitpack'
 //根据你的需求ijk模式的so
-    implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.1'
-    implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.1'
+    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-arm64:v8.3.3-release-jitpack'
+    implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-armv7a:v8.3.3-release-jitpack'
 
 
     debugImplementation "com.glance.guolindev:glance:1.0.0-alpha01"
