@@ -23,7 +23,6 @@ class TTBannerAd(activity: Activity, container: FrameLayout):Ad(activity, contai
             .setCodeId(mKTouTiaoBannerKey)
             .setSupportDeepLink(true)
             .setAdCount(3)
-            .setDownloadType(TTAdConstant.DOWNLOAD_TYPE_POPUP)
             .setExpressViewAcceptedSize(
                 getScreenWidth(activity).toFloat(),
                 80f

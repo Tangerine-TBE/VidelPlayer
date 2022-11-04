@@ -46,6 +46,8 @@ object MediaUtil {
                 val path = getString(getColumnIndexOrThrow(MediaStore.Video.Media.DATA)) // 路径
                 val resolution = getString(getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)) // 分辨率
                 val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
+                if (!path.contains("storage/emulated/0"))
+                    continue
              //   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
@@ -73,7 +75,9 @@ object MediaUtil {
                 val name = getString(getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))//名字
                 val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
                 val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
-                   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}--------${path}---${uri}---")
+                if (!path.contains("storage/emulated/0"))
+                    continue
+                LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}--------${path}---${uri}---")
                 audioList.add(MediaInformation(id, name?:"", "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,MediaState.AUDIO))
             }
@@ -92,7 +96,9 @@ object MediaUtil {
                 val path = getString(getColumnIndexOrThrow(MediaStore.Video.Media.DATA)) // 路径
                 val resolution = getString(getColumnIndexOrThrow(MediaStore.Video.Media.RESOLUTION)) // 分辨率
                 val bitmap = MediaStore.Video.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Video.Thumbnails.MICRO_KIND, null)//缩略图
-                   LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
+                if (!path.contains("storage/emulated/0"))
+                    continue
+                LogUtils.i("---getAllVideo--${bitmap}--${id}---${name}---${size}---${duration}---${date}---${resolution}---${path}---${uri}---")
                 videoList.add(MediaInformation(id, name?:"", "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", resolution
                         ?: "", path, uri.toString(), bitmap,MediaState.VIDEO))
@@ -118,6 +124,8 @@ object MediaUtil {
                 val name = getString(getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME))//名字
                 val size = getLong(getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE))//大小
                 val path = getString(getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)) // 路径
+                if (!path.contains("storage/emulated/0"))
+                    continue
              //   LogUtils.i("---getAllAudio---${id}---${name}---${size}---${duration}---${date}-----${path}---${uri}---")
                 videoList.add(MediaInformation(id, name, "${formatTime(duration / 1000)}", "${String.format("%.2f", size.toDouble() / 1024 / 1024)}MB",
                         "${RxTimeTool.date2String(Date(File(path).lastModified()), SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))}", "", path, uri.toString(), null,MediaState.AUDIO))

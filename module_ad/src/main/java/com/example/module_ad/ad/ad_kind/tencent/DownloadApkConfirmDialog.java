@@ -139,7 +139,7 @@ public class DownloadApkConfirmDialog extends Dialog implements View.OnClickList
 
 //        textView.append("icon链接:\n");
 //        textView.append(apkInfo.iconUrl);
-        Glide.with(context).load(apkInfo).into(icon);
+        Glide.with(context).load(apkInfo.iconUrl).into(icon);
 
         textView.append("\n应用名:\n");
         textView.append("\t" + apkInfo.appName);
